@@ -1,0 +1,22 @@
+# cnb stars
+
+```
+cnb stars
+```
+
+显示仓库的 Star 累积趋势折线图（TUI 界面）。
+
+通过 API 获取仓库所有 Star 用户数据，按周聚合后生成累积趋势图。图表标题显示 Star 总数。
+
+按 `q` 或 `Ctrl+C` 退出。
+
+## 示例
+
+```bash
+$ cnb stars
+$ cnb --repo prevailna/cnb stars
+```
+
+## 另请参阅
+
+- [cnb](/guide/cnb)
