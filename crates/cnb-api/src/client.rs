@@ -307,6 +307,18 @@ impl CnbClient {
         Self::handle_response(resp).await
     }
 
+    // ==================== Star API ====================
+
+    /// 获取仓库 Star 用户列表
+    pub async fn list_star_users(&self) -> Result<StarUsers, ApiError> {
+        let url = format!(
+            "{}{}/-/star-users?filter_type=all&page=0&page_size=10000",
+            self.base_url, self.repo
+        );
+        let resp = self.http.get(&url).send().await?;
+        Self::handle_response(resp).await
+    }
+
     // ==================== Content API ====================
 
     /// 获取仓库文件/目录内容

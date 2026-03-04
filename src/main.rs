@@ -48,6 +48,9 @@ enum Commands {
 
     /// 提交统计仪表盘
     Stats,
+
+    /// Star 趋势图
+    Stars,
 }
 
 fn main() {
@@ -135,5 +138,6 @@ async fn async_main() -> anyhow::Result<()> {
         }
         Commands::Download(ref args) => commands::download::run::run(&ctx, args).await,
         Commands::Stats => commands::stats::run().await,
+        Commands::Stars => commands::stars::run(&ctx).await,
     }
 }
