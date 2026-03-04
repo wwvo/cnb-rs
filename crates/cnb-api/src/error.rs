@@ -22,4 +22,12 @@ pub enum ApiError {
     /// URL 解析错误
     #[error("URL 解析错误：{0}")]
     Url(#[from] url::ParseError),
+
+    /// 资源未找到
+    #[error("{0}")]
+    NotFound(String),
+
+    /// 通用 API 错误
+    #[error("{0}")]
+    Api(String),
 }

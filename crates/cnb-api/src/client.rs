@@ -307,6 +307,47 @@ impl CnbClient {
         Self::handle_response(resp).await
     }
 
+    // ==================== Knowledge API ====================
+
+    /// 获取知识库支持的模型列表
+    pub async fn list_knowledge_models(&self) -> Result<Vec<KnowledgeModel>, ApiError> {
+        let url = format!("{}{}/-/knowledgebase/models", self.base_url, self.repo);
+        let resp = self.http.get(&url).send().await?;
+        Self::handle_response(resp).await
+    }
+
+    /// 获取知识库信息
+    pub async fn get_knowledge_base_info(&self) -> Result<KnowledgeBaseInfo, ApiError> {
+        let url = format!("{}{}/-/knowledgebase", self.base_url, self.repo);
+        let resp = self.http.get(&url).send().await?;
+        Self::handle_response(resp).await
+    }
+
+    /// 删除知识库
+    pub async fn delete_knowledge_base(&self) -> Result<(), ApiError> {
+        let url = format!("{}{}/-/knowledgebase", self.base_url, self.repo);
+        let resp = self.http.delete(&url).send().await?;
+        let status = resp.status().as_u16();
+        if status == 404 {
+            return Err(ApiError::NotFound("知识库不存在".to_string()));
+        }
+        if status >= 200 && status < 300 {
+            return Ok(());
+        }
+        let text = resp.text().await.unwrap_or_default();
+        Err(ApiError::Api(format!("HTTP {status}: {text}")))
+    }
+
+    /// 查询知识库
+    pub async fn query_knowledge_base(
+        &self,
+        req: &QueryKnowledgeBaseRequest,
+    ) -> Result<Vec<KnowledgeQueryResult>, ApiError> {
+        let url = format!("{}{}/-/knowledgebase/query", self.base_url, self.repo);
+        let resp = self.http.post(&url).json(req).send().await?;
+        Self::handle_response(resp).await
+    }
+
     // ==================== Star API ====================
 
     /// 获取仓库 Star 用户列表
