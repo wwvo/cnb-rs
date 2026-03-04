@@ -40,7 +40,10 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
     };
 
     // 收集需要下载的文件
-    let download_files = collect_files(&client, &args.files, &git_ref).await?;
+    let all_files = collect_files(&client, &args.files, &git_ref).await?;
+
+    // 应用 include/exclude glob 过滤
+    let download_files = filter_files(all_files, &args.include, &args.exclude);
 
     if download_files.is_empty() {
         println!("没有找到需要下载的文件");
@@ -227,6 +230,34 @@ async fn download_lfs(
     }
 
     Ok(())
+}
+
+/// 根据 include/exclude glob 模式过滤文件列表
+fn filter_files(files: Vec<DownFile>, include: &[String], exclude: &[String]) -> Vec<DownFile> {
+    files
+        .into_iter()
+        .filter(|file| {
+            // include：空列表表示包含所有
+            let included = if include.is_empty() {
+                true
+            } else {
+                include.iter().any(|pattern| {
+                    glob::Pattern::new(pattern)
+                        .map(|p| p.matches(&file.path))
+                        .unwrap_or(false)
+                })
+            };
+
+            // exclude：匹配任一排除模式则排除
+            let excluded = exclude.iter().any(|pattern| {
+                glob::Pattern::new(pattern)
+                    .map(|p| p.matches(&file.path))
+                    .unwrap_or(false)
+            });
+
+            included && !excluded
+        })
+        .collect()
 }
 
 /// 截断文件名显示

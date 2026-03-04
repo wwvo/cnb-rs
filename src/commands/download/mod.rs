@@ -20,6 +20,14 @@ pub struct DownloadArgs {
     #[arg(long = "local-dir", default_value = ".")]
     pub local_dir: String,
 
+    /// 包含的文件 glob 模式（可多次指定）
+    #[arg(long = "include")]
+    pub include: Vec<String>,
+
+    /// 排除的文件 glob 模式（可多次指定）
+    #[arg(long = "exclude")]
+    pub exclude: Vec<String>,
+
     /// 最大并发下载数
     #[arg(short = 'c', long = "concurrency", default_value_t = 4)]
     pub concurrency: usize,
