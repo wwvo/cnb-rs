@@ -111,6 +111,7 @@ async fn async_main() -> anyhow::Result<()> {
             match cmd.subcommand {
                 ReleaseSubcommand::List => commands::release::list::run(&ctx).await,
                 ReleaseSubcommand::Create(ref args) => commands::release::create::run(&ctx, args).await,
+                ReleaseSubcommand::AssetStats => commands::release::asset_stats::run(&ctx).await,
             }
         }
     }

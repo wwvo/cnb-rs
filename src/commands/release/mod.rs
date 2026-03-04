@@ -2,6 +2,7 @@
 
 use clap::Parser;
 
+pub mod asset_stats;
 pub mod create;
 pub mod list;
 
@@ -18,4 +19,7 @@ pub enum ReleaseSubcommand {
     List,
     /// 创建 Release
     Create(create::CreateArgs),
+    /// 统计 Release 附件大小
+    #[command(name = "asset-stats")]
+    AssetStats,
 }
