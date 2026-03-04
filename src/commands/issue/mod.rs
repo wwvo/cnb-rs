@@ -2,6 +2,7 @@
 
 use clap::Parser;
 
+pub mod assigners;
 pub mod close;
 pub mod comment;
 pub mod create;
@@ -39,4 +40,7 @@ pub enum IssueSubcommand {
 
     /// 下载 Issue 为 Markdown 文件
     Download(download::DownloadArgs),
+
+    /// Issue 处理人管理（获取/添加）
+    Assigners(assigners::AssignersArgs),
 }
