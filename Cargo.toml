@@ -17,7 +17,7 @@ members = [
 version = "0.1.0"
 edition = "2024"
 repository = "https://cnb.cool/prevailna/cnb"
-license = "MIT"
+license = "Apache-2.0"
 
 [workspace.dependencies]
 # 内部 crate
@@ -70,6 +70,9 @@ cnb-tui = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_System_Console"] }
 
 [lints]
 workspace = true
