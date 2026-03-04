@@ -82,6 +82,7 @@ async fn async_main() -> anyhow::Result<()> {
             use commands::issue::IssueSubcommand;
             match cmd.subcommand {
                 IssueSubcommand::List(ref args) => commands::issue::list::run(&ctx, args).await,
+                IssueSubcommand::Mine => commands::issue::mine::run(&ctx).await,
             }
         }
     }

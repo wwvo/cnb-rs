@@ -3,6 +3,7 @@
 use clap::Parser;
 
 pub mod list;
+pub mod mine;
 
 /// Issue 管理
 #[derive(Debug, Parser)]
@@ -15,4 +16,7 @@ pub struct IssueCommand {
 pub enum IssueSubcommand {
     /// 列出仓库的 Issue
     List(list::ListArgs),
+
+    /// 列出与我相关的 Issue
+    Mine,
 }
