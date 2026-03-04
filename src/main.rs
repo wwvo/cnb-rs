@@ -36,6 +36,9 @@ enum Commands {
 
     /// Pull Request 管理
     Pull(commands::pull::PullCommand),
+
+    /// Release 管理
+    Release(commands::release::ReleaseCommand),
 }
 
 fn main() {
@@ -101,6 +104,12 @@ async fn async_main() -> anyhow::Result<()> {
                 PullSubcommand::Create(ref args) => commands::pull::create::run(&ctx, args).await,
                 PullSubcommand::Update(ref args) => commands::pull::update::run(&ctx, args).await,
                 PullSubcommand::Merge(ref args) => commands::pull::merge::run(&ctx, args).await,
+            }
+        }
+        Commands::Release(cmd) => {
+            use commands::release::ReleaseSubcommand;
+            match cmd.subcommand {
+                ReleaseSubcommand::List => commands::release::list::run(&ctx).await,
             }
         }
     }
