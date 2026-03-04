@@ -42,6 +42,9 @@ enum Commands {
 
     /// Commit 管理
     Commit(commands::commit::CommitCommand),
+
+    /// 下载仓库文件
+    Download(commands::download::DownloadArgs),
 }
 
 fn main() {
@@ -127,5 +130,6 @@ async fn async_main() -> anyhow::Result<()> {
                 CommitSubcommand::AssetUpload(ref args) => commands::commit::asset_upload::run(&ctx, args).await,
             }
         }
+        Commands::Download(ref args) => commands::download::run::run(&ctx, args).await,
     }
 }

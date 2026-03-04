@@ -307,6 +307,15 @@ impl CnbClient {
         Self::handle_response(resp).await
     }
 
+    // ==================== Content API ====================
+
+    /// 获取仓库文件/目录内容
+    pub async fn get_content(&self, path: &str, git_ref: &str) -> Result<Content, ApiError> {
+        let url = format!("{}{}/-/git/contents/{}?ref={git_ref}", self.base_url, self.repo, path);
+        let resp = self.http.get(&url).send().await?;
+        Self::handle_response(resp).await
+    }
+
     // ==================== Commit API ====================
 
     /// 获取 Commit 列表
