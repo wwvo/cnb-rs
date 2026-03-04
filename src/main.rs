@@ -25,6 +25,9 @@ struct Cli {
 
 #[derive(Debug, clap::Subcommand)]
 enum Commands {
+    /// 认证管理
+    Auth(commands::auth::AuthCommand),
+
     /// 使用自然语言与 CNB OpenAPI 交互
     Chat(commands::chat::ChatArgs),
 
@@ -110,6 +113,14 @@ async fn async_main() -> anyhow::Result<()> {
     let ctx = AppContext::new(cli.domain, cli.repo);
 
     match cli.command {
+        Commands::Auth(cmd) => {
+            use commands::auth::AuthSubcommand;
+            match cmd.subcommand {
+                AuthSubcommand::Login(ref args) => commands::auth::login::run(&ctx, args).await,
+                AuthSubcommand::Status => todo!("auth status"),
+                AuthSubcommand::Logout => todo!("auth logout"),
+            }
+        }
         Commands::Chat(ref args) => {
             let client = ctx.api_client()?;
             if let Some(ref question) = args.do_ {

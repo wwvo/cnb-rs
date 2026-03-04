@@ -1,5 +1,6 @@
 //! 子命令实现
 
+pub mod auth;
 pub mod chat;
 pub mod commit;
 pub mod completion;
