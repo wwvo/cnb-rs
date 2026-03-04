@@ -28,6 +28,13 @@ enum Commands {
     /// 使用自然语言与 CNB OpenAPI 交互
     Chat(commands::chat::ChatArgs),
 
+    /// 生成终端命令行补全脚本
+    Completion {
+        /// 目标 shell 类型
+        #[arg(value_enum)]
+        shell: clap_complete::Shell,
+    },
+
     /// 显示仓库和用户信息
     Info,
 
@@ -110,6 +117,10 @@ async fn async_main() -> anyhow::Result<()> {
             } else {
                 commands::chat::interactive_chat(client).await
             }
+        }
+        Commands::Completion { shell } => {
+            commands::completion::run(shell);
+            Ok(())
         }
         Commands::Info => commands::info::run(&ctx).await,
         Commands::Version => {

@@ -2,6 +2,7 @@
 
 pub mod chat;
 pub mod commit;
+pub mod completion;
 pub mod download;
 pub mod group;
 pub mod info;
