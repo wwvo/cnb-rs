@@ -5,6 +5,7 @@ use clap::Parser;
 pub mod close;
 pub mod comment;
 pub mod create;
+pub mod download;
 pub mod exist;
 pub mod list;
 pub mod mine;
@@ -35,4 +36,7 @@ pub enum IssueSubcommand {
 
     /// 检查 Issue 是否存在
     Exist(exist::ExistArgs),
+
+    /// 下载 Issue 为 Markdown 文件
+    Download(download::DownloadArgs),
 }
