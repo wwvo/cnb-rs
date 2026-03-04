@@ -4,6 +4,8 @@ use clap::Parser;
 
 pub mod create;
 pub mod list;
+pub mod merge;
+pub mod update;
 
 /// Pull Request 管理
 #[derive(Debug, Parser)]
@@ -19,4 +21,10 @@ pub enum PullSubcommand {
 
     /// 创建 Pull Request
     Create(create::CreateArgs),
+
+    /// 更新 Pull Request
+    Update(update::UpdateArgs),
+
+    /// 合并 Pull Request
+    Merge(merge::MergeArgs),
 }
