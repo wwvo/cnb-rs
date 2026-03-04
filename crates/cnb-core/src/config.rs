@@ -60,6 +60,37 @@ impl Config {
         home.join(CONFIG_FILE)
     }
 
+    /// 支持的配置 key 列表
+    pub const VALID_KEYS: &[&str] = &["domain", "git_protocol"];
+
+    /// 获取配置项的值
+    pub fn get_value(&self, key: &str) -> Option<&str> {
+        match key {
+            "domain" => self.domain.as_deref(),
+            "git_protocol" => self.git_protocol.as_deref(),
+            _ => None,
+        }
+    }
+
+    /// 设置配置项的值并写入文件
+    pub fn set_value(key: &str, value: &str) -> anyhow::Result<()> {
+        let path = Self::config_path();
+        let mut config = if path.exists() {
+            let content = std::fs::read_to_string(&path)?;
+            toml::from_str::<Config>(&content).unwrap_or_default()
+        } else {
+            Config::default()
+        };
+
+        match key {
+            "domain" => config.domain = Some(value.to_string()),
+            "git_protocol" => config.git_protocol = Some(value.to_string()),
+            _ => anyhow::bail!("未知配置项: {key}\n可用配置项: {}", Self::VALID_KEYS.join(", ")),
+        }
+
+        Self::write_config(&path, &config)
+    }
+
     /// 保存认证信息到配置文件
     ///
     /// 保留已有配置，仅更新指定域名的 auth 段。
