@@ -2,6 +2,7 @@
 
 use clap::Parser;
 
+pub mod close;
 pub mod create;
 pub mod list;
 pub mod mine;
@@ -23,4 +24,7 @@ pub enum IssueSubcommand {
 
     /// 创建 Issue
     Create(create::CreateArgs),
+
+    /// 关闭 Issue
+    Close(close::CloseArgs),
 }
