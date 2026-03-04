@@ -1,9 +1,12 @@
-//! download 命令执行逻辑 - 基础顺序下载（blob 文件）
+//! download 命令执行逻辑 - 并发下载 + 进度条
 
 use anyhow::Result;
 use base64::Engine;
 use cnb_core::context::AppContext;
+use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use std::path::Path;
+use std::sync::Arc;
+use tokio::sync::Semaphore;
 
 use super::DownloadArgs;
 
@@ -37,10 +40,101 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
     };
 
     // 收集需要下载的文件
+    let download_files = collect_files(&client, &args.files, &git_ref).await?;
+
+    if download_files.is_empty() {
+        println!("没有找到需要下载的文件");
+        return Ok(());
+    }
+
+    println!("共 {} 个文件待下载\n", download_files.len());
+
+    // 并发下载 + 进度条
+    let mp = MultiProgress::new();
+    let semaphore = Arc::new(Semaphore::new(args.concurrency));
+    let local_dir = args.local_dir.clone();
+    let token = client.token().to_string();
+
+    let mut handles = Vec::new();
+
+    for file in download_files {
+        let sem = semaphore.clone();
+        let mp = mp.clone();
+        let local_dir = local_dir.clone();
+        let token = token.clone();
+
+        let handle = tokio::spawn(async move {
+            let _permit = sem.acquire().await;
+
+            let pb = mp.add(ProgressBar::new(file.size.max(1) as u64));
+            pb.set_style(
+                ProgressStyle::with_template(
+                    "{prefix:.cyan} [{bar:30}] {bytes}/{total_bytes} {msg}",
+                )
+                .unwrap_or_else(|_| ProgressStyle::default_bar())
+                .progress_chars("=> "),
+            );
+            let display_name = truncate_filename(&file.path, 30);
+            pb.set_prefix(display_name);
+
+            let result = match file.file_type.as_str() {
+                "blob" => download_blob(&file, &local_dir, &pb),
+                "lfs" => download_lfs(&file, &local_dir, &token, &pb).await,
+                _ => Ok(()),
+            };
+
+            match &result {
+                Ok(()) => {
+                    pb.set_message("done");
+                    pb.finish();
+                }
+                Err(e) => {
+                    pb.set_message(format!("FAILED: {e}"));
+                    pb.abandon();
+                }
+            }
+
+            (file.path, result)
+        });
+
+        handles.push(handle);
+    }
+
+    // 等待所有下载完成
+    let mut success = 0usize;
+    let mut failed = 0usize;
+    let mut errors = Vec::new();
+
+    for handle in handles {
+        if let Ok((path, result)) = handle.await {
+            match result {
+                Ok(()) => success += 1,
+                Err(e) => {
+                    errors.push(format!("{path}: {e}"));
+                    failed += 1;
+                }
+            }
+        }
+    }
+
+    println!("\n下载完成：{success} 成功，{failed} 失败");
+    for err in &errors {
+        println!("  ✗ {err}");
+    }
+
+    Ok(())
+}
+
+/// 收集需要下载的文件列表
+async fn collect_files(
+    client: &cnb_api::client::CnbClient,
+    files: &[String],
+    git_ref: &str,
+) -> Result<Vec<DownFile>> {
     let mut download_files: Vec<DownFile> = Vec::new();
 
-    for file_path in &args.files {
-        let content = client.get_content(file_path, &git_ref).await?;
+    for file_path in files {
+        let content = client.get_content(file_path, git_ref).await?;
 
         match content.content_type.as_str() {
             "blob" | "lfs" => {
@@ -53,10 +147,9 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
                 });
             }
             "tree" => {
-                // 递归获取目录下的文件
                 for entry in &content.entries {
                     if entry.entry_type == "blob" || entry.entry_type == "lfs" {
-                        let sub = client.get_content(&entry.path, &git_ref).await?;
+                        let sub = client.get_content(&entry.path, git_ref).await?;
                         download_files.push(DownFile {
                             path: sub.path,
                             file_type: sub.content_type,
@@ -77,56 +170,70 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
     let mut seen = std::collections::HashSet::new();
     download_files.retain(|f| seen.insert(f.path.clone()));
 
-    if download_files.is_empty() {
-        println!("没有找到需要下载的文件");
-        return Ok(());
-    }
-
-    println!("共 {} 个文件待下载", download_files.len());
-
-    // 顺序下载
-    let mut success = 0usize;
-    let mut failed = 0usize;
-
-    for file in &download_files {
-        match file.file_type.as_str() {
-            "blob" => match download_blob(file, &args.local_dir) {
-                Ok(()) => {
-                    println!("✓ {}", file.path);
-                    success += 1;
-                }
-                Err(e) => {
-                    println!("✗ {} - {e}", file.path);
-                    failed += 1;
-                }
-            },
-            "lfs" => {
-                // LFS 支持将在后续提交中实现
-                println!("⊘ {} (LFS 文件，暂不支持)", file.path);
-            }
-            _ => {}
-        }
-    }
-
-    println!("\n下载完成：{success} 成功，{failed} 失败");
-
-    Ok(())
+    Ok(download_files)
 }
 
 /// 下载 blob 类型文件（base64 解码写入磁盘）
-fn download_blob(file: &DownFile, local_dir: &str) -> Result<()> {
+fn download_blob(file: &DownFile, local_dir: &str, pb: &ProgressBar) -> Result<()> {
     let file_path = Path::new(local_dir).join(&file.path);
 
-    // 创建父目录
     if let Some(parent) = file_path.parent() {
         std::fs::create_dir_all(parent)?;
     }
 
-    // base64 解码
     let decoded = base64::engine::general_purpose::STANDARD.decode(&file.content)?;
-
-    // 写入文件
-    std::fs::write(&file_path, decoded)?;
+    std::fs::write(&file_path, &decoded)?;
+    pb.set_length(decoded.len() as u64);
+    pb.set_position(decoded.len() as u64);
 
     Ok(())
+}
+
+/// 下载 LFS 类型文件（HTTP 流式下载）
+async fn download_lfs(
+    file: &DownFile,
+    local_dir: &str,
+    token: &str,
+    pb: &ProgressBar,
+) -> Result<()> {
+    let file_path = Path::new(local_dir).join(&file.path);
+
+    if let Some(parent) = file_path.parent() {
+        std::fs::create_dir_all(parent)?;
+    }
+
+    let http = reqwest::Client::new();
+    let mut resp = http
+        .get(&file.lfs_download_url)
+        .header("Accept", "application/vnd.cnb.api+json")
+        .header("Authorization", format!("Bearer {token}"))
+        .send()
+        .await?;
+
+    let status = resp.status().as_u16();
+    if status < 200 || status >= 300 {
+        anyhow::bail!("HTTP {status}");
+    }
+
+    if let Some(len) = resp.content_length() {
+        pb.set_length(len);
+    }
+
+    let mut out = std::fs::File::create(&file_path)?;
+    use std::io::Write;
+    while let Some(chunk) = resp.chunk().await? {
+        out.write_all(&chunk)?;
+        pb.inc(chunk.len() as u64);
+    }
+
+    Ok(())
+}
+
+/// 截断文件名显示
+fn truncate_filename(path: &str, max_len: usize) -> String {
+    if path.len() <= max_len {
+        return path.to_string();
+    }
+    let half = (max_len - 3) / 2;
+    format!("{}...{}", &path[..half], &path[path.len() - half..])
 }
