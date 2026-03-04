@@ -98,6 +98,7 @@ async fn async_main() -> anyhow::Result<()> {
             use commands::pull::PullSubcommand;
             match cmd.subcommand {
                 PullSubcommand::List => commands::pull::list::run(&ctx).await,
+                PullSubcommand::Create(ref args) => commands::pull::create::run(&ctx, args).await,
             }
         }
     }

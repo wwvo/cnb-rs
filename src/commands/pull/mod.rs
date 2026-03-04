@@ -2,6 +2,7 @@
 
 use clap::Parser;
 
+pub mod create;
 pub mod list;
 
 /// Pull Request 管理
@@ -15,4 +16,7 @@ pub struct PullCommand {
 pub enum PullSubcommand {
     /// 列出与我相关的 Pull Request
     List,
+
+    /// 创建 Pull Request
+    Create(create::CreateArgs),
 }

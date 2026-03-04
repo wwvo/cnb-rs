@@ -88,6 +88,24 @@ pub fn parse_git_url(url: &str) -> Result<GitInfo> {
     })
 }
 
+/// 获取最新一次提交的标题和正文
+pub fn latest_commit_message() -> Result<(String, String)> {
+    if !is_git_dir() {
+        bail!("当前目录不是 Git 仓库");
+    }
+
+    let output = Command::new("git")
+        .args(["--no-pager", "log", "--no-merges", "-1", "--pretty=%B"])
+        .output()
+        .context("获取最新提交信息失败")?;
+
+    let text = String::from_utf8_lossy(&output.stdout);
+    let lines: Vec<&str> = text.lines().collect();
+    let title = lines.first().unwrap_or(&"").to_string();
+    let body = lines.get(1..).unwrap_or(&[]).join("\n");
+    Ok((title, body))
+}
+
 /// 获取当前 Git 分支名
 pub fn current_branch() -> Result<String> {
     let output = Command::new("git")
