@@ -110,6 +110,7 @@ async fn async_main() -> anyhow::Result<()> {
             use commands::release::ReleaseSubcommand;
             match cmd.subcommand {
                 ReleaseSubcommand::List => commands::release::list::run(&ctx).await,
+                ReleaseSubcommand::Create(ref args) => commands::release::create::run(&ctx, args).await,
             }
         }
     }

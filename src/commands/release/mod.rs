@@ -2,6 +2,7 @@
 
 use clap::Parser;
 
+pub mod create;
 pub mod list;
 
 /// Release 管理
@@ -15,4 +16,6 @@ pub struct ReleaseCommand {
 pub enum ReleaseSubcommand {
     /// 列出 Release
     List,
+    /// 创建 Release
+    Create(create::CreateArgs),
 }
