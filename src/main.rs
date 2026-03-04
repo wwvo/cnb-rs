@@ -85,6 +85,7 @@ async fn async_main() -> anyhow::Result<()> {
                 IssueSubcommand::Mine => commands::issue::mine::run(&ctx).await,
                 IssueSubcommand::Create(ref args) => commands::issue::create::run(&ctx, args).await,
                 IssueSubcommand::Close(ref args) => commands::issue::close::run(&ctx, args).await,
+                IssueSubcommand::Comment(ref args) => commands::issue::comment::run(&ctx, args).await,
             }
         }
     }
