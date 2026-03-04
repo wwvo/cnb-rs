@@ -10,6 +10,7 @@ pub mod release;
 pub mod repo;
 pub mod star;
 pub mod user;
+pub mod workspace;
 
 pub use commit::*;
 pub use content::*;
@@ -21,3 +22,4 @@ pub use release::*;
 pub use repo::*;
 pub use star::*;
 pub use user::*;
+pub use workspace::*;

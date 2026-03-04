@@ -57,6 +57,9 @@ enum Commands {
 
     /// 组织管理
     Group(commands::group::GroupCommand),
+
+    /// 云原生工作区管理
+    Workspace(commands::workspace::WorkspaceCommand),
 }
 
 fn main() {
@@ -158,6 +161,12 @@ async fn async_main() -> anyhow::Result<()> {
             use commands::group::GroupSubcommand;
             match cmd.subcommand {
                 GroupSubcommand::UpdateLogo(ref args) => commands::group::update_logo::run(&ctx, args).await,
+            }
+        }
+        Commands::Workspace(cmd) => {
+            use commands::workspace::WorkspaceSubcommand;
+            match cmd.subcommand {
+                WorkspaceSubcommand::ClosedClean => commands::workspace::closed_clean::run(&ctx).await,
             }
         }
     }

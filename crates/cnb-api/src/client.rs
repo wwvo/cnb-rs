@@ -401,6 +401,38 @@ impl CnbClient {
         Self::handle_response(resp).await
     }
 
+    // ==================== Workspace API ====================
+
+    /// 获取我的工作区列表
+    pub async fn list_workspaces(
+        &self,
+        status: &str,
+        page: i32,
+        page_size: i32,
+    ) -> Result<WorkspaceListResponse, ApiError> {
+        let mut url = format!(
+            "{}user/workspaces?page={page}&page_size={page_size}",
+            self.base_url
+        );
+        if !status.is_empty() {
+            url.push_str(&format!("&status={status}"));
+        }
+        let resp = self.http.get(&url).send().await?;
+        Self::handle_response(resp).await
+    }
+
+    /// 删除工作区
+    pub async fn delete_workspace(&self, pipeline_id: &str) -> Result<(), ApiError> {
+        let url = format!("{}user/workspaces/{pipeline_id}", self.base_url);
+        let resp = self.http.delete(&url).send().await?;
+        let status = resp.status().as_u16();
+        if status >= 200 && status < 300 {
+            return Ok(());
+        }
+        let text = resp.text().await.unwrap_or_default();
+        Err(ApiError::Api(format!("删除工作区失败 HTTP {status}: {text}")))
+    }
+
     // ==================== Content API ====================
 
     /// 获取仓库文件/目录内容
