@@ -31,6 +31,9 @@ enum Commands {
     /// 使用自然语言与 CNB OpenAPI 交互
     Chat(commands::chat::ChatArgs),
 
+    /// 配置管理
+    Config(commands::config::ConfigCommand),
+
     /// 生成终端命令行补全脚本
     Completion {
         /// 目标 shell 类型
@@ -127,6 +130,17 @@ async fn async_main() -> anyhow::Result<()> {
                 commands::chat::agent::run_agent(client, question, !args.no_stream).await
             } else {
                 commands::chat::interactive_chat(client).await
+            }
+        }
+        Commands::Config(cmd) => {
+            use commands::config::ConfigSubcommand;
+            match cmd.subcommand {
+                ConfigSubcommand::List => {
+                    commands::config::list::run(&ctx);
+                    Ok(())
+                }
+                ConfigSubcommand::Get(_ref_args) => todo!("config get"),
+                ConfigSubcommand::Set(_ref_args) => todo!("config set"),
             }
         }
         Commands::Completion { shell } => {

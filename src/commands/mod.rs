@@ -4,6 +4,7 @@ pub mod auth;
 pub mod chat;
 pub mod commit;
 pub mod completion;
+pub mod config;
 pub mod download;
 pub mod group;
 pub mod info;
