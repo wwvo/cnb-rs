@@ -237,6 +237,76 @@ impl CnbClient {
         Self::handle_response(resp).await
     }
 
+    // ==================== Release API ====================
+
+    /// 获取 Release 列表
+    pub async fn list_releases(&self, page: u32, page_size: u32) -> Result<Vec<Release>, ApiError> {
+        let url = format!("{}{}/-/releases?page={page}&page_size={page_size}",
+            self.base_url, self.repo);
+        let resp = self.http.get(&url).send().await?;
+        Self::handle_response(resp).await
+    }
+
+    /// 获取所有 Release（自动分页）
+    pub async fn list_all_releases(&self) -> Result<Vec<Release>, ApiError> {
+        let page_size = 100u32;
+        let mut all = Vec::new();
+        let mut page = 1u32;
+        loop {
+            let releases = self.list_releases(page, page_size).await?;
+            let count = releases.len();
+            all.extend(releases);
+            if (count as u32) < page_size {
+                break;
+            }
+            page += 1;
+        }
+        Ok(all)
+    }
+
+    /// 根据 Tag 获取 Release
+    pub async fn get_release_by_tag(&self, repo_name: &str, tag: &str) -> Result<Release, ApiError> {
+        let url = format!("{}{repo_name}/-/releases/tag/{tag}", self.base_url);
+        let resp = self.http.get(&url).send().await?;
+        Self::handle_response(resp).await
+    }
+
+    /// 创建 Release
+    pub async fn create_release(&self, req: &CreateReleaseRequest) -> Result<Release, ApiError> {
+        let url = format!("{}{}/-/releases", self.base_url, self.repo);
+        let resp = self.http.post(&url).json(req).send().await?;
+        Self::handle_response(resp).await
+    }
+
+    /// 删除 Release 附件
+    pub async fn delete_release_asset(&self, release_id: &str, asset_id: &str) -> Result<(), ApiError> {
+        let url = format!("{}{}/-/releases/{release_id}/assets/{asset_id}", self.base_url, self.repo);
+        let resp = self.http.delete(&url).send().await?;
+        let status = resp.status().as_u16();
+        if status >= 200 && status < 300 {
+            return Ok(());
+        }
+        if status == 401 {
+            return Err(ApiError::Auth(
+                "CNB_TOKEN 缺失或无效。请设置：export CNB_TOKEN=\"your_token\"".to_string(),
+            ));
+        }
+        let body = resp.text().await.unwrap_or_default();
+        Err(ApiError::HttpStatus { status, body })
+    }
+
+    /// 获取 Release 附件上传 URL
+    pub async fn get_release_asset_upload_url(
+        &self,
+        repo_name: &str,
+        release_id: &str,
+        req: &PostReleaseAssetUploadURLRequest,
+    ) -> Result<ReleaseAssetUploadURL, ApiError> {
+        let url = format!("{}{repo_name}/-/releases/{release_id}/asset-upload-url", self.base_url);
+        let resp = self.http.post(&url).json(req).send().await?;
+        Self::handle_response(resp).await
+    }
+
     // ==================== Internal ====================
 
     /// 处理 HTTP 响应，返回反序列化后的结果或错误
