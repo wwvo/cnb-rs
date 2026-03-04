@@ -108,8 +108,7 @@ async fn async_main() -> anyhow::Result<()> {
             if let Some(ref question) = args.do_ {
                 commands::chat::agent::run_agent(client, question, !args.no_stream).await
             } else {
-                // 交互式模式（后续实现）
-                anyhow::bail!("交互式模式尚未实现，请使用 --do 参数")
+                commands::chat::interactive_chat(client).await
             }
         }
         Commands::Info => commands::info::run(&ctx).await,
