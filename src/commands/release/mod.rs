@@ -4,6 +4,7 @@ use clap::Parser;
 
 pub mod asset_clean;
 pub mod asset_stats;
+pub mod asset_upload;
 pub mod create;
 pub mod list;
 
@@ -26,4 +27,7 @@ pub enum ReleaseSubcommand {
     /// 清理 Release 附件
     #[command(name = "asset-clean")]
     AssetClean(asset_clean::AssetCleanArgs),
+    /// 上传附件到 Release
+    #[command(name = "asset-upload")]
+    AssetUpload(asset_upload::AssetUploadArgs),
 }

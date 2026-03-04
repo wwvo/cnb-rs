@@ -113,6 +113,7 @@ async fn async_main() -> anyhow::Result<()> {
                 ReleaseSubcommand::Create(ref args) => commands::release::create::run(&ctx, args).await,
                 ReleaseSubcommand::AssetStats => commands::release::asset_stats::run(&ctx).await,
                 ReleaseSubcommand::AssetClean(ref args) => commands::release::asset_clean::run(&ctx, args).await,
+                ReleaseSubcommand::AssetUpload(ref args) => commands::release::asset_upload::run(&ctx, args).await,
             }
         }
     }
