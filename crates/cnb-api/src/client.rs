@@ -77,7 +77,7 @@ impl CnbClient {
 
     /// 获取 Issue 列表
     pub async fn list_issues(&self, opts: &ListIssuesOptions) -> Result<Vec<Issue>, ApiError> {
-        let mut url = format!("{}{}/issues?page={}&page_size={}&state={}",
+        let mut url = format!("{}{}/-/issues?page={}&page_size={}&state={}",
             self.base_url, self.repo, opts.page, opts.page_size, opts.state);
         if let Some(ref assignees) = opts.assignees {
             url.push_str(&format!("&assignees={assignees}"));
@@ -115,21 +115,21 @@ impl CnbClient {
 
     /// 获取单个 Issue 详情
     pub async fn get_issue(&self, number: &str) -> Result<IssueDetail, ApiError> {
-        let url = format!("{}{}/issues/{number}", self.base_url, self.repo);
+        let url = format!("{}{}/-/issues/{number}", self.base_url, self.repo);
         let resp = self.http.get(&url).send().await?;
         Self::handle_response(resp).await
     }
 
     /// 创建 Issue
     pub async fn create_issue(&self, req: &CreateIssueRequest) -> Result<IssueDetail, ApiError> {
-        let url = format!("{}{}/issues", self.base_url, self.repo);
+        let url = format!("{}{}/-/issues", self.base_url, self.repo);
         let resp = self.http.post(&url).json(req).send().await?;
         Self::handle_response(resp).await
     }
 
     /// 更新 Issue（用于关闭等操作）
     pub async fn update_issue(&self, number: &str, req: &UpdateIssueRequest) -> Result<(), ApiError> {
-        let url = format!("{}{}/issues/{number}", self.base_url, self.repo);
+        let url = format!("{}{}/-/issues/{number}", self.base_url, self.repo);
         let resp = self.http.patch(&url).json(req).send().await?;
         let status = resp.status().as_u16();
         if status >= 200 && status < 300 {
@@ -146,7 +146,7 @@ impl CnbClient {
 
     /// 获取 Issue 评论列表
     pub async fn list_issue_comments(&self, number: &str) -> Result<Vec<IssueComment>, ApiError> {
-        let url = format!("{}{}/issues/{number}/comments?page=1&page_size=100",
+        let url = format!("{}{}/-/issues/{number}/comments?page=1&page_size=100",
             self.base_url, self.repo);
         let resp = self.http.get(&url).send().await?;
         Self::handle_response(resp).await
@@ -154,7 +154,7 @@ impl CnbClient {
 
     /// 创建 Issue 评论
     pub async fn create_issue_comment(&self, number: &str, req: &CreateCommentRequest) -> Result<(), ApiError> {
-        let url = format!("{}{}/issues/{number}/comments", self.base_url, self.repo);
+        let url = format!("{}{}/-/issues/{number}/comments", self.base_url, self.repo);
         let resp = self.http.post(&url).json(req).send().await?;
         let status = resp.status().as_u16();
         if status >= 200 && status < 300 {
@@ -171,14 +171,14 @@ impl CnbClient {
 
     /// 获取 Issue 处理人列表
     pub async fn list_issue_assignees(&self, number: &str) -> Result<Vec<IssueAssignee>, ApiError> {
-        let url = format!("{}{}/issues/{number}/assignees", self.base_url, self.repo);
+        let url = format!("{}{}/-/issues/{number}/assignees", self.base_url, self.repo);
         let resp = self.http.get(&url).send().await?;
         Self::handle_response(resp).await
     }
 
     /// 添加 Issue 处理人
     pub async fn add_issue_assignees(&self, number: &str, req: &AddAssigneesRequest) -> Result<(), ApiError> {
-        let url = format!("{}{}/issues/{number}/assignees", self.base_url, self.repo);
+        let url = format!("{}{}/-/issues/{number}/assignees", self.base_url, self.repo);
         let resp = self.http.post(&url).json(req).send().await?;
         let status = resp.status().as_u16();
         if status >= 200 && status < 300 {

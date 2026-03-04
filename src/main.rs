@@ -30,6 +30,9 @@ enum Commands {
 
     /// 显示版本信息
     Version,
+
+    /// Issue 管理
+    Issue(commands::issue::IssueCommand),
 }
 
 fn main() {
@@ -74,6 +77,12 @@ async fn async_main() -> anyhow::Result<()> {
         Commands::Version => {
             commands::version::run();
             Ok(())
+        }
+        Commands::Issue(cmd) => {
+            use commands::issue::IssueSubcommand;
+            match cmd.subcommand {
+                IssueSubcommand::List(ref args) => commands::issue::list::run(&ctx, args).await,
+            }
         }
     }
 }

@@ -28,6 +28,7 @@ cnb-tui = { path = "crates/cnb-tui" }
 
 # 外部依赖
 anyhow = "1"
+chrono = "0.4"
 clap = { version = "4", features = ["derive"] }
 clap_complete = "4"
 dirs = "6"
@@ -62,6 +63,7 @@ path = "src/main.rs"
 
 [dependencies]
 anyhow = { workspace = true }
+chrono = { workspace = true }
 clap = { workspace = true }
 clap_complete = { workspace = true }
 cnb-api = { workspace = true }
