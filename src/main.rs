@@ -45,6 +45,9 @@ enum Commands {
 
     /// 下载仓库文件
     Download(commands::download::DownloadArgs),
+
+    /// 提交统计仪表盘
+    Stats,
 }
 
 fn main() {
@@ -131,5 +134,6 @@ async fn async_main() -> anyhow::Result<()> {
             }
         }
         Commands::Download(ref args) => commands::download::run::run(&ctx, args).await,
+        Commands::Stats => commands::stats::run().await,
     }
 }

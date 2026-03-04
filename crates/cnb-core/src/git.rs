@@ -106,6 +106,28 @@ pub fn latest_commit_message() -> Result<(String, String)> {
     Ok((title, body))
 }
 
+/// 获取所有非合并提交的时间戳和作者
+///
+/// 返回格式: `["timestamp;author", ...]`
+pub fn get_commits() -> Result<Vec<String>> {
+    if !is_git_dir() {
+        bail!("当前目录不是 Git 仓库");
+    }
+
+    let output = Command::new("git")
+        .args([
+            "log",
+            "--no-merges",
+            "--date=unix",
+            "--pretty=format:%ad;%an",
+        ])
+        .output()
+        .context("获取提交记录失败")?;
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    Ok(stdout.lines().filter(|l| !l.is_empty()).map(String::from).collect())
+}
+
 /// 获取当前 Git 分支名
 pub fn current_branch() -> Result<String> {
     let output = Command::new("git")
