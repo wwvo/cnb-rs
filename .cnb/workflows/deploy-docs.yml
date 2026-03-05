@@ -9,7 +9,7 @@ x-deploy-docs-job: &deploy-docs-job
     stages:
       - name: build
         image: node:20-alpine
-        script: cd docs && npm i -g pnpm && echo 'manage-package-manager-versions=false' >> .npmrc && pnpm install && pnpm run build
+        script: apk add --no-cache git && cd docs && npm i -g pnpm && echo 'manage-package-manager-versions=false' >> .npmrc && pnpm install && pnpm run build
       - name: deploy to cloudflare pages
         image: docker.cnb.cool/prevailna/deploy-cloudflare:latest
         script: cd docs/.vitepress/dist && wrangler pages deploy . --project-name=cnba
