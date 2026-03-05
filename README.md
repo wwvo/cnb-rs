@@ -19,6 +19,7 @@
 
 > [!NOTE]
 > 这 **不是** CNB 官方产品，而是一个社区驱动的开源项目。
+> 官方 CLI 工具请访问 [looc/git-cnb](https://cnb.cool/looc/git-cnb)。
 
 ## 功能特性
 
