@@ -1,0 +1,21 @@
+x-deploy-docs-job: &deploy-docs-job
+  - name: deploy-docs
+    runner:
+      cpus: 2
+    ifModify:
+      - "docs/**/*"
+    imports:
+      - https://cnb.cool/prevailna/secrets/-/blob/main/cloudflare.yml
+    stages:
+      - name: build
+        image: node:20-alpine
+        script: cd docs && npm i -g pnpm && echo 'manage-package-manager-versions=false' >> .npmrc && pnpm install && pnpm run build
+      - name: deploy to cloudflare pages
+        image: docker.cnb.cool/prevailna/deploy-cloudflare:latest
+        script: cd docs/.vitepress/dist && wrangler pages deploy . --project-name=cnba
+
+main:
+  push: *deploy-docs-job
+
+'**':
+  web_trigger_deploy-docs: *deploy-docs-job

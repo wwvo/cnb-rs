@@ -1,21 +1,12 @@
+include:
+  - .cnb/workflows/deploy-docs.yml
+
 $:
   vscode:
-    - docker:
+    - runner:
+        cpus: 32
+      docker:
         image: docker.cnb.cool/wwvo/dev-env/rust:latest
       services:
         - vscode
         - docker
-main:
-  push:
-    - name: 部署文档站点
-      ifModify:
-        - "docs/**/*"
-      imports:
-        - https://cnb.cool/prevailna/secrets/-/blob/main/cloudflare.yml
-      stages:
-        - name: build
-          image: node:20-alpine
-          script: cd docs && npm i -g pnpm && echo 'manage-package-manager-versions=false' >> .npmrc && pnpm install && pnpm run build
-        - name: deploy to cloudflare pages
-          image: docker.cnb.cool/prevailna/deploy-cloudflare:latest
-          script: cd docs/.vitepress/dist && wrangler pages deploy . --project-name=cnba

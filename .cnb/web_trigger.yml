@@ -1,0 +1,5 @@
+branch:
+  - buttons:
+      - name: 部署文档站点
+        description: 部署文档站点
+        event: web_trigger_deploy-docs
