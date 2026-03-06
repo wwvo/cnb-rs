@@ -19,7 +19,7 @@ pub struct PullCommand {
 #[derive(Debug, clap::Subcommand)]
 pub enum PullSubcommand {
     /// 列出与我相关的 Pull Request
-    List,
+    List(list::ListArgs),
 
     /// 创建 Pull Request
     Create(create::CreateArgs),
@@ -34,7 +34,7 @@ pub enum PullSubcommand {
 impl PullCommand {
     pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
         match &self.subcommand {
-            PullSubcommand::List => list::run(ctx).await,
+            PullSubcommand::List(args) => list::run(ctx, args).await,
             PullSubcommand::Create(args) => create::run(ctx, args).await,
             PullSubcommand::Update(args) => update::run(ctx, args).await,
             PullSubcommand::Merge(args) => merge::run(ctx, args).await,
