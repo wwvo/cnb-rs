@@ -11,7 +11,7 @@ use cnb_tui::success;
 #[derive(Debug, Parser)]
 pub struct AssetUploadArgs {
     /// Release 的 Tag 名称
-    #[arg(short = 't', long = "tag-name")]
+    #[arg(short = 't', long = "tag", alias = "tag-name")]
     pub tag_name: String,
 
     /// 要上传的文件路径

@@ -10,11 +10,11 @@ use cnb_tui::{info, success, fail};
 #[derive(Debug, Parser)]
 pub struct AssetCleanArgs {
     /// 按 Tag 名前缀删除
-    #[arg(long = "tag-name-prefix")]
+    #[arg(long = "tag-prefix", alias = "tag-name-prefix")]
     pub tag_name_prefix: Option<String>,
 
     /// 按 Release 名前缀删除
-    #[arg(long = "release-name-prefix")]
+    #[arg(long = "release-prefix", alias = "release-name-prefix")]
     pub release_name_prefix: Option<String>,
 
     /// 删除 N 天前发布的 Release 附件
