@@ -44,12 +44,12 @@ pub struct CreatePullRequest {
 /// 更新 Pull Request 请求
 #[derive(Debug, Serialize)]
 pub struct UpdatePullRequest {
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub title: String,
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub body: String,
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub state: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub body: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
 }
 
 /// 合并 Pull Request 请求

@@ -13,26 +13,27 @@ pub struct UpdateArgs {
     pub number: String,
 
     /// 修改标题
-    #[arg(short = 't', long = "title", default_value = "")]
-    pub title: String,
+    #[arg(short = 't', long = "title")]
+    pub title: Option<String>,
 
     /// 修改描述
-    #[arg(short = 'b', long = "body", default_value = "")]
-    pub body: String,
+    #[arg(short = 'b', long = "body")]
+    pub body: Option<String>,
 
     /// 修改状态（open 或 closed）
-    #[arg(short = 's', long = "state", default_value = "")]
-    pub state: String,
+    #[arg(short = 's', long = "state")]
+    pub state: Option<String>,
 }
 
 /// 执行 pull update 命令
 pub async fn run(ctx: &AppContext, args: &UpdateArgs) -> Result<()> {
-    // 参数校验
-    if args.title.is_empty() && args.body.is_empty() && args.state.is_empty() {
+    if args.title.is_none() && args.body.is_none() && args.state.is_none() {
         bail!("至少需要指定 --title、--body 或 --state 中的一个");
     }
-    if !args.state.is_empty() && args.state != "open" && args.state != "closed" {
-        bail!("--state 只能为 'open' 或 'closed'");
+    if let Some(ref state) = args.state {
+        if state != "open" && state != "closed" {
+            bail!("--state 只能为 'open' 或 'closed'");
+        }
     }
 
     let client = ctx.api_client()?;
