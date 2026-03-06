@@ -89,6 +89,17 @@ export default defineConfig({
       {
         text: '仓库命令',
         items: [
+          {
+            text: 'cnb repo',
+            link: '/repo/',
+            items: [
+              { text: 'create', link: '/repo/create' },
+              { text: 'delete', link: '/repo/delete' },
+              { text: 'edit', link: '/repo/edit' },
+              { text: 'list', link: '/repo/list' },
+              { text: 'view', link: '/repo/view' },
+            ],
+          },
           { text: 'cnb download', link: '/download' },
           { text: 'cnb info', link: '/info' },
           { text: 'cnb stats', link: '/stats' },
