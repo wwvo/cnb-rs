@@ -22,11 +22,11 @@ pub struct CreateArgs {
     pub remote_repo: Option<String>,
 
     /// PR 标题（默认为最新提交信息）
-    #[arg(long = "title")]
+    #[arg(short = 't', long = "title")]
     pub title: Option<String>,
 
     /// PR 描述
-    #[arg(long = "body", default_value = "")]
+    #[arg(short = 'b', long = "body", default_value = "")]
     pub body: String,
 }
 
