@@ -3,6 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
+use cnb_tui::fmt::format_rfc3339;
 use std::io::{self, BufRead, Write};
 
 /// 清理 Commit 附件
@@ -33,7 +34,7 @@ impl std::fmt::Display for AssetToDelete {
         write!(
             f,
             "sha1: {}, asset: {}, created: {}",
-            self.sha, self.asset_name, parse_rfc3339(&self.created_at)
+            self.sha, self.asset_name, format_rfc3339(&self.created_at)
         )
     }
 }
@@ -126,9 +127,3 @@ pub async fn run(ctx: &AppContext, args: &AssetCleanArgs) -> Result<()> {
     Ok(())
 }
 
-/// 解析 RFC3339 时间为可读格式
-fn parse_rfc3339(s: &str) -> String {
-    chrono::DateTime::parse_from_rfc3339(s)
-        .map(|dt| dt.format("%Y-%m-%d %H:%M:%S").to_string())
-        .unwrap_or_default()
-}

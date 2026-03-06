@@ -2,6 +2,7 @@
 
 use anyhow::Result;
 use cnb_core::context::AppContext;
+use cnb_tui::fmt::format_rfc3339;
 use cnb_tui::{Column, Table};
 
 /// 执行 release list 命令
@@ -28,7 +29,7 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
         } else {
             ""
         };
-        let published = parse_rfc3339(&release.published_at);
+        let published = format_rfc3339(&release.published_at);
         table.add_row(vec![
             release.name.clone(),
             release.tag_name.clone(),
@@ -39,11 +40,4 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
     table.print();
 
     Ok(())
-}
-
-/// 解析 RFC3339 时间为可读格式
-fn parse_rfc3339(s: &str) -> String {
-    chrono::DateTime::parse_from_rfc3339(s)
-        .map(|dt| dt.format("%Y-%m-%d %H:%M:%S").to_string())
-        .unwrap_or_default()
 }
