@@ -21,7 +21,7 @@ pub struct MergeArgs {
     pub commit_message: String,
 
     /// 合并方式
-    #[arg(short = 's', long = "merge-style", value_enum, default_value = "merge")]
+    #[arg(short = 'M', long = "merge-style", value_enum, default_value = "merge")]
     pub merge_style: MergeStyle,
 }
 

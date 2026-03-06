@@ -11,7 +11,7 @@ use cnb_tui::success;
 #[derive(Debug, Parser)]
 pub struct AssetUploadArgs {
     /// Commit 的 SHA1
-    #[arg(short = 's', long = "sha1")]
+    #[arg(long = "sha1")]
     pub sha1: String,
 
     /// 要上传的文件路径
