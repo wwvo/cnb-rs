@@ -68,6 +68,9 @@ enum Commands {
     /// Release 管理
     Release(commands::release::ReleaseCommand),
 
+    /// 仓库管理
+    Repo(commands::repo::RepoCommand),
+
     /// Commit 管理
     Commit(commands::commit::CommitCommand),
 
@@ -147,6 +150,7 @@ async fn async_main() -> anyhow::Result<()> {
         Commands::Issue(cmd) => cmd.execute(&ctx).await,
         Commands::Pull(cmd) => cmd.execute(&ctx).await,
         Commands::Release(cmd) => cmd.execute(&ctx).await,
+        Commands::Repo(cmd) => cmd.execute(&ctx).await,
         Commands::Commit(cmd) => cmd.execute(&ctx).await,
         Commands::Download(ref args) => args.execute(&ctx).await,
         Commands::Stats => commands::stats::run().await,

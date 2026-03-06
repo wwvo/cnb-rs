@@ -7,6 +7,7 @@ mod issue;
 mod knowledge;
 mod pull;
 mod release;
+mod repo;
 mod star;
 mod workspace;
 

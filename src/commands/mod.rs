@@ -13,6 +13,7 @@ pub mod issue;
 pub mod knowledge;
 pub mod pull;
 pub mod release;
+pub mod repo;
 pub mod stars;
 pub mod stats;
 pub mod version;
