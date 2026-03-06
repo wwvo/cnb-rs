@@ -3,7 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 /// 列出仓库的 Issue
 #[derive(Debug, Parser)]
@@ -29,7 +29,7 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     };
 
     if filtered.is_empty() {
-        println!("没有找到符合条件的 Issue");
+        info!("没有找到符合条件的 Issue");
         return Ok(());
     }
 

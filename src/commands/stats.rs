@@ -6,7 +6,7 @@
 
 use anyhow::Result;
 use chrono::{DateTime, Duration, NaiveDate, Utc};
-use cnb_tui::TerminalGuard;
+use cnb_tui::{info, TerminalGuard};
 use ratatui::layout::{Constraint, Direction, Layout};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::Line;
@@ -18,7 +18,7 @@ pub async fn run() -> Result<()> {
     let lines = cnb_core::git::get_commits()?;
 
     if lines.is_empty() {
-        println!("没有找到提交记录");
+        info!("没有找到提交记录");
         return Ok(());
     }
 

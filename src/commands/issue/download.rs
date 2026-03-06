@@ -4,6 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_api::types::Issue;
 use cnb_core::context::AppContext;
+use cnb_tui::info;
 use std::fs;
 use std::io::Write;
 use std::path::Path;
@@ -83,10 +84,10 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
             }
         }
 
-        println!("已下载 Issue #{}: {}", issue.number, issue.title.trim());
+        info!("已下载 Issue #{}: {}", issue.number, issue.title.trim());
     }
 
-    println!("下载完成，共下载了 {} 个 Issue", issues.len());
+    info!("下载完成，共下载了 {} 个 Issue", issues.len());
 
     Ok(())
 }

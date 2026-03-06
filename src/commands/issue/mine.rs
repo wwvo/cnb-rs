@@ -3,7 +3,7 @@
 use anyhow::Result;
 use cnb_api::types::ListIssuesOptions;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 /// 执行 issue mine 命令
 pub async fn run(ctx: &AppContext) -> Result<()> {
@@ -53,7 +53,7 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
     }
 
     if results.is_empty() {
-        println!("没有找到与我相关的 Issue");
+        info!("没有找到与我相关的 Issue");
         return Ok(());
     }
 

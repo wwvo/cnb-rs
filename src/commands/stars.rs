@@ -5,7 +5,7 @@
 use anyhow::Result;
 use chrono::{Duration, NaiveDate, NaiveDateTime};
 use cnb_core::context::AppContext;
-use cnb_tui::TerminalGuard;
+use cnb_tui::{info, TerminalGuard};
 use ratatui::layout::{Constraint, Layout};
 use ratatui::style::{Color, Style};
 use ratatui::widgets::{Axis, Block, Borders, Chart, Dataset, GraphType};
@@ -17,13 +17,13 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
     let star_users = client.list_star_users().await?;
 
     if star_users.total == 0 {
-        println!("该仓库还没有 Star");
+        info!("该仓库还没有 Star");
         return Ok(());
     }
 
     // 解析第一个 Star 的时间，确定起始周
     let Some(first_star_time) = parse_star_time(&star_users.users[0].stared_at) else {
-        println!("无法解析 Star 时间数据");
+        info!("无法解析 Star 时间数据");
         return Ok(());
     };
     let first_week = start_of_week(first_star_time);

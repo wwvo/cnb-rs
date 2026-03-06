@@ -3,7 +3,7 @@
 use anyhow::Result;
 use cnb_core::context::AppContext;
 use cnb_tui::fmt::format_rfc3339;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 /// 执行 release list 命令
 pub async fn run(ctx: &AppContext) -> Result<()> {
@@ -11,7 +11,7 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
     let releases = client.list_all_releases().await?;
 
     if releases.is_empty() {
-        println!("没有找到 Release");
+        info!("没有找到 Release");
         return Ok(());
     }
 
