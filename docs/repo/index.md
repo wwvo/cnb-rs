@@ -9,13 +9,18 @@ cnb repo <subcommand>
 ## 可用命令
 
 - [cnb repo archive](/repo/archive) — 归档仓库
+- [cnb repo asset](/repo/asset) — 管理仓库资产
 - [cnb repo clone](/repo/clone) — 克隆仓库到本地
+- [cnb repo contributor](/repo/contributor) — 查看贡献者趋势
 - [cnb repo create](/repo/create) — 创建新仓库
 - [cnb repo delete](/repo/delete) — 删除仓库
 - [cnb repo edit](/repo/edit) — 编辑仓库信息
+- [cnb repo events](/repo/events) — 获取仓库动态
 - [cnb repo fork](/repo/fork) — 查看 Fork 列表
 - [cnb repo list](/repo/list) — 列出仓库
 - [cnb repo pin](/repo/pin) — 管理仓库墙（置顶仓库）
+- [cnb repo security](/repo/security) — 查看安全概览
+- [cnb repo top-contributors](/repo/top-contributors) — 查看活跃用户排名
 - [cnb repo transfer](/repo/transfer) — 转移仓库
 - [cnb repo unarchive](/repo/unarchive) — 解除仓库归档
 - [cnb repo view](/repo/view) — 查看仓库详情
