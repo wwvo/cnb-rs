@@ -71,7 +71,9 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
     table.print();
 
     // 尝试获取同组织下 feedback 仓库的 Issue（忽略错误）
-    let feedback_repo = get_feedback_repo(repo);
+    let Some(feedback_repo) = get_feedback_repo(repo) else {
+        return Ok(());
+    };
     if let Ok(feedback_client) = cnb_api::client::CnbClient::new(
         client.base_url(),
         client.base_web_url(),
@@ -106,8 +108,7 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
 }
 
 /// 获取同组织下的 feedback 仓库路径
-fn get_feedback_repo(repo: &str) -> String {
-    let parts: Vec<&str> = repo.split('/').collect();
-    let group = parts[..parts.len() - 1].join("/");
-    format!("{group}/feedback")
+fn get_feedback_repo(repo: &str) -> Option<String> {
+    let (group, _) = repo.rsplit_once('/')?;
+    Some(format!("{group}/feedback"))
 }
