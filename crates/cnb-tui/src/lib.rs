@@ -3,6 +3,7 @@
 //! 提供表格、图表、进度条等终端 UI 组件。
 
 pub mod table;
+pub mod terminal;
 
-pub use table::Table;
-pub use table::Column;
+pub use table::{Column, Table};
+pub use terminal::TerminalGuard;

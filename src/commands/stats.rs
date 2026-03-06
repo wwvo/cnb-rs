@@ -6,16 +6,12 @@
 
 use anyhow::Result;
 use chrono::{DateTime, Datelike, Duration, NaiveDate, Utc};
-use crossterm::event::{self, Event, KeyCode};
-use crossterm::terminal::{self, EnterAlternateScreen, LeaveAlternateScreen};
-use ratatui::backend::CrosstermBackend;
+use cnb_tui::TerminalGuard;
 use ratatui::layout::{Constraint, Direction, Layout};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::Line;
 use ratatui::widgets::{Axis, Block, Borders, Chart, Dataset, GraphType, List, ListItem};
-use ratatui::Terminal;
 use std::collections::HashMap;
-use std::io;
 
 /// 执行 stats 命令
 pub async fn run() -> Result<()> {
@@ -93,119 +89,90 @@ fn render_dashboard(
     top_users: &[(String, usize)],
     week_data: &[(NaiveDate, usize)],
 ) -> Result<()> {
-    // 初始化终端
-    terminal::enable_raw_mode()?;
-    let mut stdout = io::stdout();
-    crossterm::execute!(stdout, EnterAlternateScreen)?;
-    let backend = CrosstermBackend::new(stdout);
-    let mut terminal = Terminal::new(backend)?;
+    let items: Vec<(String, usize)> = top_users.to_vec();
 
-    loop {
-        terminal.draw(|frame| {
-            let chunks = Layout::default()
-                .direction(Direction::Horizontal)
-                .constraints([Constraint::Length(35), Constraint::Min(40)])
-                .split(frame.area());
+    let chart_data: Vec<(f64, f64)> = week_data
+        .iter()
+        .enumerate()
+        .map(|(i, (_, count))| (i as f64, *count as f64))
+        .collect();
 
-            // 左侧：用户排行榜
-            let items: Vec<ListItem> = top_users
-                .iter()
-                .map(|(user, commits)| {
-                    ListItem::new(Line::raw(format!("[{commits:>4}] {user}")))
-                })
-                .collect();
+    let max_y = week_data
+        .iter()
+        .map(|(_, c)| *c)
+        .max()
+        .unwrap_or(1)
+        .max(1) as f64;
 
-            let list = List::new(items)
-                .block(
-                    Block::default()
-                        .borders(Borders::ALL)
-                        .title(" 历史提交榜 "),
-                )
-                .style(Style::default().fg(Color::White))
-                .highlight_style(Style::default().add_modifier(Modifier::BOLD));
+    let x_max = chart_data.len().saturating_sub(1).max(1) as f64;
 
-            frame.render_widget(list, chunks[0]);
+    let x_labels: Vec<String> = if let (Some(first), Some(last)) =
+        (week_data.first(), week_data.last())
+    {
+        vec![
+            first.0.format("%Y-%m").to_string(),
+            last.0.format("%Y-%m").to_string(),
+        ]
+    } else {
+        vec![]
+    };
 
-            // 右侧：提交趋势折线图
-            let chart_data: Vec<(f64, f64)> = week_data
-                .iter()
-                .enumerate()
-                .map(|(i, (_, count))| (i as f64, *count as f64))
-                .collect();
+    let mut guard = TerminalGuard::new()?;
+    guard.run_loop(|frame| {
+        let chunks = Layout::default()
+            .direction(Direction::Horizontal)
+            .constraints([Constraint::Length(35), Constraint::Min(40)])
+            .split(frame.area());
 
-            let max_y = week_data
-                .iter()
-                .map(|(_, c)| *c)
-                .max()
-                .unwrap_or(1)
-                .max(1) as f64;
+        let list_items: Vec<ListItem> = items
+            .iter()
+            .map(|(user, commits)| {
+                ListItem::new(Line::raw(format!("[{commits:>4}] {user}")))
+            })
+            .collect();
 
-            let datasets = vec![Dataset::default()
-                .name("commits/week")
-                .marker(ratatui::symbols::Marker::Braille)
-                .graph_type(GraphType::Line)
-                .style(Style::default().fg(Color::Green))
-                .data(&chart_data)];
+        let list = List::new(list_items)
+            .block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .title(" 历史提交榜 "),
+            )
+            .style(Style::default().fg(Color::White))
+            .highlight_style(Style::default().add_modifier(Modifier::BOLD));
 
-            let x_max = chart_data.len().saturating_sub(1).max(1) as f64;
+        frame.render_widget(list, chunks[0]);
 
-            // X 轴标签：首尾周日期
-            let x_labels: Vec<ratatui::text::Span> = if let (Some(first), Some(last)) =
-                (week_data.first(), week_data.last())
-            {
-                vec![
-                    ratatui::text::Span::raw(first.0.format("%Y-%m").to_string()),
-                    ratatui::text::Span::raw(last.0.format("%Y-%m").to_string()),
-                ]
-            } else {
-                vec![]
-            };
+        let datasets = vec![Dataset::default()
+            .name("commits/week")
+            .marker(ratatui::symbols::Marker::Braille)
+            .graph_type(GraphType::Line)
+            .style(Style::default().fg(Color::Green))
+            .data(&chart_data)];
 
-            let chart = Chart::new(datasets)
-                .block(
-                    Block::default()
-                        .borders(Borders::ALL)
-                        .title(" 过去 80 周的提交曲线 "),
-                )
-                .x_axis(
-                    Axis::default()
-                        .title("week")
-                        .bounds([0.0, x_max])
-                        .labels(x_labels.clone()),
-                )
-                .y_axis(
-                    Axis::default()
-                        .title("commits")
-                        .bounds([0.0, max_y * 1.1])
-                        .labels(vec![
-                            ratatui::text::Span::raw("0"),
-                            ratatui::text::Span::raw(format!("{}", max_y as u64)),
-                        ]),
-                );
+        let chart = Chart::new(datasets)
+            .block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .title(" 过去 80 周的提交曲线 "),
+            )
+            .x_axis(
+                Axis::default()
+                    .title("week")
+                    .bounds([0.0, x_max])
+                    .labels(x_labels.iter().map(|s| ratatui::text::Span::raw(s.clone())).collect::<Vec<_>>()),
+            )
+            .y_axis(
+                Axis::default()
+                    .title("commits")
+                    .bounds([0.0, max_y * 1.1])
+                    .labels(vec![
+                        ratatui::text::Span::raw("0"),
+                        ratatui::text::Span::raw(format!("{}", max_y as u64)),
+                    ]),
+            );
 
-            frame.render_widget(chart, chunks[1]);
-        })?;
-
-        // 事件处理：q 或 Ctrl+C 退出
-        if event::poll(std::time::Duration::from_millis(100))? {
-            if let Event::Key(key) = event::read()? {
-                match key.code {
-                    KeyCode::Char('q') => break,
-                    KeyCode::Char('c')
-                        if key.modifiers.contains(crossterm::event::KeyModifiers::CONTROL) =>
-                    {
-                        break;
-                    }
-                    _ => {}
-                }
-            }
-        }
-    }
-
-    // 恢复终端
-    terminal::disable_raw_mode()?;
-    crossterm::execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
-    terminal.show_cursor()?;
+        frame.render_widget(chart, chunks[1]);
+    })?;
 
     Ok(())
 }

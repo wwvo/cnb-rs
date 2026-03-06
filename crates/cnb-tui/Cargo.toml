@@ -9,3 +9,5 @@ workspace = true
 
 [dependencies]
 anyhow = { workspace = true }
+crossterm = { workspace = true }
+ratatui = { workspace = true }

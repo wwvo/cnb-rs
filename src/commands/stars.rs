@@ -5,15 +5,11 @@
 use anyhow::Result;
 use chrono::{Datelike, Duration, NaiveDate, NaiveDateTime};
 use cnb_core::context::AppContext;
-use crossterm::event::{self, Event, KeyCode};
-use crossterm::terminal::{self, EnterAlternateScreen, LeaveAlternateScreen};
-use ratatui::backend::CrosstermBackend;
+use cnb_tui::TerminalGuard;
 use ratatui::layout::{Constraint, Layout};
 use ratatui::style::{Color, Style};
 use ratatui::widgets::{Axis, Block, Borders, Chart, Dataset, GraphType};
-use ratatui::Terminal;
 use std::collections::HashMap;
-use std::io;
 
 /// 执行 stars 命令
 pub async fn run(ctx: &AppContext) -> Result<()> {
@@ -89,12 +85,6 @@ fn generate_weeks(start: NaiveDate) -> HashMap<NaiveDate, i64> {
 
 /// 使用 ratatui 渲染 Star 趋势图
 fn render_star_chart(data: &[(NaiveDate, f64)], total: i64) -> Result<()> {
-    terminal::enable_raw_mode()?;
-    let mut stdout = io::stdout();
-    crossterm::execute!(stdout, EnterAlternateScreen)?;
-    let backend = CrosstermBackend::new(stdout);
-    let mut terminal = Terminal::new(backend)?;
-
     let chart_data: Vec<(f64, f64)> = data
         .iter()
         .enumerate()
@@ -104,73 +94,52 @@ fn render_star_chart(data: &[(NaiveDate, f64)], total: i64) -> Result<()> {
     let max_y = data.last().map(|(_, v)| *v).unwrap_or(1.0).max(1.0);
     let x_max = chart_data.len().saturating_sub(1).max(1) as f64;
 
-    loop {
-        terminal.draw(|frame| {
-            let chunks = Layout::default()
-                .constraints([Constraint::Min(1)])
-                .split(frame.area());
+    let x_labels: Vec<String> = if let (Some(first), Some(last)) = (data.first(), data.last()) {
+        vec![
+            first.0.format("%Y-%m").to_string(),
+            last.0.format("%Y-%m").to_string(),
+        ]
+    } else {
+        vec![]
+    };
 
-            let datasets = vec![Dataset::default()
-                .name(format!("stars (total: {total})"))
-                .marker(ratatui::symbols::Marker::Braille)
-                .graph_type(GraphType::Line)
-                .style(Style::default().fg(Color::Yellow))
-                .data(&chart_data)];
+    let mut guard = TerminalGuard::new()?;
+    guard.run_loop(|frame| {
+        let chunks = Layout::default()
+            .constraints([Constraint::Min(1)])
+            .split(frame.area());
 
-            let x_labels: Vec<ratatui::text::Span> = if let (Some(first), Some(last)) =
-                (data.first(), data.last())
-            {
-                vec![
-                    ratatui::text::Span::raw(first.0.format("%Y-%m").to_string()),
-                    ratatui::text::Span::raw(last.0.format("%Y-%m").to_string()),
-                ]
-            } else {
-                vec![]
-            };
+        let datasets = vec![Dataset::default()
+            .name(format!("stars (total: {total})"))
+            .marker(ratatui::symbols::Marker::Braille)
+            .graph_type(GraphType::Line)
+            .style(Style::default().fg(Color::Yellow))
+            .data(&chart_data)];
 
-            let chart = Chart::new(datasets)
-                .block(
-                    Block::default()
-                        .borders(Borders::ALL)
-                        .title(format!(" Star 趋势（共 {total} 个）按 q 退出 ")),
-                )
-                .x_axis(
-                    Axis::default()
-                        .title("week")
-                        .bounds([0.0, x_max])
-                        .labels(x_labels.clone()),
-                )
-                .y_axis(
-                    Axis::default()
-                        .title("stars")
-                        .bounds([0.0, max_y * 1.1])
-                        .labels(vec![
-                            ratatui::text::Span::raw("0"),
-                            ratatui::text::Span::raw(format!("{total}")),
-                        ]),
-                );
+        let chart = Chart::new(datasets)
+            .block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .title(format!(" Star 趋势（共 {total} 个）按 q 退出 ")),
+            )
+            .x_axis(
+                Axis::default()
+                    .title("week")
+                    .bounds([0.0, x_max])
+                    .labels(x_labels.iter().map(|s| ratatui::text::Span::raw(s.clone())).collect::<Vec<_>>()),
+            )
+            .y_axis(
+                Axis::default()
+                    .title("stars")
+                    .bounds([0.0, max_y * 1.1])
+                    .labels(vec![
+                        ratatui::text::Span::raw("0"),
+                        ratatui::text::Span::raw(format!("{total}")),
+                    ]),
+            );
 
-            frame.render_widget(chart, chunks[0]);
-        })?;
-
-        if event::poll(std::time::Duration::from_millis(100))? {
-            if let Event::Key(key) = event::read()? {
-                match key.code {
-                    KeyCode::Char('q') => break,
-                    KeyCode::Char('c')
-                        if key.modifiers.contains(crossterm::event::KeyModifiers::CONTROL) =>
-                    {
-                        break;
-                    }
-                    _ => {}
-                }
-            }
-        }
-    }
-
-    terminal::disable_raw_mode()?;
-    crossterm::execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
-    terminal.show_cursor()?;
+        frame.render_widget(chart, chunks[0]);
+    })?;
 
     Ok(())
 }
