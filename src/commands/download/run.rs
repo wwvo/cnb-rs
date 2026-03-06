@@ -5,6 +5,7 @@ use base64::Engine;
 use cnb_core::context::AppContext;
 use futures::future::try_join_all;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
+use std::io::Write;
 use std::path::Path;
 use std::sync::Arc;
 use tokio::sync::Semaphore;
@@ -240,7 +241,6 @@ async fn download_lfs(
     }
 
     let mut out = std::fs::File::create(&file_path)?;
-    use std::io::Write;
     while let Some(chunk) = resp.chunk().await? {
         out.write_all(&chunk)?;
         pb.inc(chunk.len() as u64);
