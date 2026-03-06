@@ -54,7 +54,7 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
             authors: args.author.clone(),
             reviewers: args.reviewer.clone(),
         };
-        let pulls = client.list_pulls(&opts).await.unwrap_or_default();
+        let pulls = client.list_pulls(&opts).await?;
 
         if pulls.is_empty() {
             info!("没有找到符合条件的 Pull Request");
@@ -106,8 +106,8 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
         client.list_pulls(&from_me_opts),
         client.list_pulls(&to_me_opts)
     );
-    let from_me = from_me.unwrap_or_default();
-    let to_me = to_me.unwrap_or_default();
+    let from_me = from_me?;
+    let to_me = to_me?;
 
     // 合并并去重：同一 PR 既是我创建的又需要我评审时标记为 ME->ME
     let mut results: Vec<(String, String, String, &str)> = Vec::new();
