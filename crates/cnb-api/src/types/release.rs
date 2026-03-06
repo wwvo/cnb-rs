@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Release 信息
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Release {
     pub id: String,
     pub name: String,
@@ -21,7 +21,7 @@ pub struct Release {
 }
 
 /// Release 附件
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct ReleaseAsset {
     pub id: String,
     pub name: String,

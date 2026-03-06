@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Issue 基础信息（列表接口返回）
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Issue {
     pub number: String,
     pub title: String,
@@ -13,7 +13,7 @@ pub struct Issue {
 }
 
 /// Issue 详细信息（单个 Issue 接口返回）
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct IssueDetail {
     pub number: String,
     pub title: String,
@@ -71,7 +71,7 @@ pub struct CreateCommentRequest {
 }
 
 /// Issue 处理人
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct IssueAssignee {
     pub username: String,
 }

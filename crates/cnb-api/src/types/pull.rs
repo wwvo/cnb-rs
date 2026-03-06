@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Pull Request 基础信息（列表接口返回）
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct PullRequest {
     pub number: String,
     pub title: String,
