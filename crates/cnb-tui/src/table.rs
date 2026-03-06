@@ -172,7 +172,7 @@ mod tests {
     #[test]
     fn test_display_width_cjk() {
         assert_eq!(display_width("你好"), 4);
-        assert_eq!(display_width("ab 你好 cd"), 8);
+        assert_eq!(display_width("ab 你好 cd"), 10);
     }
 
     #[test]

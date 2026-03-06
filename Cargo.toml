@@ -32,22 +32,22 @@ base64 = "0.22"
 chrono = "0.4"
 clap = { version = "4", features = ["derive"] }
 clap_complete = "4"
-crossterm = "0.28"
+crossterm = "0.29.0"
 dirs = "6"
 futures = "0.3"
 glob = "0.3"
-indicatif = "0.17"
+indicatif = "0.18.4"
 open = "5"
-ratatui = "0.29"
+ratatui = "0.30.0"
 regex-lite = "0.1"
-reqwest = { version = "0.12", default-features = false, features = [
+reqwest = { version = "0.13.2", default-features = false, features = [
   "json",
   "multipart",
-  "rustls-tls",
+  "rustls",
   "stream"
 ] }
-rpassword = "5"
-rustyline = "15"
+rpassword = "7.4.0"
+rustyline = "17.0.2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "2"
@@ -59,7 +59,7 @@ tokio = { version = "1", features = [
   "time"
 ] }
 tokio-util = { version = "0.7", features = ["io"] }
-toml = "0.8"
+toml = "0.9.8"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 url = "2"
@@ -105,7 +105,7 @@ tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 
 [target.'cfg(windows)'.dependencies]
-windows-sys = { version = "0.59", features = ["Win32_System_Console"] }
+windows-sys = { version = "0.61.2", features = ["Win32_System_Console"] }
 
 [lints]
 workspace = true
