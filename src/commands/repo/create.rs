@@ -3,6 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_api::types::CreateRepoRequest;
+use cnb_core::config::DEFAULT_GIT_PROTOCOL;
 use cnb_core::context::AppContext;
 use cnb_tui::success;
 
@@ -31,6 +32,10 @@ pub struct CreateArgs {
     /// 创建加密仓库
     #[arg(long)]
     pub secret: bool,
+
+    /// 创建后克隆到本地
+    #[arg(short, long)]
+    pub clone: bool,
 }
 
 pub async fn run(ctx: &AppContext, args: &CreateArgs) -> Result<()> {
@@ -63,7 +68,29 @@ pub async fn run(ctx: &AppContext, args: &CreateArgs) -> Result<()> {
     client.create_repo(&slug, &req).await?;
 
     let domain = ctx.domain();
-    success!("仓库已创建：https://{domain}/{slug}/{}", args.name);
+    let repo_path = format!("{slug}/{}", args.name);
+    success!("仓库已创建：https://{domain}/{repo_path}");
+
+    if args.clone {
+        let protocol = ctx.config().git_protocol.as_deref().unwrap_or(DEFAULT_GIT_PROTOCOL);
+        let clone_url = if protocol == "ssh" {
+            format!("git@{domain}:{repo_path}.git")
+        } else {
+            format!("https://{domain}/{repo_path}.git")
+        };
+
+        let status = std::process::Command::new("git")
+            .arg("clone")
+            .arg(&clone_url)
+            .status()
+            .map_err(|e| anyhow::anyhow!("执行 git clone 失败：{e}"))?;
+
+        if !status.success() {
+            anyhow::bail!("git clone 退出码：{}", status.code().unwrap_or(-1));
+        }
+
+        success!("仓库已克隆到 ./{}", args.name);
+    }
 
     Ok(())
 }
