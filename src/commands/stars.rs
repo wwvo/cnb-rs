@@ -5,6 +5,7 @@
 use anyhow::Result;
 use chrono::{Duration, NaiveDate, NaiveDateTime};
 use cnb_core::context::AppContext;
+use cnb_tui::time::start_of_week;
 use cnb_tui::{info, TerminalGuard};
 use ratatui::layout::{Constraint, Layout};
 use ratatui::style::{Color, Style};
@@ -67,8 +68,6 @@ fn parse_star_time(s: &str) -> Option<NaiveDate> {
                 .ok()
         })
 }
-
-use cnb_tui::time::start_of_week;
 
 /// 生成从 start 到现在的所有周
 fn generate_weeks(start: NaiveDate) -> HashMap<NaiveDate, i64> {
