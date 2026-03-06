@@ -12,6 +12,7 @@ pub mod download;
 pub mod exist;
 pub mod list;
 pub mod mine;
+pub mod view;
 
 /// Issue 管理
 #[derive(Debug, Parser)]
@@ -45,6 +46,9 @@ pub enum IssueSubcommand {
 
     /// Issue 处理人管理（获取/添加）
     Assigners(assigners::AssignersArgs),
+
+    /// 查看 Issue 详情
+    View(view::ViewArgs),
 }
 
 impl IssueCommand {
@@ -58,6 +62,7 @@ impl IssueCommand {
             IssueSubcommand::Exist(args) => exist::run(ctx, args).await,
             IssueSubcommand::Download(args) => download::run(ctx, args).await,
             IssueSubcommand::Assigners(args) => assigners::run(ctx, args).await,
+            IssueSubcommand::View(args) => view::run(ctx, args).await,
         }
     }
 }
