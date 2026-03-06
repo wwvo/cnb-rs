@@ -27,6 +27,14 @@ pub struct CreateArgs {
     /// 处理人（逗号分隔）
     #[arg(short = 'a', long = "assignees", value_delimiter = ',')]
     pub assignees: Vec<String>,
+
+    /// 开始日期（格式：YYYY-MM-DD）
+    #[arg(long = "start-date")]
+    pub start_date: Option<String>,
+
+    /// 结束日期（格式：YYYY-MM-DD）
+    #[arg(long = "end-date")]
+    pub end_date: Option<String>,
 }
 
 /// 执行 issue create 命令
@@ -39,6 +47,8 @@ pub async fn run(ctx: &AppContext, args: &CreateArgs) -> Result<()> {
         priority: args.priority.clone(),
         labels: args.labels.clone(),
         assignees: args.assignees.clone(),
+        start_date: args.start_date.clone(),
+        end_date: args.end_date.clone(),
     };
 
     let issue = client.create_issue(&req).await?;
