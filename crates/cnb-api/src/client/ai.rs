@@ -16,12 +16,6 @@ impl CnbClient {
         if (200..300).contains(&status) {
             return Ok(resp);
         }
-        if status == 401 {
-            return Err(ApiError::Auth(
-                "CNB_TOKEN 缺失或无效。请设置：export CNB_TOKEN=\"your_token\"".to_string(),
-            ));
-        }
-        let body = resp.text().await.unwrap_or_default();
-        Err(ApiError::HttpStatus { status, body })
+        Err(Self::map_error_status(status, resp).await)
     }
 }
