@@ -27,30 +27,44 @@ CNB CLI 按以下优先级查找认证 Token：
 
 环境变量优先级高于配置文件，适合在 CI/CD 流水线中使用：
 
-```bash
-# Unix / Linux / macOS
+::: code-group
+
+```bash [Unix / Linux / macOS]
 export CNB_TOKEN=cnb_xxxxxxxxxxxx
 cnb issue list
+```
 
-# Windows PowerShell
+```powershell [Windows PowerShell]
 $env:CNB_TOKEN="cnb_xxxxxxxxxxxx"
 cnb issue list
+```
 
-# CNB 流水线 YAML
+```yaml [CNB 流水线]
 env:
   CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
 ```
+
+:::
 
 ## 配置文件
 
 Token 保存在 `~/.cnb/config.toml` 中，格式如下：
 
-```toml
-# 全局配置
+::: code-group
+
+```toml [单域名]
 domain = "cnb.cool"
 git_protocol = "https"
 
-# 认证信息（按域名存储，支持多域名）
+[auth.cnb.cool]
+token = "cnb_xxxxxxxxxxxx"
+username = "octocat"
+```
+
+```toml [多域名]
+domain = "cnb.cool"
+git_protocol = "https"
+
 [auth.cnb.cool]
 token = "cnb_xxxxxxxxxxxx"
 username = "octocat"
@@ -59,6 +73,8 @@ username = "octocat"
 token = "cnb_yyyyyyyyyyyy"
 username = "alice"
 ```
+
+:::
 
 ## 安全考虑
 
