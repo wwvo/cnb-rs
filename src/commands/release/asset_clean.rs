@@ -5,6 +5,7 @@ use clap::Parser;
 use cnb_core::context::AppContext;
 use cnb_tui::confirm::confirm_action;
 use cnb_tui::{info, success, fail};
+use futures::stream::{self, StreamExt};
 
 /// 清理 Release 附件
 #[derive(Debug, Parser)]
@@ -116,16 +117,21 @@ pub async fn run(ctx: &AppContext, args: &AssetCleanArgs) -> Result<()> {
         return Ok(());
     }
 
-    // 执行删除
-    for asset in &assets_to_delete {
-        match client
-            .delete_release_asset(&asset.release_id, &asset.asset_id)
-            .await
-        {
-            Ok(()) => success!("已删除：{asset}"),
-            Err(e) => fail!("删除失败：{asset}, 错误：{e}"),
-        }
-    }
+    // 并发删除（最多 10 并发）
+    stream::iter(assets_to_delete.iter())
+        .for_each_concurrent(10, |asset| {
+            let client = &client;
+            async move {
+                match client
+                    .delete_release_asset(&asset.release_id, &asset.asset_id)
+                    .await
+                {
+                    Ok(()) => success!("已删除：{asset}"),
+                    Err(e) => fail!("删除失败：{asset}, 错误：{e}"),
+                }
+            }
+        })
+        .await;
 
     Ok(())
 }
