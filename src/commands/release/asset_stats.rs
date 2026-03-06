@@ -3,6 +3,7 @@
 use anyhow::Result;
 use cnb_core::context::AppContext;
 use cnb_tui::fmt::{format_bytes, format_rfc3339};
+use cnb_tui::{Column, Table};
 
 /// 执行 release asset-stats 命令
 pub async fn run(ctx: &AppContext) -> Result<()> {
@@ -11,29 +12,28 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
 
     let mut total_size: i64 = 0;
 
-    println!(
-        "{:<15} {:<15} {:<20} {:<25}",
-        "Name", "TAG NAME", "ASSET SIZE", "PUBLISHED"
-    );
+    let mut table = Table::new(vec![
+        Column::new("Name", 15),
+        Column::new("TAG NAME", 15),
+        Column::new("ASSET SIZE", 20),
+        Column::new("PUBLISHED", 25),
+    ]);
 
     for release in &releases {
         if release.assets.is_empty() {
             continue;
         }
-        let mut release_size: i64 = 0;
-        for asset in &release.assets {
-            total_size += asset.size;
-            release_size += asset.size;
-        }
+        let release_size: i64 = release.assets.iter().map(|a| a.size).sum();
+        total_size += release_size;
         let published = format_rfc3339(&release.published_at);
-        println!(
-            "{:<15} {:<15} {:<20} {:<25}",
-            release.name,
-            release.tag_name,
+        table.add_row(vec![
+            release.name.clone(),
+            release.tag_name.clone(),
             format_bytes(release_size),
-            published
-        );
+            published,
+        ]);
     }
+    table.print();
 
     println!("Total Size: {} ({})", total_size, format_bytes(total_size));
 
