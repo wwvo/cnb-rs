@@ -7,6 +7,7 @@ use cnb_core::context::AppContext;
 pub mod create;
 pub mod delete;
 pub mod list;
+pub mod sub_groups;
 pub mod transfer;
 pub mod update;
 pub mod update_logo;
@@ -33,6 +34,9 @@ pub enum GroupSubcommand {
     Delete(delete::DeleteArgs),
     /// 转移组织
     Transfer(transfer::TransferArgs),
+    /// 列出子组织
+    #[command(name = "sub-groups")]
+    SubGroups(sub_groups::SubGroupsArgs),
     /// 更新组织 Logo
     #[command(name = "update-logo")]
     UpdateLogo(update_logo::UpdateLogoArgs),
@@ -47,6 +51,7 @@ impl GroupCommand {
             GroupSubcommand::Update(args) => update::run(ctx, args).await,
             GroupSubcommand::Delete(args) => delete::run(ctx, args).await,
             GroupSubcommand::Transfer(args) => transfer::run(ctx, args).await,
+            GroupSubcommand::SubGroups(args) => sub_groups::run(ctx, args).await,
             GroupSubcommand::UpdateLogo(args) => update_logo::run(ctx, args).await,
         }
     }
