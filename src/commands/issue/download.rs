@@ -58,7 +58,7 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
         let detail = client.get_issue(&issue.number).await?;
 
         // 获取评论
-        let comments = client.list_issue_comments(&issue.number).await.unwrap_or_default();
+        let comments = client.list_all_issue_comments(&issue.number).await.unwrap_or_default();
 
         // 写入 Issue 标题和内容
         writeln!(file, "# {}\n", issue.title)?;

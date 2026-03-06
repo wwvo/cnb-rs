@@ -54,11 +54,16 @@ impl CnbClient {
         Self::handle_empty_response(resp).await
     }
 
-    pub async fn list_issue_comments(&self, number: &str) -> Result<Vec<IssueComment>, ApiError> {
-        let url = format!("{}{}/-/issues/{number}/comments?page=1&page_size=100",
+    pub async fn list_issue_comments(&self, number: &str, page: u32, page_size: u32) -> Result<Vec<IssueComment>, ApiError> {
+        let url = format!("{}{}/-/issues/{number}/comments?page={page}&page_size={page_size}",
             self.base_url, self.repo);
         let resp = self.http.get(&url).send().await?;
         Self::handle_response(resp).await
+    }
+
+    /// 获取全部 Issue 评论（自动分页）
+    pub async fn list_all_issue_comments(&self, number: &str) -> Result<Vec<IssueComment>, ApiError> {
+        self.paginate(|page, page_size| self.list_issue_comments(number, page, page_size)).await
     }
 
     pub async fn create_issue_comment(&self, number: &str, req: &CreateCommentRequest) -> Result<(), ApiError> {
