@@ -60,6 +60,11 @@ async fn run_get(ctx: &AppContext, args: &GetAssignersArgs) -> Result<()> {
         return Ok(());
     }
 
+    if ctx.json() {
+        println!("{}", serde_json::to_string_pretty(&assignees)?);
+        return Ok(());
+    }
+
     for assignee in &assignees {
         println!("{}", assignee.username);
     }
