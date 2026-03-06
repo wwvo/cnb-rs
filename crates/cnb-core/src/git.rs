@@ -156,3 +156,65 @@ pub fn current_branch() -> Result<String> {
 
     Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_https_url() {
+        let info = parse_git_url("https://cnb.cool/looc/git-cnb").unwrap();
+        assert_eq!(info.scheme, "https");
+        assert_eq!(info.domain, "cnb.cool");
+        assert_eq!(info.repo, "looc/git-cnb");
+    }
+
+    #[test]
+    fn parse_https_url_with_git_suffix() {
+        let info = parse_git_url("https://cnb.cool/looc/git-cnb.git").unwrap();
+        assert_eq!(info.domain, "cnb.cool");
+        assert_eq!(info.repo, "looc/git-cnb");
+    }
+
+    #[test]
+    fn parse_https_url_with_auth() {
+        let info = parse_git_url("https://user:token@cnb.cool/looc/git-cnb.git").unwrap();
+        assert_eq!(info.domain, "cnb.cool");
+        assert_eq!(info.repo, "looc/git-cnb");
+    }
+
+    #[test]
+    fn parse_http_url() {
+        let info = parse_git_url("http://cnb.cool/group/repo").unwrap();
+        assert_eq!(info.scheme, "http");
+        assert_eq!(info.domain, "cnb.cool");
+        assert_eq!(info.repo, "group/repo");
+    }
+
+    #[test]
+    fn parse_ssh_url() {
+        let info = parse_git_url("git@cnb.cool:looc/git-cnb.git").unwrap();
+        assert_eq!(info.scheme, "https");
+        assert_eq!(info.domain, "cnb.cool");
+        assert_eq!(info.repo, "looc/git-cnb");
+    }
+
+    #[test]
+    fn parse_ssh_url_without_git_suffix() {
+        let info = parse_git_url("git@cnb.cool:looc/git-cnb").unwrap();
+        assert_eq!(info.domain, "cnb.cool");
+        assert_eq!(info.repo, "looc/git-cnb");
+    }
+
+    #[test]
+    fn parse_nested_group_url() {
+        let info = parse_git_url("https://cnb.cool/org/sub-group/repo").unwrap();
+        assert_eq!(info.repo, "org/sub-group/repo");
+    }
+
+    #[test]
+    fn parse_invalid_url() {
+        assert!(parse_git_url("not-a-url").is_err());
+        assert!(parse_git_url("ftp://cnb.cool/repo").is_err());
+    }
+}
