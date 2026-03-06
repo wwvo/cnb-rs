@@ -46,7 +46,7 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
             number: detail.number,
             title: detail.title,
             state: detail.state,
-            last_acted_at: String::new(),
+            ..Default::default()
         }]
     };
 

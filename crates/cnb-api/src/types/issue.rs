@@ -2,14 +2,52 @@
 
 use serde::{Deserialize, Serialize};
 
+/// Issue 用户信息（作者、处理人等）
+#[derive(Debug, Default, Clone, Deserialize, Serialize)]
+pub struct IssueUser {
+    pub username: String,
+    #[serde(default)]
+    pub nickname: String,
+}
+
+/// Issue 标签
+#[derive(Debug, Default, Clone, Deserialize, Serialize)]
+pub struct IssueLabel {
+    #[serde(default)]
+    pub id: String,
+    pub name: String,
+    #[serde(default)]
+    pub color: String,
+    #[serde(default)]
+    pub description: String,
+}
+
 /// Issue 基础信息（列表接口返回）
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize)]
 pub struct Issue {
     pub number: String,
     pub title: String,
     pub state: String,
     #[serde(default)]
+    pub priority: String,
+    #[serde(default)]
+    pub author: Option<IssueUser>,
+    #[serde(default)]
+    pub assignees: Vec<IssueUser>,
+    #[serde(default)]
+    pub labels: Vec<IssueLabel>,
+    #[serde(default)]
+    pub comment_count: u32,
+    #[serde(default)]
+    pub created_at: String,
+    #[serde(default)]
+    pub updated_at: String,
+    #[serde(default)]
     pub last_acted_at: String,
+    #[serde(default)]
+    pub started_at: String,
+    #[serde(default)]
+    pub ended_at: String,
 }
 
 /// Issue 详细信息（单个 Issue 接口返回）
@@ -17,8 +55,33 @@ pub struct Issue {
 pub struct IssueDetail {
     pub number: String,
     pub title: String,
+    #[serde(default)]
     pub body: String,
     pub state: String,
+    #[serde(default)]
+    pub state_reason: String,
+    #[serde(default)]
+    pub priority: String,
+    #[serde(default)]
+    pub author: Option<IssueUser>,
+    #[serde(default)]
+    pub assignees: Vec<IssueUser>,
+    #[serde(default)]
+    pub labels: Vec<IssueLabel>,
+    #[serde(default)]
+    pub comment_count: u32,
+    #[serde(default)]
+    pub created_at: String,
+    #[serde(default)]
+    pub updated_at: String,
+    #[serde(default)]
+    pub last_acted_at: String,
+    #[serde(default)]
+    pub started_at: String,
+    #[serde(default)]
+    pub ended_at: String,
+    #[serde(default)]
+    pub invisible: bool,
 }
 
 /// 创建 Issue 请求
@@ -40,12 +103,22 @@ pub struct CreateIssueRequest {
 }
 
 /// 更新 Issue 请求
-#[derive(Debug, Serialize)]
+#[derive(Debug, Default, Serialize)]
 pub struct UpdateIssueRequest {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub body: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_reason: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_date: Option<String>,
 }
 
 /// Issue 评论
@@ -74,6 +147,8 @@ pub struct CreateCommentRequest {
 #[derive(Debug, Deserialize, Serialize)]
 pub struct IssueAssignee {
     pub username: String,
+    #[serde(default)]
+    pub nickname: String,
 }
 
 /// 添加处理人请求
@@ -82,14 +157,29 @@ pub struct AddAssigneesRequest {
     pub assignees: Vec<String>,
 }
 
+/// 标签操作请求（添加/设置标签）
+#[derive(Debug, Serialize)]
+pub struct IssueLabelRequest {
+    pub labels: Vec<String>,
+}
+
 /// Issue 列表查询参数
 #[derive(Debug, Default)]
 pub struct ListIssuesOptions {
     pub state: String,
     pub page: u32,
     pub page_size: u32,
-    pub assignees: Option<String>,
+    pub keyword: Option<String>,
+    pub priority: Option<String>,
+    pub labels: Option<String>,
+    pub labels_operator: Option<String>,
     pub authors: Option<String>,
+    pub assignees: Option<String>,
+    pub updated_time_begin: Option<String>,
+    pub updated_time_end: Option<String>,
+    pub close_time_begin: Option<String>,
+    pub close_time_end: Option<String>,
+    pub order_by: Option<String>,
 }
 
 #[cfg(test)]
@@ -165,10 +255,7 @@ mod tests {
 
     #[test]
     fn update_issue_request_serialize_skip_none() {
-        let req = UpdateIssueRequest {
-            state: None,
-            state_reason: None,
-        };
+        let req = UpdateIssueRequest::default();
         let json = serde_json::to_string(&req)
             .unwrap_or_else(|e| panic!("序列化失败：{e}"));
         assert_eq!(json, "{}");
@@ -179,6 +266,7 @@ mod tests {
         let req = UpdateIssueRequest {
             state: Some("closed".to_string()),
             state_reason: Some("completed".to_string()),
+            ..Default::default()
         };
         let json = serde_json::to_string(&req)
             .unwrap_or_else(|e| panic!("序列化失败：{e}"));

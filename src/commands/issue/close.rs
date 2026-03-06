@@ -43,6 +43,7 @@ pub async fn run(ctx: &AppContext, args: &CloseArgs) -> Result<()> {
     let req = UpdateIssueRequest {
         state: Some("closed".to_string()),
         state_reason: Some(args.reason.to_string()),
+        ..Default::default()
     };
 
     client.update_issue(&args.number, &req).await?;
