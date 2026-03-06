@@ -31,9 +31,13 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
 
     // 收集需要下载的 Issue
     let issues: Vec<Issue> = if args.all {
-        let mut all = client.list_all_issues("open").await?;
-        let closed = client.list_all_issues("closed").await?;
-        all.extend(closed);
+        // 并行获取 open 和 closed issues
+        let (open, closed) = tokio::join!(
+            client.list_all_issues("open"),
+            client.list_all_issues("closed")
+        );
+        let mut all = open?;
+        all.extend(closed?);
         all
     } else {
         let number = args.number.as_deref().unwrap_or_default();
@@ -55,11 +59,13 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
         let md_path = issue_dir.join(format!("{}.md", issue.number));
         let mut file = fs::File::create(&md_path)?;
 
-        // 获取 Issue 详情
-        let detail = client.get_issue(&issue.number).await?;
-
-        // 获取评论
-        let comments = client.list_all_issue_comments(&issue.number).await.unwrap_or_default();
+        // 并行获取 Issue 详情和评论
+        let (detail_result, comments_result) = tokio::join!(
+            client.get_issue(&issue.number),
+            client.list_all_issue_comments(&issue.number)
+        );
+        let detail = detail_result?;
+        let comments = comments_result.unwrap_or_default();
 
         // 写入 Issue 标题和内容
         writeln!(file, "# {}\n", issue.title)?;
