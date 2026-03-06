@@ -56,3 +56,50 @@ pub struct RepoTime {
     #[serde(default)]
     pub valid: bool,
 }
+
+/// 仓库列表查询选项
+#[derive(Debug)]
+pub struct ListReposOptions {
+    pub page: u32,
+    pub page_size: u32,
+    pub search: Option<String>,
+    pub filter_type: Option<String>,
+    pub order_by: Option<String>,
+    pub desc: bool,
+}
+
+impl Default for ListReposOptions {
+    fn default() -> Self {
+        Self {
+            page: 1,
+            page_size: 30,
+            search: None,
+            filter_type: None,
+            order_by: None,
+            desc: false,
+        }
+    }
+}
+
+impl ListReposOptions {
+    /// 拼接通用查询参数
+    pub fn query_string(&self) -> String {
+        let mut params = vec![
+            format!("page={}", self.page),
+            format!("page_size={}", self.page_size),
+        ];
+        if let Some(s) = &self.search {
+            params.push(format!("search={s}"));
+        }
+        if let Some(f) = &self.filter_type {
+            params.push(format!("filter_type={f}"));
+        }
+        if let Some(o) = &self.order_by {
+            params.push(format!("order_by={o}"));
+        }
+        if self.desc {
+            params.push("desc=true".to_string());
+        }
+        params.join("&")
+    }
+}

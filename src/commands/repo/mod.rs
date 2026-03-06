@@ -4,6 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
 
+pub mod list;
 pub mod view;
 
 /// 仓库管理
@@ -15,6 +16,9 @@ pub struct RepoCommand {
 
 #[derive(Debug, clap::Subcommand)]
 pub enum RepoSubcommand {
+    /// 列出仓库
+    List(list::ListArgs),
+
     /// 查看仓库详情
     View(view::ViewArgs),
 }
@@ -22,6 +26,7 @@ pub enum RepoSubcommand {
 impl RepoCommand {
     pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
         match &self.subcommand {
+            RepoSubcommand::List(args) => list::run(ctx, args).await,
             RepoSubcommand::View(args) => view::run(ctx, args).await,
         }
     }
