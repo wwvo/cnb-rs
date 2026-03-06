@@ -1,6 +1,8 @@
 //! Pull Request 子命令组
 
+use anyhow::Result;
 use clap::Parser;
+use cnb_core::context::AppContext;
 
 pub mod create;
 pub mod list;
@@ -27,4 +29,15 @@ pub enum PullSubcommand {
 
     /// 合并 Pull Request
     Merge(merge::MergeArgs),
+}
+
+impl PullCommand {
+    pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
+        match &self.subcommand {
+            PullSubcommand::List => list::run(ctx).await,
+            PullSubcommand::Create(args) => create::run(ctx, args).await,
+            PullSubcommand::Update(args) => update::run(ctx, args).await,
+            PullSubcommand::Merge(args) => merge::run(ctx, args).await,
+        }
+    }
 }

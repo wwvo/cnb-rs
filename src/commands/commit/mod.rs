@@ -1,6 +1,8 @@
 //! Commit 子命令组
 
+use anyhow::Result;
 use clap::Parser;
+use cnb_core::context::AppContext;
 
 pub mod asset_clean;
 pub mod asset_stats;
@@ -24,4 +26,14 @@ pub enum CommitSubcommand {
     /// 上传附件到 Commit
     #[command(name = "asset-upload")]
     AssetUpload(asset_upload::AssetUploadArgs),
+}
+
+impl CommitCommand {
+    pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
+        match &self.subcommand {
+            CommitSubcommand::AssetStats => asset_stats::run(ctx).await,
+            CommitSubcommand::AssetClean(args) => asset_clean::run(ctx, args).await,
+            CommitSubcommand::AssetUpload(args) => asset_upload::run(ctx, args).await,
+        }
+    }
 }

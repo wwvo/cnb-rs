@@ -1,6 +1,8 @@
 //! Knowledge 知识库子命令组
 
+use anyhow::Result;
 use clap::Parser;
+use cnb_core::context::AppContext;
 
 pub mod clean;
 pub mod info;
@@ -25,4 +27,15 @@ pub enum KnowledgeSubcommand {
     Clean,
     /// 查询知识库
     Query(query::QueryArgs),
+}
+
+impl KnowledgeCommand {
+    pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
+        match &self.subcommand {
+            KnowledgeSubcommand::ListModels => list_models::run(ctx).await,
+            KnowledgeSubcommand::Info => info::run(ctx).await,
+            KnowledgeSubcommand::Clean => clean::run(ctx).await,
+            KnowledgeSubcommand::Query(args) => query::run(ctx, args).await,
+        }
+    }
 }

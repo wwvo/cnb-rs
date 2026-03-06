@@ -116,14 +116,7 @@ async fn async_main() -> anyhow::Result<()> {
     let ctx = AppContext::new(cli.domain, cli.repo);
 
     match cli.command {
-        Commands::Auth(cmd) => {
-            use commands::auth::AuthSubcommand;
-            match cmd.subcommand {
-                AuthSubcommand::Login(ref args) => commands::auth::login::run(&ctx, args).await,
-                AuthSubcommand::Status => commands::auth::status::run(&ctx).await,
-                AuthSubcommand::Logout => commands::auth::logout::run(&ctx).await,
-            }
-        }
+        Commands::Auth(cmd) => cmd.execute(&ctx).await,
         Commands::Chat(ref args) => {
             let client = ctx.api_client()?;
             if let Some(ref question) = args.do_ {
@@ -132,23 +125,7 @@ async fn async_main() -> anyhow::Result<()> {
                 commands::chat::interactive_chat(client).await
             }
         }
-        Commands::Config(cmd) => {
-            use commands::config::ConfigSubcommand;
-            match cmd.subcommand {
-                ConfigSubcommand::List => {
-                    commands::config::list::run(&ctx);
-                    Ok(())
-                }
-                ConfigSubcommand::Get(ref args) => {
-                    commands::config::get::run(&ctx, args)?;
-                    Ok(())
-                }
-                ConfigSubcommand::Set(ref args) => {
-                    commands::config::set::run(args)?;
-                    Ok(())
-                }
-            }
-        }
+        Commands::Config(cmd) => cmd.execute(&ctx),
         Commands::Completion { shell } => {
             commands::completion::run(shell);
             Ok(())
@@ -158,69 +135,15 @@ async fn async_main() -> anyhow::Result<()> {
             commands::version::run();
             Ok(())
         }
-        Commands::Issue(cmd) => {
-            use commands::issue::IssueSubcommand;
-            match cmd.subcommand {
-                IssueSubcommand::List(ref args) => commands::issue::list::run(&ctx, args).await,
-                IssueSubcommand::Mine => commands::issue::mine::run(&ctx).await,
-                IssueSubcommand::Create(ref args) => commands::issue::create::run(&ctx, args).await,
-                IssueSubcommand::Close(ref args) => commands::issue::close::run(&ctx, args).await,
-                IssueSubcommand::Comment(ref args) => commands::issue::comment::run(&ctx, args).await,
-                IssueSubcommand::Exist(ref args) => commands::issue::exist::run(&ctx, args).await,
-                IssueSubcommand::Download(ref args) => commands::issue::download::run(&ctx, args).await,
-                IssueSubcommand::Assigners(ref args) => commands::issue::assigners::run(&ctx, args).await,
-            }
-        }
-        Commands::Pull(cmd) => {
-            use commands::pull::PullSubcommand;
-            match cmd.subcommand {
-                PullSubcommand::List => commands::pull::list::run(&ctx).await,
-                PullSubcommand::Create(ref args) => commands::pull::create::run(&ctx, args).await,
-                PullSubcommand::Update(ref args) => commands::pull::update::run(&ctx, args).await,
-                PullSubcommand::Merge(ref args) => commands::pull::merge::run(&ctx, args).await,
-            }
-        }
-        Commands::Release(cmd) => {
-            use commands::release::ReleaseSubcommand;
-            match cmd.subcommand {
-                ReleaseSubcommand::List => commands::release::list::run(&ctx).await,
-                ReleaseSubcommand::Create(ref args) => commands::release::create::run(&ctx, args).await,
-                ReleaseSubcommand::AssetStats => commands::release::asset_stats::run(&ctx).await,
-                ReleaseSubcommand::AssetClean(ref args) => commands::release::asset_clean::run(&ctx, args).await,
-                ReleaseSubcommand::AssetUpload(ref args) => commands::release::asset_upload::run(&ctx, args).await,
-            }
-        }
-        Commands::Commit(cmd) => {
-            use commands::commit::CommitSubcommand;
-            match cmd.subcommand {
-                CommitSubcommand::AssetStats => commands::commit::asset_stats::run(&ctx).await,
-                CommitSubcommand::AssetClean(ref args) => commands::commit::asset_clean::run(&ctx, args).await,
-                CommitSubcommand::AssetUpload(ref args) => commands::commit::asset_upload::run(&ctx, args).await,
-            }
-        }
+        Commands::Issue(cmd) => cmd.execute(&ctx).await,
+        Commands::Pull(cmd) => cmd.execute(&ctx).await,
+        Commands::Release(cmd) => cmd.execute(&ctx).await,
+        Commands::Commit(cmd) => cmd.execute(&ctx).await,
         Commands::Download(ref args) => commands::download::run::run(&ctx, args).await,
         Commands::Stats => commands::stats::run().await,
         Commands::Stars => commands::stars::run(&ctx).await,
-        Commands::Knowledge(cmd) => {
-            use commands::knowledge::KnowledgeSubcommand;
-            match cmd.subcommand {
-                KnowledgeSubcommand::ListModels => commands::knowledge::list_models::run(&ctx).await,
-                KnowledgeSubcommand::Info => commands::knowledge::info::run(&ctx).await,
-                KnowledgeSubcommand::Clean => commands::knowledge::clean::run(&ctx).await,
-                KnowledgeSubcommand::Query(ref args) => commands::knowledge::query::run(&ctx, args).await,
-            }
-        }
-        Commands::Group(cmd) => {
-            use commands::group::GroupSubcommand;
-            match cmd.subcommand {
-                GroupSubcommand::UpdateLogo(ref args) => commands::group::update_logo::run(&ctx, args).await,
-            }
-        }
-        Commands::Workspace(cmd) => {
-            use commands::workspace::WorkspaceSubcommand;
-            match cmd.subcommand {
-                WorkspaceSubcommand::ClosedClean => commands::workspace::closed_clean::run(&ctx).await,
-            }
-        }
+        Commands::Knowledge(cmd) => cmd.execute(&ctx).await,
+        Commands::Group(cmd) => cmd.execute(&ctx).await,
+        Commands::Workspace(cmd) => cmd.execute(&ctx).await,
     }
 }

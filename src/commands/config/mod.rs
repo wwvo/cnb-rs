@@ -1,6 +1,8 @@
 //! Config 配置管理子命令
 
+use anyhow::Result;
 use clap::Parser;
+use cnb_core::context::AppContext;
 
 pub mod get;
 pub mod list;
@@ -23,4 +25,23 @@ pub enum ConfigSubcommand {
 
     /// 设置配置项的值
     Set(set::SetArgs),
+}
+
+impl ConfigCommand {
+    pub fn execute(&self, ctx: &AppContext) -> Result<()> {
+        match &self.subcommand {
+            ConfigSubcommand::List => {
+                list::run(ctx);
+                Ok(())
+            }
+            ConfigSubcommand::Get(args) => {
+                get::run(ctx, args)?;
+                Ok(())
+            }
+            ConfigSubcommand::Set(args) => {
+                set::run(args)?;
+                Ok(())
+            }
+        }
+    }
 }

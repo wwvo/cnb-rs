@@ -1,6 +1,8 @@
 //! Auth 认证管理子命令
 
+use anyhow::Result;
 use clap::Parser;
+use cnb_core::context::AppContext;
 
 pub mod login;
 pub mod logout;
@@ -23,4 +25,14 @@ pub enum AuthSubcommand {
 
     /// 退出登录
     Logout,
+}
+
+impl AuthCommand {
+    pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
+        match &self.subcommand {
+            AuthSubcommand::Login(args) => login::run(ctx, args).await,
+            AuthSubcommand::Status => status::run(ctx).await,
+            AuthSubcommand::Logout => logout::run(ctx).await,
+        }
+    }
 }

@@ -1,6 +1,8 @@
 //! Release 子命令组
 
+use anyhow::Result;
 use clap::Parser;
+use cnb_core::context::AppContext;
 
 pub mod asset_clean;
 pub mod asset_stats;
@@ -30,4 +32,16 @@ pub enum ReleaseSubcommand {
     /// 上传附件到 Release
     #[command(name = "asset-upload")]
     AssetUpload(asset_upload::AssetUploadArgs),
+}
+
+impl ReleaseCommand {
+    pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
+        match &self.subcommand {
+            ReleaseSubcommand::List => list::run(ctx).await,
+            ReleaseSubcommand::Create(args) => create::run(ctx, args).await,
+            ReleaseSubcommand::AssetStats => asset_stats::run(ctx).await,
+            ReleaseSubcommand::AssetClean(args) => asset_clean::run(ctx, args).await,
+            ReleaseSubcommand::AssetUpload(args) => asset_upload::run(ctx, args).await,
+        }
+    }
 }

@@ -1,6 +1,8 @@
 //! Issue 子命令组
 
+use anyhow::Result;
 use clap::Parser;
+use cnb_core::context::AppContext;
 
 pub mod assigners;
 pub mod close;
@@ -43,4 +45,19 @@ pub enum IssueSubcommand {
 
     /// Issue 处理人管理（获取/添加）
     Assigners(assigners::AssignersArgs),
+}
+
+impl IssueCommand {
+    pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
+        match &self.subcommand {
+            IssueSubcommand::List(args) => list::run(ctx, args).await,
+            IssueSubcommand::Mine => mine::run(ctx).await,
+            IssueSubcommand::Create(args) => create::run(ctx, args).await,
+            IssueSubcommand::Close(args) => close::run(ctx, args).await,
+            IssueSubcommand::Comment(args) => comment::run(ctx, args).await,
+            IssueSubcommand::Exist(args) => exist::run(ctx, args).await,
+            IssueSubcommand::Download(args) => download::run(ctx, args).await,
+            IssueSubcommand::Assigners(args) => assigners::run(ctx, args).await,
+        }
+    }
 }

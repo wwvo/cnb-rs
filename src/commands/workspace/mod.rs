@@ -1,6 +1,8 @@
 //! Workspace 云原生工作区子命令组
 
+use anyhow::Result;
 use clap::Parser;
+use cnb_core::context::AppContext;
 
 pub mod closed_clean;
 
@@ -16,4 +18,12 @@ pub enum WorkspaceSubcommand {
     /// 清理已关闭的工作区
     #[command(name = "closed-clean")]
     ClosedClean,
+}
+
+impl WorkspaceCommand {
+    pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
+        match &self.subcommand {
+            WorkspaceSubcommand::ClosedClean => closed_clean::run(ctx).await,
+        }
+    }
 }
