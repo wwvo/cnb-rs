@@ -3,6 +3,7 @@
 use anyhow::Result;
 use cnb_core::context::AppContext;
 use cnb_tui::{info, success, fail};
+use futures::stream::{self, StreamExt};
 
 const PAGE_SIZE: i32 = 100;
 
@@ -33,18 +34,22 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
 
     info!("共找到 {} 个已关闭的工作区\n", all_workspaces.len());
 
-    for ws in &all_workspaces {
-        info!("开始清理工作区 slug={} pipelineId={}", ws.slug, ws.pipeline_id);
-
-        match client.delete_workspace(&ws.pipeline_id).await {
-            Ok(()) => {
-                success!("已清理工作区 slug={} pipelineId={}", ws.slug, ws.pipeline_id);
+    // 并发清理（最多 10 并发）
+    stream::iter(all_workspaces.iter())
+        .for_each_concurrent(10, |ws| {
+            let client = &client;
+            async move {
+                match client.delete_workspace(&ws.pipeline_id).await {
+                    Ok(()) => {
+                        success!("已清理工作区 slug={} pipelineId={}", ws.slug, ws.pipeline_id);
+                    }
+                    Err(e) => {
+                        fail!("清理失败 slug={} pipelineId={} err={e}", ws.slug, ws.pipeline_id);
+                    }
+                }
             }
-            Err(e) => {
-                fail!("清理失败 slug={} pipelineId={} err={e}", ws.slug, ws.pipeline_id);
-            }
-        }
-    }
+        })
+        .await;
 
     Ok(())
 }
