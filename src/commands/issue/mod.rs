@@ -11,6 +11,7 @@ pub mod create;
 pub mod download;
 pub mod exist;
 pub mod edit;
+pub mod label;
 pub mod list;
 pub mod mine;
 pub mod reopen;
@@ -57,6 +58,9 @@ pub enum IssueSubcommand {
 
     /// 重新打开 Issue
     Reopen(reopen::ReopenArgs),
+
+    /// 标签管理
+    Label(label::LabelArgs),
 }
 
 impl IssueCommand {
@@ -73,6 +77,7 @@ impl IssueCommand {
             IssueSubcommand::View(args) => view::run(ctx, args).await,
             IssueSubcommand::Edit(args) => edit::run(ctx, args).await,
             IssueSubcommand::Reopen(args) => reopen::run(ctx, args).await,
+            IssueSubcommand::Label(args) => label::run(ctx, args).await,
         }
     }
 }
