@@ -8,7 +8,7 @@ cnb auth logout
 
 仅移除本地存储的认证信息，**不会撤销远程 Token**。
 如需撤销已生成的 Token，请访问 CNB 平台的
-[个人设置 > Access Token](https://cnb.cool/-/profile/tokens) 页面。
+[个人设置 > 访问令牌](https://cnb.cool/profile/token) 页面。
 
 根据 Token 来源执行不同操作：
 
