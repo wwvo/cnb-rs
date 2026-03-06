@@ -2,6 +2,7 @@
 
 use anyhow::Result;
 use clap::Parser;
+use cnb_api::error::ApiError;
 use cnb_core::context::AppContext;
 
 /// 检查 Issue 是否存在
@@ -18,7 +19,9 @@ pub async fn run(ctx: &AppContext, args: &ExistArgs) -> Result<()> {
 
     match client.get_issue(&args.number).await {
         Ok(issue) => println!("{}", issue.title),
-        Err(_) => println!("false"),
+        Err(ApiError::NotFound(_)) => println!("false"),
+        Err(ApiError::HttpStatus { status: 404, .. }) => println!("false"),
+        Err(e) => return Err(e.into()),
     }
 
     Ok(())
