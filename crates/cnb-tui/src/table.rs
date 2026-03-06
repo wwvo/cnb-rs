@@ -58,7 +58,7 @@ impl Table {
                 .iter()
                 .enumerate()
                 .map(|(i, col)| {
-                    let value = row.get(i).map(|s| s.as_str()).unwrap_or("");
+                    let value = row.get(i).map_or("", String::as_str);
                     pad_or_truncate(value, col.width)
                 })
                 .collect::<Vec<_>>()

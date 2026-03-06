@@ -17,23 +17,25 @@ pub fn get_api_doc(doc_ref: &str) -> Result<String, String> {
         ));
     }
 
-    match get_embedded_doc(doc_ref) {
-        Some(content) => Ok(content.to_string()),
-        None => {
-            let (service, api_name) = (parts[0], parts[1]);
-            let available = list_apis(service);
-            if available.is_empty() {
-                let services = list_services();
-                Err(format!(
-                    "服务 \"{service}\" 不存在。可用服务：{}",
-                    services.join(", ")
-                ))
-            } else {
-                Err(format!(
-                    "API \"{api_name}\" 在服务 \"{service}\" 中不存在。可用：{}",
-                    available.join(", ")
-                ))
-            }
+    if let Some(content) = get_embedded_doc(doc_ref) {
+        Ok(content.to_string())
+    } else {
+        let (service, api_name) = (parts[0], parts[1]);
+        let available = list_apis(service);
+        if available.is_empty() {
+            let services = list_services();
+            Err(format!(
+                "服务 \"{}\" 不存在。可用服务：{}",
+                service,
+                services.join(", ")
+            ))
+        } else {
+            Err(format!(
+                "API \"{}\" 在服务 \"{}\" 中不存在。可用：{}",
+                api_name,
+                service,
+                available.join(", ")
+            ))
         }
     }
 }
@@ -42,7 +44,8 @@ pub fn get_api_doc(doc_ref: &str) -> Result<String, String> {
 pub fn list_services() -> Vec<String> {
     list_embedded_services()
         .iter()
-        .map(|s| s.to_string())
+        .copied()
+        .map(String::from)
         .collect()
 }
 
@@ -53,6 +56,6 @@ pub fn list_apis(service: &str) -> Vec<String> {
         .iter()
         .filter(|key| key.starts_with(&prefix))
         .filter_map(|key| key.strip_prefix(&prefix))
-        .map(|name| name.to_string())
+        .map(String::from)
         .collect()
 }

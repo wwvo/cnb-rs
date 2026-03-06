@@ -121,7 +121,6 @@ impl CnbClient {
                 // 网络错误可重试（排除请求构建错误）
                 Err(e) if attempt < MAX_RETRIES && !e.is_builder() => {
                     last_err = Some(ApiError::Network(e));
-                    continue;
                 }
                 Err(e) => return Err(ApiError::Network(e)),
             }

@@ -96,8 +96,7 @@ impl AppContext {
         let domain = self.domain();
         let scheme = self
             .git_info()
-            .map(|i| i.scheme.as_str())
-            .unwrap_or(DEFAULT_SCHEME);
+            .map_or(DEFAULT_SCHEME, |i| i.scheme.as_str());
         let repo = self.repo()?;
 
         if path.is_empty() {
@@ -121,8 +120,7 @@ impl AppContext {
         let domain = self.domain();
         let scheme = self
             .git_info()
-            .map(|i| i.scheme.as_str())
-            .unwrap_or(DEFAULT_SCHEME);
+            .map_or(DEFAULT_SCHEME, |i| i.scheme.as_str());
 
         let base_url = format!("{scheme}://api.{domain}/");
         let base_web_url = format!("{scheme}://{domain}/");

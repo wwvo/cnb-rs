@@ -41,27 +41,26 @@ pub async fn run(ctx: &AppContext, args: &CreateArgs) -> Result<()> {
         .unwrap_or_else(|| client.repo().to_string());
 
     // 确定目标分支（默认获取远程仓库的 HEAD 分支）
-    let base = match &args.base_branch {
-        Some(b) => b.clone(),
-        None => {
-            let head_ref = client.get_head(&base_repo).await?;
-            head_ref.name
-        }
+    let base = if let Some(b) = &args.base_branch {
+        b.clone()
+    } else {
+        let head_ref = client.get_head(&base_repo).await?;
+        head_ref.name
     };
 
     // 确定源分支（默认为当前分支）
-    let head = match &args.head_branch {
-        Some(h) => h.clone(),
-        None => git::current_branch()?,
+    let head = if let Some(h) = &args.head_branch {
+        h.clone()
+    } else {
+        git::current_branch()?
     };
 
     // 确定标题（默认为最新提交标题）
-    let title = match &args.title {
-        Some(t) => t.clone(),
-        None => {
-            let (commit_title, _) = git::latest_commit_message()?;
-            commit_title
-        }
+    let title = if let Some(t) = &args.title {
+        t.clone()
+    } else {
+        let (commit_title, _) = git::latest_commit_message()?;
+        commit_title
     };
 
     let req = CreatePullRequest {

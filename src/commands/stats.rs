@@ -24,7 +24,7 @@ pub async fn run() -> Result<()> {
 
     // 解析提交数据
     let today = Utc::now();
-    let today_week = get_start_of_week(today);
+    let today_week = get_start_of_week(&today);
 
     let mut weekly_map = generate_last_weeks(today_week, 80);
     let mut user_map: HashMap<String, usize> = HashMap::new();
@@ -44,7 +44,7 @@ pub async fn run() -> Result<()> {
 
         let commit_time = DateTime::from_timestamp(timestamp, 0)
             .unwrap_or_default();
-        let week_key = get_start_of_week(commit_time);
+        let week_key = get_start_of_week(&commit_time);
         if let Some(count) = weekly_map.get_mut(&week_key) {
             *count += 1;
         }
@@ -67,7 +67,7 @@ pub async fn run() -> Result<()> {
 }
 
 /// 获取某一天所在周的周一日期
-fn get_start_of_week<Tz: chrono::TimeZone>(dt: DateTime<Tz>) -> NaiveDate {
+fn get_start_of_week<Tz: chrono::TimeZone>(dt: &DateTime<Tz>) -> NaiveDate {
     cnb_tui::time::start_of_week(dt.naive_utc().date())
 }
 

@@ -83,7 +83,7 @@ pub async fn run(ctx: &AppContext, args: &AssetCleanArgs) -> Result<()> {
             if let Ok(published) = chrono::DateTime::parse_from_rfc3339(&release.published_at) {
                 let published_utc: chrono::DateTime<chrono::Utc> = published.into();
                 let days = (now - published_utc).num_days();
-                if days > keep_days as i64 {
+                if days > i64::from(keep_days) {
                     collect_assets(&mut assets_to_delete, release);
                 }
             }

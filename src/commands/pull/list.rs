@@ -146,8 +146,8 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     for (number, title, blocked_on, pr_type) in &results {
         table.add_row(vec![
             format!("#{number}"),
-            title.to_string(),
-            blocked_on.to_string(),
+            title.clone(),
+            blocked_on.clone(),
             pr_type.to_string(),
         ]);
     }

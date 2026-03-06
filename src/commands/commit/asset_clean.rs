@@ -61,7 +61,7 @@ pub async fn run(ctx: &AppContext, args: &AssetCleanArgs) -> Result<()> {
             .iter()
             .filter(|c| {
                 chrono::DateTime::parse_from_rfc3339(&c.commit.committer.date)
-                    .map(|dt| (now - dt.with_timezone(&chrono::Utc)).num_days() > keep_days as i64)
+                    .map(|dt| (now - dt.with_timezone(&chrono::Utc)).num_days() > i64::from(keep_days))
                     .unwrap_or(false)
             })
             .collect();

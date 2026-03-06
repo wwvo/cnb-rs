@@ -41,7 +41,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 生成列出所有服务名的函数
     let mut services: Vec<String> = entries
         .iter()
-        .filter_map(|(key, _)| key.split('/').next().map(String::from))
+        .filter_map(|(key, _)| key.split('/').next().map(std::string::ToString::to_string))
         .collect();
     services.sort();
     services.dedup();
@@ -72,8 +72,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 /// 递归收集 .md 文件，key 格式为 "service/apiname"（无 .md 后缀）
 fn collect_md_files(base: &Path, dir: &Path, entries: &mut Vec<(String, String)>) -> Result<(), Box<dyn std::error::Error>> {
-    let mut items: Vec<_> = fs::read_dir(dir)?.filter_map(|e| e.ok()).collect();
-    items.sort_by_key(|e| e.file_name());
+    let mut items: Vec<_> = fs::read_dir(dir)?.filter_map(Result::ok).collect();
+    items.sort_by_key(std::fs::DirEntry::file_name);
 
     for entry in items {
         let path = entry.path();
@@ -83,7 +83,7 @@ fn collect_md_files(base: &Path, dir: &Path, entries: &mut Vec<(String, String)>
             let rel = path.strip_prefix(base)?;
             let rel_str = rel.to_string_lossy().replace('\\', "/");
             let key = rel_str.strip_suffix(".md").unwrap_or(&rel_str);
-            entries.push((key.to_string(), rel_str.to_string()));
+            entries.push((key.to_string(), rel_str.clone()));
         }
     }
 

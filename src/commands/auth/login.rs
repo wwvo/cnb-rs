@@ -19,12 +19,11 @@ pub async fn run(ctx: &AppContext, args: &LoginArgs) -> Result<()> {
     let domain = ctx.domain();
 
     // 获取 token：优先使用 --token 参数，否则交互式隐藏输入
-    let token = match &args.token {
-        Some(t) => t.clone(),
-        None => {
-            eprint!("请输入 Token（输入不会显示）: ");
-            rpassword::read_password()?
-        }
+    let token = if let Some(t) = &args.token {
+        t.clone()
+    } else {
+        eprint!("请输入 Token（输入不会显示）: ");
+        rpassword::read_password()?
     };
 
     let token = token.trim().to_string();

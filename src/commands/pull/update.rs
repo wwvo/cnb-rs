@@ -52,7 +52,7 @@ pub async fn run(ctx: &AppContext, args: &UpdateArgs) -> Result<()> {
     let req = UpdatePullRequest {
         title: args.title.clone(),
         body: args.body.clone(),
-        state: args.state.as_ref().map(|s| s.to_string()),
+        state: args.state.as_ref().map(ToString::to_string),
     };
 
     let pull = client.update_pull(&args.number, &req).await?;

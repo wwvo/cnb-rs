@@ -86,7 +86,6 @@ pub async fn interactive_chat(client: &CnbClient) -> Result<()> {
             Err(ReadlineError::Interrupted) => {
                 // Ctrl+C 在输入阶段：忽略，继续等待输入
                 eprintln!();
-                continue;
             }
             Err(ReadlineError::Eof) => {
                 // Ctrl+D：退出

@@ -39,8 +39,8 @@ pub async fn run(ctx: &AppContext, args: &QueryArgs) -> Result<()> {
     }
 
     for r in &results {
-        let url = r.metadata.get("url").map(|s| s.as_str()).unwrap_or("-");
-        let file_type = r.metadata.get("type").map(|s| s.as_str()).unwrap_or("-");
+        let url = r.metadata.get("url").map_or("-", String::as_str);
+        let file_type = r.metadata.get("type").map_or("-", String::as_str);
         println!("{};{:.4};{}", url, r.score, file_type);
     }
 

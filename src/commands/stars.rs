@@ -89,7 +89,7 @@ fn render_star_chart(data: &[(NaiveDate, f64)], total: i64) -> Result<()> {
         .map(|(i, (_, v))| (i as f64, *v))
         .collect();
 
-    let max_y = data.last().map(|(_, v)| *v).unwrap_or(1.0).max(1.0);
+    let max_y = data.last().map_or(1.0, |(_, v)| *v).max(1.0);
     let x_max = chart_data.len().saturating_sub(1).max(1) as f64;
 
     let x_labels: Vec<String> = if let (Some(first), Some(last)) = (data.first(), data.last()) {

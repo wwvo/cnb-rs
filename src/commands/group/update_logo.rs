@@ -29,8 +29,7 @@ pub async fn run(ctx: &AppContext, args: &UpdateLogoArgs) -> Result<()> {
     let metadata = std::fs::metadata(path)?;
     let file_name = path
         .file_name()
-        .map(|n| n.to_string_lossy().to_string())
-        .unwrap_or_else(|| "logo".to_string());
+        .map_or_else(|| "logo".to_string(), |n| n.to_string_lossy().to_string());
 
     let client = ctx.api_client()?;
 
