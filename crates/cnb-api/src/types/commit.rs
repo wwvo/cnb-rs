@@ -22,7 +22,7 @@ pub struct CommitPerson {
 }
 
 /// Commit 附件
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct CommitAsset {
     pub id: String,
     pub name: String,
