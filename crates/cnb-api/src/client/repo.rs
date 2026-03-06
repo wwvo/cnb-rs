@@ -32,4 +32,11 @@ impl CnbClient {
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
+
+    /// 创建仓库（POST /{slug}/-/repos）
+    pub async fn create_repo(&self, slug: &str, req: &CreateRepoRequest) -> Result<(), ApiError> {
+        let url = format!("{}{}/-/repos", self.base_url, slug);
+        let resp = self.http.post(&url).json(req).send().await?;
+        Self::handle_empty_response(resp).await
+    }
 }

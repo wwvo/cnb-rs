@@ -57,6 +57,18 @@ pub struct RepoTime {
     pub valid: bool,
 }
 
+/// 创建仓库请求体
+#[derive(Debug, Serialize)]
+pub struct CreateRepoRequest {
+    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub visibility: Option<String>,
+}
+
 /// 仓库列表查询选项
 #[derive(Debug)]
 pub struct ListReposOptions {
