@@ -113,3 +113,122 @@ impl ChatMessage {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn chat_message_system() {
+        let msg = ChatMessage::system("你是助手");
+        assert_eq!(msg.content, "你是助手");
+        let json = serde_json::to_string(&msg)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert!(json.contains(r#""role":"system""#));
+    }
+
+    #[test]
+    fn chat_message_user() {
+        let msg = ChatMessage::user("你好");
+        let json = serde_json::to_string(&msg)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert!(json.contains(r#""role":"user""#));
+    }
+
+    #[test]
+    fn chat_message_assistant() {
+        let msg = ChatMessage::assistant("回答");
+        let json = serde_json::to_string(&msg)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert!(json.contains(r#""role":"assistant""#));
+    }
+
+    #[test]
+    fn role_roundtrip() {
+        // 序列化 → 反序列化往返
+        let original = Role::System;
+        let json = serde_json::to_string(&original)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert_eq!(json, r#""system""#);
+        let deserialized: Role = serde_json::from_str(&json)
+            .unwrap_or_else(|e| panic!("反序列化失败: {e}"));
+        assert!(matches!(deserialized, Role::System));
+    }
+
+    #[test]
+    fn chat_completions_request_serialize() {
+        let req = ChatCompletionsRequest {
+            model: "deepseek-r1".to_string(),
+            stream: true,
+            messages: vec![
+                ChatMessage::system("sys"),
+                ChatMessage::user("hello"),
+            ],
+        };
+        let json = serde_json::to_string(&req)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert!(json.contains(r#""model":"deepseek-r1""#));
+        assert!(json.contains(r#""stream":true"#));
+        assert!(json.contains("messages"));
+    }
+
+    #[test]
+    fn chat_completions_response_deserialize() {
+        let json = r#"{
+            "id": "chatcmpl-123",
+            "model": "deepseek-r1",
+            "created": 1700000000,
+            "choices": [{
+                "index": 0,
+                "finish_reason": "stop",
+                "message": {"role": "assistant", "content": "你好！"}
+            }]
+        }"#;
+        let resp: ChatCompletionsResponse = serde_json::from_str(json)
+            .unwrap_or_else(|e| panic!("反序列化失败: {e}"));
+        assert_eq!(resp.id, "chatcmpl-123");
+        assert_eq!(resp.choices.len(), 1);
+        assert_eq!(resp.choices[0].message.content, "你好！");
+        assert_eq!(resp.choices[0].finish_reason, Some("stop".to_string()));
+    }
+
+    #[test]
+    fn chat_stream_chunk_deserialize() {
+        let json = r#"{
+            "id": "chunk-1",
+            "model": "deepseek-r1",
+            "created": 1700000000,
+            "choices": [{
+                "index": 0,
+                "finish_reason": null,
+                "delta": {"content": "Hello", "reasoning_content": ""}
+            }],
+            "model_response": null
+        }"#;
+        let chunk: ChatStreamChunk = serde_json::from_str(json)
+            .unwrap_or_else(|e| panic!("反序列化失败: {e}"));
+        assert_eq!(chunk.choices[0].delta.content, "Hello");
+        assert!(chunk.model_response.is_none());
+    }
+
+    #[test]
+    fn chat_stream_chunk_with_model_response() {
+        let json = r#"{
+            "id": null,
+            "model": null,
+            "created": null,
+            "choices": [{
+                "index": 0,
+                "finish_reason": null,
+                "delta": {"content": "", "reasoning_content": "思考中..."}
+            }],
+            "model_response": {"type": 1, "event_name": "thinking_start"}
+        }"#;
+        let chunk: ChatStreamChunk = serde_json::from_str(json)
+            .unwrap_or_else(|e| panic!("反序列化失败: {e}"));
+        let mr = chunk.model_response.as_ref()
+            .unwrap_or_else(|| panic!("model_response 不应为 None"));
+        assert_eq!(mr.resp_type, 1);
+        assert_eq!(chunk.choices[0].delta.reasoning_content, "思考中...");
+    }
+}

@@ -31,3 +31,45 @@ pub enum ApiError {
     #[error("{0}")]
     Api(String),
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn error_display_http_status() {
+        let err = ApiError::HttpStatus {
+            status: 404,
+            body: "not found".to_string(),
+        };
+        let msg = err.to_string();
+        assert!(msg.contains("404"));
+        assert!(msg.contains("not found"));
+    }
+
+    #[test]
+    fn error_display_auth() {
+        let err = ApiError::Auth("token invalid".to_string());
+        assert!(err.to_string().contains("token invalid"));
+    }
+
+    #[test]
+    fn error_display_not_found() {
+        let err = ApiError::NotFound("资源不存在".to_string());
+        assert!(err.to_string().contains("资源不存在"));
+    }
+
+    #[test]
+    fn error_display_api() {
+        let err = ApiError::Api("服务端错误".to_string());
+        assert!(err.to_string().contains("服务端错误"));
+    }
+
+    #[test]
+    fn error_is_debug() {
+        // 确保 ApiError 实现了 Debug
+        let err = ApiError::HttpStatus { status: 500, body: "error".to_string() };
+        let debug = format!("{err:?}");
+        assert!(debug.contains("HttpStatus"));
+    }
+}

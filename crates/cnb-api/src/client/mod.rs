@@ -141,3 +141,55 @@ impl CnbClient {
         Err(ApiError::HttpStatus { status, body })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn encode_path_simple() {
+        assert_eq!(CnbClient::encode_path("src/main.rs"), "src/main.rs");
+    }
+
+    #[test]
+    fn encode_path_with_special_chars() {
+        // 空格和中文应被编码，`/` 保留
+        let encoded = CnbClient::encode_path("docs/我的文件 1.md");
+        assert!(encoded.contains('/'));
+        assert!(!encoded.contains(' '));
+        assert!(!encoded.contains('我'));
+    }
+
+    #[test]
+    fn encode_path_single_segment() {
+        assert_eq!(CnbClient::encode_path("README.md"), "README.md");
+    }
+
+    #[test]
+    fn encode_path_empty() {
+        assert_eq!(CnbClient::encode_path(""), "");
+    }
+
+    #[test]
+    fn encode_path_preserves_slashes() {
+        let encoded = CnbClient::encode_path("a/b/c/d");
+        assert_eq!(encoded, "a/b/c/d");
+    }
+
+    #[test]
+    fn new_client_with_token() {
+        let client = CnbClient::new("https://api.cnb.cool/", "https://cnb.cool/", "test_token", "org/repo");
+        assert!(client.is_ok());
+        let client = client.unwrap_or_else(|e| panic!("创建客户端失败: {e}"));
+        assert_eq!(client.base_url(), "https://api.cnb.cool/");
+        assert_eq!(client.base_web_url(), "https://cnb.cool/");
+        assert_eq!(client.repo(), "org/repo");
+        assert_eq!(client.token(), "test_token");
+    }
+
+    #[test]
+    fn new_client_without_token() {
+        let client = CnbClient::new("https://api.cnb.cool/", "https://cnb.cool/", "", "org/repo");
+        assert!(client.is_ok());
+    }
+}

@@ -85,3 +85,92 @@ pub struct ListPullsOptions {
 pub struct HeadRef {
     pub name: String,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn pull_request_deserialize() {
+        let json = r#"{"number": "10", "title": "feat: add feature", "state": "open", "blocked_on": ""}"#;
+        let pr: PullRequest = serde_json::from_str(json)
+            .unwrap_or_else(|e| panic!("反序列化失败: {e}"));
+        assert_eq!(pr.number, "10");
+        assert_eq!(pr.title, "feat: add feature");
+        assert_eq!(pr.state, "open");
+    }
+
+    #[test]
+    fn pull_request_deserialize_defaults() {
+        let json = r#"{"number": "1", "title": "test", "state": "open"}"#;
+        let pr: PullRequest = serde_json::from_str(json)
+            .unwrap_or_else(|e| panic!("反序列化失败: {e}"));
+        assert_eq!(pr.blocked_on, "");
+    }
+
+    #[test]
+    fn merge_style_serialize() {
+        let merge = serde_json::to_string(&MergeStyle::Merge)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert_eq!(merge, r#""merge""#);
+
+        let squash = serde_json::to_string(&MergeStyle::Squash)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert_eq!(squash, r#""squash""#);
+
+        let rebase = serde_json::to_string(&MergeStyle::Rebase)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert_eq!(rebase, r#""rebase""#);
+    }
+
+    #[test]
+    fn create_pull_request_serialize_skip_empty() {
+        let req = CreatePullRequest {
+            base: "main".to_string(),
+            head: "feature".to_string(),
+            head_repo: String::new(),
+            title: "test PR".to_string(),
+            body: String::new(),
+        };
+        let json = serde_json::to_string(&req)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert!(!json.contains("head_repo"));
+        assert!(!json.contains("body"));
+        assert!(json.contains("base"));
+        assert!(json.contains("head"));
+    }
+
+    #[test]
+    fn update_pull_request_serialize_skip_none() {
+        let req = UpdatePullRequest {
+            title: None,
+            body: None,
+            state: None,
+        };
+        let json = serde_json::to_string(&req)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert_eq!(json, "{}");
+    }
+
+    #[test]
+    fn merge_pull_request_body_serialize() {
+        let body = MergePullRequestBody {
+            commit_title: "merge: feature".to_string(),
+            commit_message: String::new(),
+            merge_style: MergeStyle::Squash,
+        };
+        let json = serde_json::to_string(&body)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert!(json.contains(r#""merge_style":"squash""#));
+        assert!(!json.contains("commit_message"));
+    }
+
+    #[test]
+    fn merge_pull_response_deserialize() {
+        let json = r#"{"merged": true, "sha": "abc123", "message": "ok"}"#;
+        let resp: MergePullResponse = serde_json::from_str(json)
+            .unwrap_or_else(|e| panic!("反序列化失败: {e}"));
+        assert!(resp.merged);
+        assert_eq!(resp.sha, "abc123");
+    }
+}

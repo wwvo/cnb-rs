@@ -91,3 +91,107 @@ pub struct ListIssuesOptions {
     pub assignees: Option<String>,
     pub authors: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn issue_deserialize() {
+        let json = r#"{"number": "42", "title": "Bug report", "state": "open", "last_acted_at": "2025-01-01T00:00:00Z"}"#;
+        let issue: Issue = serde_json::from_str(json)
+            .unwrap_or_else(|e| panic!("反序列化失败: {e}"));
+        assert_eq!(issue.number, "42");
+        assert_eq!(issue.title, "Bug report");
+        assert_eq!(issue.state, "open");
+        assert_eq!(issue.last_acted_at, "2025-01-01T00:00:00Z");
+    }
+
+    #[test]
+    fn issue_deserialize_defaults() {
+        let json = r#"{"number": "1", "title": "test", "state": "closed"}"#;
+        let issue: Issue = serde_json::from_str(json)
+            .unwrap_or_else(|e| panic!("反序列化失败: {e}"));
+        assert_eq!(issue.last_acted_at, "");
+    }
+
+    #[test]
+    fn issue_detail_deserialize() {
+        let json = r#"{"number": "1", "title": "test", "body": "description", "state": "open"}"#;
+        let detail: IssueDetail = serde_json::from_str(json)
+            .unwrap_or_else(|e| panic!("反序列化失败: {e}"));
+        assert_eq!(detail.body, "description");
+    }
+
+    #[test]
+    fn create_issue_request_serialize_minimal() {
+        let req = CreateIssueRequest {
+            title: "test".to_string(),
+            body: String::new(),
+            priority: String::new(),
+            labels: vec![],
+            assignees: vec![],
+            start_date: None,
+            end_date: None,
+        };
+        let json = serde_json::to_string(&req)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        // 空字段应被 skip
+        assert!(!json.contains("body"));
+        assert!(!json.contains("priority"));
+        assert!(!json.contains("labels"));
+        assert!(!json.contains("assignees"));
+        assert!(json.contains("title"));
+    }
+
+    #[test]
+    fn create_issue_request_serialize_full() {
+        let req = CreateIssueRequest {
+            title: "test".to_string(),
+            body: "desc".to_string(),
+            priority: "p0".to_string(),
+            labels: vec!["bug".to_string()],
+            assignees: vec!["user1".to_string()],
+            start_date: Some("2025-01-01".to_string()),
+            end_date: Some("2025-12-31".to_string()),
+        };
+        let json = serde_json::to_string(&req)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert!(json.contains("body"));
+        assert!(json.contains("priority"));
+        assert!(json.contains("labels"));
+        assert!(json.contains("start_date"));
+    }
+
+    #[test]
+    fn update_issue_request_serialize_skip_none() {
+        let req = UpdateIssueRequest {
+            state: None,
+            state_reason: None,
+        };
+        let json = serde_json::to_string(&req)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert_eq!(json, "{}");
+    }
+
+    #[test]
+    fn update_issue_request_serialize_with_values() {
+        let req = UpdateIssueRequest {
+            state: Some("closed".to_string()),
+            state_reason: Some("completed".to_string()),
+        };
+        let json = serde_json::to_string(&req)
+            .unwrap_or_else(|e| panic!("序列化失败: {e}"));
+        assert!(json.contains(r#""state":"closed""#));
+        assert!(json.contains(r#""state_reason":"completed""#));
+    }
+
+    #[test]
+    fn issue_comment_deserialize() {
+        let json = r#"{"body": "comment text", "created_at": "2025-01-01T00:00:00Z", "updated_at": "2025-01-02T00:00:00Z", "author": {"username": "user1", "nickname": "User One"}}"#;
+        let comment: IssueComment = serde_json::from_str(json)
+            .unwrap_or_else(|e| panic!("反序列化失败: {e}"));
+        assert_eq!(comment.body, "comment text");
+        assert_eq!(comment.author.username, "user1");
+    }
+}
