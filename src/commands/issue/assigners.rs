@@ -4,6 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_api::types::AddAssigneesRequest;
 use cnb_core::context::AppContext;
+use cnb_tui::{info, success};
 
 /// Issue 处理人管理
 #[derive(Debug, Parser)]
@@ -55,7 +56,7 @@ async fn run_get(ctx: &AppContext, args: &GetAssignersArgs) -> Result<()> {
     let assignees = client.list_issue_assignees(&args.number).await?;
 
     if assignees.is_empty() {
-        println!("Issue #{} 没有处理人", args.number);
+        info!("Issue #{} 没有处理人", args.number);
         return Ok(());
     }
 
@@ -89,7 +90,7 @@ async fn run_add(ctx: &AppContext, args: &AddAssignersArgs) -> Result<()> {
     };
 
     client.add_issue_assignees(&args.number, &req).await?;
-    println!("Issue #{} 处理人已更新", args.number);
+    success!("Issue #{} 处理人已更新", args.number);
 
     Ok(())
 }

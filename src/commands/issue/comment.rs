@@ -4,6 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_api::types::CreateCommentRequest;
 use cnb_core::context::AppContext;
+use cnb_tui::success;
 
 /// 创建 Issue 评论
 #[derive(Debug, Parser)]
@@ -26,7 +27,7 @@ pub async fn run(ctx: &AppContext, args: &CommentArgs) -> Result<()> {
     };
 
     client.create_issue_comment(&args.number, &req).await?;
-    println!("Issue #{} 评论已创建", args.number);
+    success!("Issue #{} 评论已创建", args.number);
 
     Ok(())
 }

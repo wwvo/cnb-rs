@@ -5,6 +5,7 @@ use clap::Parser;
 use cnb_api::types::PostReleaseAssetUploadURLRequest;
 use cnb_core::context::AppContext;
 use cnb_core::upload;
+use cnb_tui::success;
 
 /// 上传附件到 Release
 #[derive(Debug, Parser)]
@@ -38,7 +39,7 @@ pub async fn run(ctx: &AppContext, args: &AssetUploadArgs) -> Result<()> {
     let path = std::path::Path::new(&args.file_path);
     upload::upload_and_confirm(path, &upload_info.upload_url, &upload_info.verify_url, client.token()).await?;
 
-    println!("文件 {file_name} 已上传到 Release {}", args.tag_name);
+    success!("文件 {file_name} 已上传到 Release {}", args.tag_name);
 
     Ok(())
 }

@@ -4,6 +4,7 @@ use anyhow::{Result, bail};
 use clap::Parser;
 use cnb_api::types::UploadLogoRequest;
 use cnb_core::context::AppContext;
+use cnb_tui::success;
 use std::path::Path;
 
 /// 更新组织 Logo 参数
@@ -48,7 +49,7 @@ pub async fn run(ctx: &AppContext, args: &UpdateLogoArgs) -> Result<()> {
         .post_to_cos(&upload_info.upload_url, &upload_info.form, data)
         .await?;
 
-    println!("组织 Logo 更新成功");
+    success!("组织 Logo 更新成功");
 
     Ok(())
 }

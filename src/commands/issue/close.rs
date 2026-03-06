@@ -4,6 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_api::types::UpdateIssueRequest;
 use cnb_core::context::AppContext;
+use cnb_tui::success;
 
 /// 关闭 Issue
 #[derive(Debug, Parser)]
@@ -27,7 +28,7 @@ pub async fn run(ctx: &AppContext, args: &CloseArgs) -> Result<()> {
     };
 
     client.update_issue(&args.number, &req).await?;
-    println!("Issue #{} 已关闭（原因: {}）", args.number, args.reason);
+    success!("Issue #{} 已关闭（原因: {}）", args.number, args.reason);
 
     Ok(())
 }
