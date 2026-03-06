@@ -5,6 +5,7 @@ use clap::Args;
 use cnb_api::client::CnbClient;
 use cnb_core::config::{Config, DEFAULT_SCHEME};
 use cnb_core::context::AppContext;
+use cnb_tui::{info, success};
 
 /// 登录参数
 #[derive(Debug, Args)]
@@ -32,18 +33,18 @@ pub async fn run(ctx: &AppContext, args: &LoginArgs) -> Result<()> {
     }
 
     // 验证 token：用临时客户端调用 /user
-    eprintln!("正在验证 Token...");
+    info!("正在验证 Token...");
     let base_url = format!("{DEFAULT_SCHEME}://api.{domain}/");
     let base_web_url = format!("{DEFAULT_SCHEME}://{domain}/");
     let client = CnbClient::new(&base_url, &base_web_url, &token, "")?;
 
     let user = client.me().await.map_err(|e| {
-        anyhow::anyhow!("Token 验证失败: {e}")
+        anyhow::anyhow!("Token 验证失败：{e}")
     })?;
 
     // 保存到配置文件
     Config::save_auth(domain, &token, &user.username)?;
 
-    eprintln!("✓ 已登录为 {} ({})", user.username, domain);
+    success!("已登录为 {} ({})", user.username, domain);
     Ok(())
 }

@@ -3,6 +3,7 @@
 use anyhow::Result;
 use cnb_core::auth::{TokenSource, get_token_with_source};
 use cnb_core::context::AppContext;
+use cnb_tui::info;
 
 /// 查看当前认证状态
 pub async fn run(ctx: &AppContext) -> Result<()> {
@@ -10,12 +11,12 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
     let config = ctx.config();
 
     let Some((token, source)) = get_token_with_source(domain, config) else {
-        eprintln!("未登录 ({domain})");
-        eprintln!("使用 `cnb auth login` 登录，或设置环境变量 CNB_TOKEN");
+        info!("未登录 ({domain})");
+        info!("使用 `cnb auth login` 登录，或设置环境变量 CNB_TOKEN");
         return Ok(());
     };
 
-    // Token 脱敏显示：保留前4位和后4位
+    // Token 脱敏显示：保留前 4 位和后 4 位
     let masked = if token.len() > 12 {
         format!("{}****{}", &token[..4], &token[token.len() - 4..])
     } else {
@@ -37,9 +38,9 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
         Err(_) => "(无法创建客户端)".to_string(),
     };
 
-    eprintln!("域名:   {domain}");
-    eprintln!("用户:   {username}");
-    eprintln!("Token:  {masked}（来源: {source_desc}）");
+    info!("域名：  {domain}");
+    info!("用户：  {username}");
+    info!("Token:  {masked}（来源：{source_desc}）");
 
     Ok(())
 }
