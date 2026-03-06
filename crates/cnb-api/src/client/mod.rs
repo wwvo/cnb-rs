@@ -65,14 +65,14 @@ impl CnbClient {
     /// 获取当前用户信息
     pub async fn me(&self) -> Result<User, ApiError> {
         let url = format!("{}user", self.base_url);
-        let resp = self.http.get(&url).send().await?;
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
     /// 获取仓库信息
     pub async fn get_repo(&self) -> Result<Repo, ApiError> {
         let url = format!("{}{}", self.base_url, self.repo);
-        let resp = self.http.get(&url).send().await?;
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
@@ -81,11 +81,54 @@ impl CnbClient {
         let path = Self::encode_path(path);
         let git_ref = encode(git_ref);
         let url = format!("{}{}/-/git/contents/{path}?ref={git_ref}", self.base_url, self.repo);
-        let resp = self.http.get(&url).send().await?;
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
     // ==================== Internal ====================
+
+    /// 发送请求并在 5xx / 网络错误时自动重试（最多 3 次，退避 100ms → 500ms → 1s）
+    ///
+    /// 4xx 错误不重试（客户端错误重试无意义）。
+    /// `build` 闭包每次重试时重新构建 `RequestBuilder`。
+    pub(crate) async fn send_with_retry<F>(&self, build: F) -> Result<reqwest::Response, ApiError>
+    where
+        F: Fn() -> reqwest::RequestBuilder,
+    {
+        const MAX_RETRIES: u32 = 3;
+        const DELAYS_MS: [u64; 3] = [100, 500, 1000];
+
+        let mut last_err: Option<ApiError> = None;
+
+        for attempt in 0..=MAX_RETRIES {
+            if attempt > 0 {
+                let delay = DELAYS_MS.get((attempt - 1) as usize).copied().unwrap_or(1000);
+                tracing::warn!("请求失败，{delay}ms 后第 {attempt} 次重试...");
+                tokio::time::sleep(std::time::Duration::from_millis(delay)).await;
+            }
+
+            match build().send().await {
+                Ok(resp) => {
+                    let status = resp.status().as_u16();
+                    // 5xx 可重试
+                    if status >= 500 && attempt < MAX_RETRIES {
+                        let body = resp.text().await.unwrap_or_default();
+                        last_err = Some(ApiError::HttpStatus { status, body });
+                        continue;
+                    }
+                    return Ok(resp);
+                }
+                // 网络错误可重试（排除请求构建错误）
+                Err(e) if attempt < MAX_RETRIES && !e.is_builder() => {
+                    last_err = Some(ApiError::Network(e));
+                    continue;
+                }
+                Err(e) => return Err(ApiError::Network(e)),
+            }
+        }
+
+        Err(last_err.unwrap_or_else(|| ApiError::Api("重试次数用尽".to_string())))
+    }
 
     /// 对含 `/` 的路径做 URL 编码，保留 `/` 分隔符
     pub(crate) fn encode_path(path: &str) -> String {
