@@ -5,6 +5,7 @@ use clap::Parser;
 use cnb_core::context::AppContext;
 
 pub mod create;
+pub mod edit;
 pub mod list;
 pub mod view;
 
@@ -20,6 +21,9 @@ pub enum RepoSubcommand {
     /// 创建新仓库
     Create(create::CreateArgs),
 
+    /// 编辑仓库信息
+    Edit(edit::EditArgs),
+
     /// 列出仓库
     List(list::ListArgs),
 
@@ -31,6 +35,7 @@ impl RepoCommand {
     pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
         match &self.subcommand {
             RepoSubcommand::Create(args) => create::run(ctx, args).await,
+            RepoSubcommand::Edit(args) => edit::run(ctx, args).await,
             RepoSubcommand::List(args) => list::run(ctx, args).await,
             RepoSubcommand::View(args) => view::run(ctx, args).await,
         }

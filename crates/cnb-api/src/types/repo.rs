@@ -69,6 +69,19 @@ pub struct CreateRepoRequest {
     pub visibility: Option<String>,
 }
 
+/// 更新仓库请求体
+#[derive(Debug, Serialize)]
+pub struct UpdateRepoRequest {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub site: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topics: Option<Vec<String>>,
+}
+
 /// 仓库列表查询选项
 #[derive(Debug)]
 pub struct ListReposOptions {

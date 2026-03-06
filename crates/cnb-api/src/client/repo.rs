@@ -39,4 +39,11 @@ impl CnbClient {
         let resp = self.http.post(&url).json(req).send().await?;
         Self::handle_empty_response(resp).await
     }
+
+    /// 更新仓库信息（PATCH /{repo}）
+    pub async fn update_repo(&self, repo_path: &str, req: &UpdateRepoRequest) -> Result<(), ApiError> {
+        let url = format!("{}{}", self.base_url, repo_path);
+        let resp = self.http.patch(&url).json(req).send().await?;
+        Self::handle_empty_response(resp).await
+    }
 }
