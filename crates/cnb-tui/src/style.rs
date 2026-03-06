@@ -1,27 +1,22 @@
 //! 终端样式辅助函数
 //!
-//! 提供 ANSI 转义码封装，支持 NO_COLOR 环境变量。
+//! 基于 crossterm 的轻量封装，提供统一的终端样式 API。
 
-use std::sync::OnceLock;
-
-/// 检查是否禁用颜色输出（NO_COLOR 环境变量）
-fn no_color() -> bool {
-    static NO_COLOR: OnceLock<bool> = OnceLock::new();
-    *NO_COLOR.get_or_init(|| std::env::var("NO_COLOR").is_ok())
-}
+use crossterm::style::Stylize;
 
 /// 灰色文本（用于辅助信息、思考过程等）
 pub fn dim(text: &str) -> String {
-    if no_color() {
-        text.to_string()
-    } else {
-        format!("\x1b[90m{text}\x1b[0m")
-    }
+    format!("{}", text.dark_grey())
 }
 
-/// 清除当前行
-pub fn clear_line() -> &'static str {
-    if no_color() { "\r" } else { "\r\x1b[K" }
+/// 清除当前行（回到行首并擦除内容）
+pub fn clear_line() {
+    use crossterm::{cursor, terminal, execute};
+    let _ = execute!(
+        std::io::stderr(),
+        cursor::MoveToColumn(0),
+        terminal::Clear(terminal::ClearType::CurrentLine)
+    );
 }
 
 #[cfg(test)]
@@ -29,15 +24,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn dim_with_color() {
-        // 在测试环境中 NO_COLOR 通常未设置
+    fn dim_contains_text() {
         let result = dim("hello");
         assert!(result.contains("hello"));
-    }
-
-    #[test]
-    fn clear_line_not_empty() {
-        let result = clear_line();
-        assert!(!result.is_empty());
     }
 }

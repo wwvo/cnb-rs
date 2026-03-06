@@ -53,7 +53,7 @@ pub async fn run_agent(
         let resp = client.ai_chat(&req).await?;
 
         // 清除等待提示
-        eprint!("{}", clear_line());
+        clear_line();
 
         let Some(choice) = resp.choices.first() else {
             anyhow::bail!("AI 返回空响应");

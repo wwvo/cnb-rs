@@ -18,11 +18,14 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     let client = ctx.api_client()?;
     let issues = client.list_all_issues("open").await?;
 
+    // 统一使用同一个时间基准
+    let now = chrono::Utc::now();
+
     // 过滤逻辑
     let filtered: Vec<_> = if args.stale_days > 0 {
         issues
             .into_iter()
-            .filter(|issue| is_stale(&issue.last_acted_at, args.stale_days))
+            .filter(|issue| is_stale(&now, &issue.last_acted_at, args.stale_days))
             .collect()
     } else {
         issues
@@ -45,7 +48,7 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
         Column::new("StaleDays", 10),
     ]);
     for issue in &filtered {
-        let stale_days = calculate_stale_days(&issue.last_acted_at);
+        let stale_days = calculate_stale_days(&now, &issue.last_acted_at);
         table.add_row(vec![
             issue.number.clone(),
             issue.title.clone(),
@@ -59,21 +62,20 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
 }
 
 /// 判断 Issue 是否超过指定天数未活动
-fn is_stale(last_acted_at: &str, stale_days: u32) -> bool {
+fn is_stale(now: &chrono::DateTime<chrono::Utc>, last_acted_at: &str, stale_days: u32) -> bool {
     if stale_days == 0 {
         return false;
     }
-    let days = calculate_stale_days(last_acted_at);
+    let days = calculate_stale_days(now, last_acted_at);
     days >= stale_days
 }
 
 /// 计算不活跃天数
-fn calculate_stale_days(last_acted_at: &str) -> u32 {
+fn calculate_stale_days(now: &chrono::DateTime<chrono::Utc>, last_acted_at: &str) -> u32 {
     // 解析 RFC3339 格式的时间字符串
     let Ok(last_time) = chrono::DateTime::parse_from_rfc3339(last_acted_at) else {
         return 0;
     };
-    let now = chrono::Utc::now();
     let duration = now.signed_duration_since(last_time);
     duration.num_days().max(0) as u32
 }
