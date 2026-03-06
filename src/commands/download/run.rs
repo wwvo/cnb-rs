@@ -26,7 +26,7 @@ pub struct DownFile {
 /// 执行 download 命令
 pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
     if args.files.is_empty() {
-        println!("请指定要下载的文件，使用 --files 参数，详见 -h");
+        eprintln!("请指定要下载的文件，使用 --files 参数，详见 -h");
         return Ok(());
     }
 
@@ -46,11 +46,11 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
     let download_files = filter_files(all_files, &args.include, &args.exclude);
 
     if download_files.is_empty() {
-        println!("没有找到需要下载的文件");
+        eprintln!("没有找到需要下载的文件");
         return Ok(());
     }
 
-    println!("共 {} 个文件待下载\n", download_files.len());
+    eprintln!("共 {} 个文件待下载\n", download_files.len());
 
     // 并发下载 + 进度条
     let mp = MultiProgress::new();
@@ -120,9 +120,9 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
         }
     }
 
-    println!("\n下载完成：{success} 成功，{failed} 失败");
+    eprintln!("\n下载完成：{success} 成功，{failed} 失败");
     for err in &errors {
-        println!("  ✗ {err}");
+        eprintln!("  ✗ {err}");
     }
 
     Ok(())
@@ -164,7 +164,7 @@ async fn collect_files(
                 }
             }
             _ => {
-                println!("跳过未知类型: {} ({})", file_path, content.content_type);
+                eprintln!("跳过未知类型: {} ({})", file_path, content.content_type);
             }
         }
     }
