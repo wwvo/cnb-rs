@@ -1,8 +1,8 @@
 //! cnb pull merge 子命令 - 合并 Pull Request
 
-use anyhow::{Result, bail};
+use anyhow::Result;
 use clap::Parser;
-use cnb_api::types::MergePullRequestBody;
+use cnb_api::types::{MergePullRequestBody, MergeStyle};
 use cnb_core::context::AppContext;
 
 /// 合并 Pull Request
@@ -20,18 +20,13 @@ pub struct MergeArgs {
     #[arg(short = 'm', long = "commit-message", default_value = "")]
     pub commit_message: String,
 
-    /// 合并方式（merge/squash/rebase）
-    #[arg(short = 's', long = "merge-style", default_value = "merge")]
-    pub merge_style: String,
+    /// 合并方式
+    #[arg(short = 's', long = "merge-style", value_enum, default_value = "merge")]
+    pub merge_style: MergeStyle,
 }
 
 /// 执行 pull merge 命令
 pub async fn run(ctx: &AppContext, args: &MergeArgs) -> Result<()> {
-    // 参数校验
-    if !["merge", "squash", "rebase"].contains(&args.merge_style.as_str()) {
-        bail!("--merge-style 只能为 'merge'、'squash' 或 'rebase'");
-    }
-
     let client = ctx.api_client()?;
 
     let req = MergePullRequestBody {
@@ -43,10 +38,9 @@ pub async fn run(ctx: &AppContext, args: &MergeArgs) -> Result<()> {
     let resp = client.merge_pull(&args.number, &req).await?;
 
     println!(
-        "{:<15} {:<10} {:<15} {:<45} {}",
+        "{:<15} {:<10} {:<45} {}",
         format!("#{}", args.number),
         resp.merged,
-        args.merge_style,
         resp.sha,
         resp.message
     );

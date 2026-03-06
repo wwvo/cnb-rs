@@ -52,13 +52,22 @@ pub struct UpdatePullRequest {
     pub state: Option<String>,
 }
 
+/// 合并方式
+#[derive(Debug, Clone, clap::ValueEnum, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum MergeStyle {
+    Merge,
+    Squash,
+    Rebase,
+}
+
 /// 合并 Pull Request 请求
 #[derive(Debug, Serialize)]
 pub struct MergePullRequestBody {
     pub commit_title: String,
     #[serde(skip_serializing_if = "String::is_empty")]
     pub commit_message: String,
-    pub merge_style: String,
+    pub merge_style: MergeStyle,
 }
 
 /// Pull Request 列表查询参数
