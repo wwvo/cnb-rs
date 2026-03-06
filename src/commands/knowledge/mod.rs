@@ -24,7 +24,7 @@ pub enum KnowledgeSubcommand {
     /// 获取知识库信息
     Info,
     /// 清除知识库
-    Clean,
+    Clean(clean::CleanArgs),
     /// 查询知识库
     Query(query::QueryArgs),
 }
@@ -34,7 +34,7 @@ impl KnowledgeCommand {
         match &self.subcommand {
             KnowledgeSubcommand::ListModels => list_models::run(ctx).await,
             KnowledgeSubcommand::Info => info::run(ctx).await,
-            KnowledgeSubcommand::Clean => clean::run(ctx).await,
+            KnowledgeSubcommand::Clean(args) => clean::run(ctx, args).await,
             KnowledgeSubcommand::Query(args) => query::run(ctx, args).await,
         }
     }
