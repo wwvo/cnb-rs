@@ -7,6 +7,8 @@ use reqwest::header::{ACCEPT, AUTHORIZATION, HeaderMap, HeaderValue};
 /// CNB API 客户端
 pub struct CnbClient {
     http: reqwest::Client,
+    /// 无认证头的 HTTP 客户端，用于 COS 等第三方上传
+    http_plain: reqwest::Client,
     base_url: String,
     base_web_url: String,
     token: String,
@@ -30,8 +32,11 @@ impl CnbClient {
             .default_headers(headers)
             .build()?;
 
+        let http_plain = reqwest::Client::new();
+
         Ok(Self {
             http,
+            http_plain,
             base_url: base_url.to_string(),
             base_web_url: base_web_url.to_string(),
             token: token.to_string(),
@@ -294,7 +299,7 @@ impl CnbClient {
         let part = reqwest::multipart::Part::bytes(file_data).file_name("file.dat");
         multipart = multipart.part("file", part);
 
-        let resp = reqwest::Client::new()
+        let resp = self.http_plain
             .post(upload_url)
             .multipart(multipart)
             .send()
