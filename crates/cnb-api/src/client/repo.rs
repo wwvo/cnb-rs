@@ -60,4 +60,36 @@ impl CnbClient {
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
+
+    /// 归档仓库（POST /{slug}/-/settings/archive）
+    pub async fn archive_repo(&self, repo_path: &str) -> Result<(), ApiError> {
+        let url = format!("{}{}/-/settings/archive", self.base_url, repo_path);
+        let resp = self.http.post(&url).send().await?;
+        Self::handle_empty_response(resp).await
+    }
+
+    /// 解除仓库归档（POST /{slug}/-/settings/unarchive）
+    pub async fn unarchive_repo(&self, repo_path: &str) -> Result<(), ApiError> {
+        let url = format!("{}{}/-/settings/unarchive", self.base_url, repo_path);
+        let resp = self.http.post(&url).send().await?;
+        Self::handle_empty_response(resp).await
+    }
+
+    /// 设置仓库可见性（POST /{repo}/-/settings/set_visibility?visibility=xxx）
+    pub async fn set_repo_visibility(&self, repo_path: &str, visibility: &str) -> Result<(), ApiError> {
+        let url = format!("{}{}/-/settings/set_visibility?visibility={}", self.base_url, repo_path, visibility);
+        let resp = self.http.post(&url).send().await?;
+        Self::handle_empty_response(resp).await
+    }
+
+    /// 转移仓库（POST /{repo}/-/transfer）
+    pub async fn transfer_repo(&self, repo_path: &str, target: &str) -> Result<(), ApiError> {
+        let url = format!("{}{}/-/transfer", self.base_url, repo_path);
+        let body = serde_json::json!({
+            "source": repo_path,
+            "target": target,
+        });
+        let resp = self.http.post(&url).json(&body).send().await?;
+        Self::handle_empty_response(resp).await
+    }
 }
