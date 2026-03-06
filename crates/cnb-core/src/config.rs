@@ -11,6 +11,9 @@ pub const DEFAULT_DOMAIN: &str = "cnb.cool";
 /// 默认 HTTPS scheme
 pub const DEFAULT_SCHEME: &str = "https";
 
+/// 默认 Git 协议
+pub const DEFAULT_GIT_PROTOCOL: &str = "https";
+
 /// 配置文件名
 pub const CONFIG_FILE: &str = "config.toml";
 
