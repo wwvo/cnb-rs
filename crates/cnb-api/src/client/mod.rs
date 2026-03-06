@@ -166,6 +166,9 @@ impl CnbClient {
             ));
         }
         let body = resp.text().await.unwrap_or_default();
+        if status == 404 {
+            return Err(ApiError::NotFound(body));
+        }
         Err(ApiError::HttpStatus { status, body })
     }
 
@@ -181,6 +184,9 @@ impl CnbClient {
             ));
         }
         let body = resp.text().await.unwrap_or_default();
+        if status == 404 {
+            return Err(ApiError::NotFound(body));
+        }
         Err(ApiError::HttpStatus { status, body })
     }
 }

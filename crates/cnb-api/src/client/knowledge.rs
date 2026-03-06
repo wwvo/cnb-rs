@@ -18,10 +18,6 @@ impl CnbClient {
     pub async fn delete_knowledge_base(&self) -> Result<(), ApiError> {
         let url = format!("{}{}/-/knowledgebase", self.base_url, self.repo);
         let resp = self.http.delete(&url).send().await?;
-        let status = resp.status().as_u16();
-        if status == 404 {
-            return Err(ApiError::NotFound("知识库不存在".to_string()));
-        }
         Self::handle_empty_response(resp).await
     }
 

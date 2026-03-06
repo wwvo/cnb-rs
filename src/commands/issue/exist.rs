@@ -20,7 +20,6 @@ pub async fn run(ctx: &AppContext, args: &ExistArgs) -> Result<()> {
     match client.get_issue(&args.number).await {
         Ok(issue) => println!("{}", issue.title),
         Err(ApiError::NotFound(_)) => println!("false"),
-        Err(ApiError::HttpStatus { status: 404, .. }) => println!("false"),
         Err(e) => return Err(e.into()),
     }
 
