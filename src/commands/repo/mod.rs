@@ -4,6 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
 
+pub mod clone;
 pub mod create;
 pub mod delete;
 pub mod edit;
@@ -20,6 +21,9 @@ pub struct RepoCommand {
 
 #[derive(Debug, clap::Subcommand)]
 pub enum RepoSubcommand {
+    /// 克隆仓库到本地
+    Clone(clone::CloneArgs),
+
     /// 创建新仓库
     Create(create::CreateArgs),
 
@@ -42,6 +46,7 @@ pub enum RepoSubcommand {
 impl RepoCommand {
     pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
         match &self.subcommand {
+            RepoSubcommand::Clone(args) => clone::run(ctx, args).await,
             RepoSubcommand::Create(args) => create::run(ctx, args).await,
             RepoSubcommand::Delete(args) => delete::run(ctx, args).await,
             RepoSubcommand::Edit(args) => edit::run(ctx, args).await,
