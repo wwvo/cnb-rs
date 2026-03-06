@@ -11,6 +11,10 @@ pub struct CloseArgs {
     /// Issue 编号
     #[arg(short = 'n', long = "number")]
     pub number: String,
+
+    /// 关闭原因（completed 或 not_planned）
+    #[arg(short = 'r', long = "reason", default_value = "completed")]
+    pub reason: String,
 }
 
 /// 执行 issue close 命令
@@ -19,11 +23,11 @@ pub async fn run(ctx: &AppContext, args: &CloseArgs) -> Result<()> {
 
     let req = UpdateIssueRequest {
         state: Some("closed".to_string()),
-        state_reason: Some("not_planned".to_string()),
+        state_reason: Some(args.reason.clone()),
     };
 
     client.update_issue(&args.number, &req).await?;
-    println!("Issue #{} 已关闭", args.number);
+    println!("Issue #{} 已关闭（原因: {}）", args.number, args.reason);
 
     Ok(())
 }

@@ -15,6 +15,18 @@ pub struct CreateArgs {
     /// Issue 描述
     #[arg(short = 'b', long = "body", default_value = "")]
     pub body: String,
+
+    /// 优先级
+    #[arg(short = 'p', long = "priority", default_value = "")]
+    pub priority: String,
+
+    /// 标签（逗号分隔）
+    #[arg(short = 'l', long = "labels", value_delimiter = ',')]
+    pub labels: Vec<String>,
+
+    /// 处理人（逗号分隔）
+    #[arg(short = 'a', long = "assignees", value_delimiter = ',')]
+    pub assignees: Vec<String>,
 }
 
 /// 执行 issue create 命令
@@ -24,9 +36,9 @@ pub async fn run(ctx: &AppContext, args: &CreateArgs) -> Result<()> {
     let req = CreateIssueRequest {
         title: args.title.clone(),
         body: args.body.clone(),
-        priority: String::new(),
-        labels: Vec::new(),
-        assignees: Vec::new(),
+        priority: args.priority.clone(),
+        labels: args.labels.clone(),
+        assignees: args.assignees.clone(),
     };
 
     let issue = client.create_issue(&req).await?;
