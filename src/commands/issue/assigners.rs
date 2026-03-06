@@ -37,9 +37,9 @@ pub struct AddAssignersArgs {
     #[arg(short = 'n', long = "number")]
     pub number: String,
 
-    /// 处理人用户名，多个用逗号分隔
-    #[arg(short = 'a', long = "assignees")]
-    pub assignees: String,
+    /// 处理人用户名（逗号分隔）
+    #[arg(short = 'a', long = "assignees", value_delimiter = ',')]
+    pub assignees: Vec<String>,
 }
 
 /// 执行 assigners 命令
@@ -71,10 +71,9 @@ async fn run_get(ctx: &AppContext, args: &GetAssignersArgs) -> Result<()> {
 async fn run_add(ctx: &AppContext, args: &AddAssignersArgs) -> Result<()> {
     let client = ctx.api_client()?;
 
-    // 按逗号分割并去重
     let assignee_list: Vec<String> = args
         .assignees
-        .split(',')
+        .iter()
         .map(|s| s.trim().to_string())
         .filter(|s| !s.is_empty())
         .collect::<std::collections::HashSet<_>>()
