@@ -4,6 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
 use cnb_tui::confirm::confirm_action;
+use cnb_tui::{info, success, fail};
 
 /// 清理 Release 附件
 #[derive(Debug, Parser)]
@@ -54,7 +55,7 @@ pub async fn run(ctx: &AppContext, args: &AssetCleanArgs) -> Result<()> {
         && args.keep_days.is_none()
         && args.keep_num.is_none()
     {
-        println!("请指定删除策略，使用 -h 查看帮助");
+        info!("请指定删除策略，使用 -h 查看帮助");
         return Ok(());
     }
 
@@ -99,19 +100,19 @@ pub async fn run(ctx: &AppContext, args: &AssetCleanArgs) -> Result<()> {
     }
 
     if assets_to_delete.is_empty() {
-        println!("没有需要清理的附件");
+        info!("没有需要清理的附件");
         return Ok(());
     }
 
     // 显示待删除列表
     for asset in &assets_to_delete {
-        println!("{asset}");
+        eprintln!("{asset}");
     }
-    println!();
+    eprintln!();
 
     // 确认删除
     if !confirm_action(&format!("确认删除以上 {} 个附件？", assets_to_delete.len()), args.yes)? {
-        println!("已取消");
+        info!("已取消");
         return Ok(());
     }
 
@@ -121,8 +122,8 @@ pub async fn run(ctx: &AppContext, args: &AssetCleanArgs) -> Result<()> {
             .delete_release_asset(&asset.release_id, &asset.asset_id)
             .await
         {
-            Ok(()) => println!("已删除：{asset}"),
-            Err(e) => println!("删除失败：{asset}, 错误：{e}"),
+            Ok(()) => success!("已删除：{asset}"),
+            Err(e) => fail!("删除失败：{asset}, 错误：{e}"),
         }
     }
 

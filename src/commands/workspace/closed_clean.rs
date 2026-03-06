@@ -2,6 +2,7 @@
 
 use anyhow::Result;
 use cnb_core::context::AppContext;
+use cnb_tui::{info, success, fail};
 
 const PAGE_SIZE: i32 = 100;
 
@@ -26,30 +27,21 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
     }
 
     if all_workspaces.is_empty() {
-        println!("没有已关闭的云原生工作区需要清理");
+        info!("没有已关闭的云原生工作区需要清理");
         return Ok(());
     }
 
-    println!("共找到 {} 个已关闭的工作区\n", all_workspaces.len());
+    info!("共找到 {} 个已关闭的工作区\n", all_workspaces.len());
 
     for ws in &all_workspaces {
-        println!(
-            "[INFO] 开始清理工作区 slug={} pipelineId={}",
-            ws.slug, ws.pipeline_id
-        );
+        info!("开始清理工作区 slug={} pipelineId={}", ws.slug, ws.pipeline_id);
 
         match client.delete_workspace(&ws.pipeline_id).await {
             Ok(()) => {
-                println!(
-                    "[SUCCESS] 已清理工作区 slug={} pipelineId={}",
-                    ws.slug, ws.pipeline_id
-                );
+                success!("已清理工作区 slug={} pipelineId={}", ws.slug, ws.pipeline_id);
             }
             Err(e) => {
-                println!(
-                    "[WARN] 清理失败 slug={} pipelineId={} err={e}",
-                    ws.slug, ws.pipeline_id
-                );
+                fail!("清理失败 slug={} pipelineId={} err={e}", ws.slug, ws.pipeline_id);
             }
         }
     }
