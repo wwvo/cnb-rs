@@ -3,10 +3,11 @@
 //! COS 上传流程：PUT 文件到 upload_url → POST 确认到 verify_url
 
 use std::path::Path;
+use tokio_util::io::ReaderStream;
 
 /// 上传文件到 COS 并确认
 ///
-/// 1. 读取本地文件
+/// 1. 流式读取本地文件（避免大文件全量加载到内存）
 /// 2. PUT 上传到 `upload_url`
 /// 3. POST 确认到 `verify_url`（带 Bearer Token 认证）
 pub async fn upload_and_confirm(
@@ -16,12 +17,16 @@ pub async fn upload_and_confirm(
     verify_url: &str,
     token: &str,
 ) -> anyhow::Result<()> {
-    let file_data = std::fs::read(file_path)?;
+    let file = tokio::fs::File::open(file_path).await?;
+    let file_len = file.metadata().await?.len();
+    let stream = ReaderStream::new(file);
+    let body = reqwest::Body::wrap_stream(stream);
 
     let resp = http
         .put(upload_url)
         .header("Content-Type", "application/octet-stream")
-        .body(file_data)
+        .header("Content-Length", file_len)
+        .body(body)
         .send()
         .await?;
 
