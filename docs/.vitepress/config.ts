@@ -130,7 +130,19 @@ export default defineConfig({
           {
             text: 'cnb group',
             link: '/group/',
-            items: [{ text: 'update-logo', link: '/group/update-logo' }],
+            items: [
+              { text: 'list', link: '/group/list' },
+              { text: 'view', link: '/group/view' },
+              { text: 'create', link: '/group/create' },
+              { text: 'update', link: '/group/update' },
+              { text: 'delete', link: '/group/delete' },
+              { text: 'transfer', link: '/group/transfer' },
+              { text: 'sub-groups', link: '/group/sub-groups' },
+              { text: 'settings', link: '/group/settings' },
+              { text: 'quota', link: '/group/quota' },
+              { text: 'member', link: '/group/member' },
+              { text: 'update-logo', link: '/group/update-logo' },
+            ],
           },
           {
             text: 'cnb knowledge',
