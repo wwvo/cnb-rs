@@ -1,17 +1,35 @@
 //! cnb pull list 子命令 - 列出与我相关的 Pull Request
 
 use anyhow::Result;
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use cnb_api::types::ListPullsOptions;
 use cnb_core::context::AppContext;
 use cnb_tui::{info, Column, Table};
 
+/// 列表状态过滤
+#[derive(Debug, Clone, ValueEnum)]
+pub enum StateFilter {
+    Open,
+    Closed,
+    All,
+}
+
+impl std::fmt::Display for StateFilter {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            StateFilter::Open => write!(f, "open"),
+            StateFilter::Closed => write!(f, "closed"),
+            StateFilter::All => write!(f, "all"),
+        }
+    }
+}
+
 /// 列出 Pull Request
 #[derive(Debug, Parser)]
 pub struct ListArgs {
-    /// 按状态过滤（open/closed/all，默认 open）
-    #[arg(short = 's', long = "state", default_value = "open")]
-    pub state: String,
+    /// 按状态过滤
+    #[arg(short = 's', long = "state", value_enum, default_value = "open")]
+    pub state: StateFilter,
 }
 
 /// 执行 pull list 命令
@@ -19,15 +37,16 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     let client = ctx.api_client()?;
     let me = client.me().await?;
 
+    let state = args.state.to_string();
     let from_me_opts = ListPullsOptions {
-        state: args.state.clone(),
+        state: state.clone(),
         page: 1,
         page_size: 100,
         authors: Some(me.username.clone()),
         ..Default::default()
     };
     let to_me_opts = ListPullsOptions {
-        state: args.state.clone(),
+        state,
         page: 1,
         page_size: 100,
         reviewers: Some(me.username.clone()),
