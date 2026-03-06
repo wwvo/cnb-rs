@@ -30,14 +30,58 @@ pub struct ListArgs {
     /// 按状态过滤
     #[arg(short = 's', long = "state", value_enum, default_value = "open")]
     pub state: StateFilter,
+
+    /// 按作者过滤（默认为当前用户）
+    #[arg(long = "author")]
+    pub author: Option<String>,
+
+    /// 按评审人过滤（默认为当前用户）
+    #[arg(long = "reviewer")]
+    pub reviewer: Option<String>,
 }
 
 /// 执行 pull list 命令
 pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     let client = ctx.api_client()?;
+    let state = args.state.to_string();
+
+    // 指定了 author 或 reviewer 时，直接按指定条件查询
+    if args.author.is_some() || args.reviewer.is_some() {
+        let opts = ListPullsOptions {
+            state,
+            page: 1,
+            page_size: 100,
+            authors: args.author.clone(),
+            reviewers: args.reviewer.clone(),
+        };
+        let pulls = client.list_pulls(&opts).await.unwrap_or_default();
+
+        if pulls.is_empty() {
+            info!("没有找到符合条件的 Pull Request");
+            return Ok(());
+        }
+
+        let mut table = Table::new(vec![
+            Column::new("NUMBER", 15),
+            Column::new("TITLE", 55),
+            Column::new("STATE", 10),
+            Column::new("BLOCKEDON", 15),
+        ]);
+        for pr in &pulls {
+            table.add_row(vec![
+                format!("#{}", pr.number),
+                pr.title.clone(),
+                pr.state.clone(),
+                pr.blocked_on.clone(),
+            ]);
+        }
+        table.print();
+        return Ok(());
+    }
+
+    // 默认行为：查询与当前用户相关的 PR
     let me = client.me().await?;
 
-    let state = args.state.to_string();
     let from_me_opts = ListPullsOptions {
         state: state.clone(),
         page: 1,
