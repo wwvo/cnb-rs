@@ -160,16 +160,7 @@ impl CnbClient {
         if (200..300).contains(&status) {
             return Ok(());
         }
-        if status == 401 {
-            return Err(ApiError::Auth(
-                "CNB_TOKEN 缺失或无效。请设置：export CNB_TOKEN=\"your_token\"".to_string(),
-            ));
-        }
-        let body = resp.text().await.unwrap_or_default();
-        if status == 404 {
-            return Err(ApiError::NotFound(body));
-        }
-        Err(ApiError::HttpStatus { status, body })
+        Err(Self::map_error_status(status, resp).await)
     }
 
     pub(crate) async fn handle_response<T: serde::de::DeserializeOwned>(resp: reqwest::Response) -> Result<T, ApiError> {
@@ -178,16 +169,21 @@ impl CnbClient {
             let data = resp.json::<T>().await?;
             return Ok(data);
         }
+        Err(Self::map_error_status(status, resp).await)
+    }
+
+    /// 将非成功 HTTP 状态码映射为对应的 ApiError
+    async fn map_error_status(status: u16, resp: reqwest::Response) -> ApiError {
         if status == 401 {
-            return Err(ApiError::Auth(
+            return ApiError::Auth(
                 "CNB_TOKEN 缺失或无效。请设置：export CNB_TOKEN=\"your_token\"".to_string(),
-            ));
+            );
         }
         let body = resp.text().await.unwrap_or_default();
         if status == 404 {
-            return Err(ApiError::NotFound(body));
+            return ApiError::NotFound(body);
         }
-        Err(ApiError::HttpStatus { status, body })
+        ApiError::HttpStatus { status, body }
     }
 }
 
