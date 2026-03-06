@@ -10,6 +10,7 @@ pub mod comment;
 pub mod create;
 pub mod download;
 pub mod exist;
+pub mod edit;
 pub mod list;
 pub mod mine;
 pub mod view;
@@ -49,6 +50,9 @@ pub enum IssueSubcommand {
 
     /// 查看 Issue 详情
     View(view::ViewArgs),
+
+    /// 编辑 Issue
+    Edit(edit::EditArgs),
 }
 
 impl IssueCommand {
@@ -63,6 +67,7 @@ impl IssueCommand {
             IssueSubcommand::Download(args) => download::run(ctx, args).await,
             IssueSubcommand::Assigners(args) => assigners::run(ctx, args).await,
             IssueSubcommand::View(args) => view::run(ctx, args).await,
+            IssueSubcommand::Edit(args) => edit::run(ctx, args).await,
         }
     }
 }
