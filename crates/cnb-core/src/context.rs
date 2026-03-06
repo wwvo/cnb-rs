@@ -38,7 +38,13 @@ impl AppContext {
 
     /// 获取配置（懒加载）
     pub fn config(&self) -> &Config {
-        self.config.get_or_init(|| Config::load().unwrap_or_default())
+        self.config.get_or_init(|| match Config::load() {
+            Ok(c) => c,
+            Err(e) => {
+                tracing::warn!("加载配置文件失败，使用默认配置: {e}");
+                Config::default()
+            }
+        })
     }
 
     /// 获取 Git 信息（懒加载，非 Git 目录返回 None）
