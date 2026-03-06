@@ -53,4 +53,11 @@ impl CnbClient {
         let resp = self.http.delete(&url).send().await?;
         Self::handle_empty_response(resp).await
     }
+
+    /// 获取仓库的 Fork 列表（GET /{repo}/-/forks）
+    pub async fn list_forks(&self, repo_path: &str, page: u32, page_size: u32) -> Result<ForkList, ApiError> {
+        let url = format!("{}{}/-/forks?page={page}&page_size={page_size}", self.base_url, repo_path);
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
+        Self::handle_response(resp).await
+    }
 }

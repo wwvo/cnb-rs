@@ -7,6 +7,7 @@ use cnb_core::context::AppContext;
 pub mod create;
 pub mod delete;
 pub mod edit;
+pub mod fork;
 pub mod list;
 pub mod view;
 
@@ -28,6 +29,9 @@ pub enum RepoSubcommand {
     /// 编辑仓库信息
     Edit(edit::EditArgs),
 
+    /// 查看 Fork 列表
+    Fork(fork::ForkArgs),
+
     /// 列出仓库
     List(list::ListArgs),
 
@@ -41,6 +45,7 @@ impl RepoCommand {
             RepoSubcommand::Create(args) => create::run(ctx, args).await,
             RepoSubcommand::Delete(args) => delete::run(ctx, args).await,
             RepoSubcommand::Edit(args) => edit::run(ctx, args).await,
+            RepoSubcommand::Fork(args) => fork::run(ctx, args).await,
             RepoSubcommand::List(args) => list::run(ctx, args).await,
             RepoSubcommand::View(args) => view::run(ctx, args).await,
         }

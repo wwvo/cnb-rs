@@ -57,6 +57,32 @@ pub struct RepoTime {
     pub valid: bool,
 }
 
+/// Fork 列表响应
+#[derive(Debug, Deserialize, Serialize)]
+pub struct ForkList {
+    #[serde(default)]
+    pub fork_tree_count: u64,
+    #[serde(default)]
+    pub forks: Vec<ForkInfo>,
+}
+
+/// Fork 信息
+#[derive(Debug, Deserialize, Serialize)]
+pub struct ForkInfo {
+    #[serde(default)]
+    pub path: String,
+    #[serde(default)]
+    pub username: String,
+    #[serde(default)]
+    pub nickname: String,
+    #[serde(default)]
+    pub fork_count: u64,
+    #[serde(default)]
+    pub created_at: String,
+    #[serde(default)]
+    pub freeze: bool,
+}
+
 /// 创建仓库请求体
 #[derive(Debug, Serialize)]
 pub struct CreateRepoRequest {
