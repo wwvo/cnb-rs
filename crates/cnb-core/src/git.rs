@@ -8,7 +8,12 @@ use std::sync::LazyLock;
 
 static HTTPS_RE: LazyLock<regex_lite::Regex> = LazyLock::new(|| {
     regex_lite::Regex::new(r"^(https?)://([^/]+)/(.+?)(?:\.git)?$")
-        .unwrap_or_else(|e| panic!("正则表达式编译失败: {e}"))
+        .unwrap_or_else(|e| panic!("HTTPS 正则编译失败: {e}"))
+});
+
+static SSH_RE: LazyLock<regex_lite::Regex> = LazyLock::new(|| {
+    regex_lite::Regex::new(r"^git@([^:]+):(.+?)(?:\.git)?$")
+        .unwrap_or_else(|e| panic!("SSH 正则编译失败: {e}"))
 });
 
 /// 从当前 Git 仓库解析出的信息
@@ -64,31 +69,42 @@ pub fn parse_git_info_from_current_dir() -> Result<GitInfo> {
     parse_git_url(parts[1])
 }
 
-/// 解析 Git HTTPS URL
+/// 解析 Git remote URL（支持 HTTPS 和 SSH 格式）
 ///
 /// 支持格式:
 /// - `https://cnb.cool/looc/git-cnb`
 /// - `https://cnb.cool/looc/git-cnb.git`
 /// - `https://user:token@cnb.cool/looc/git-cnb.git`
+/// - `git@cnb.cool:looc/git-cnb.git`
 pub fn parse_git_url(url: &str) -> Result<GitInfo> {
-    let caps = HTTPS_RE.captures(url).context("URL 格式不匹配 CNB HTTPS 格式")?;
+    // 尝试 HTTPS 格式
+    if let Some(caps) = HTTPS_RE.captures(url) {
+        let scheme = caps.get(1).map_or("", |m| m.as_str()).to_string();
+        let host_part = caps.get(2).map_or("", |m| m.as_str());
+        let repo = caps.get(3).map_or("", |m| m.as_str()).to_string();
 
-    let scheme = caps.get(1).map_or("", |m| m.as_str()).to_string();
-    let host_part = caps.get(2).map_or("", |m| m.as_str());
-    let repo = caps.get(3).map_or("", |m| m.as_str()).to_string();
+        let domain = if let Some(at_pos) = host_part.find('@') {
+            host_part[at_pos + 1..].to_string()
+        } else {
+            host_part.to_string()
+        };
 
-    // 处理带认证信息的 URL (user:token@domain)
-    let domain = if let Some(at_pos) = host_part.find('@') {
-        host_part[at_pos + 1..].to_string()
-    } else {
-        host_part.to_string()
-    };
+        return Ok(GitInfo { scheme, domain, repo });
+    }
 
-    Ok(GitInfo {
-        scheme,
-        domain,
-        repo,
-    })
+    // 尝试 SSH 格式
+    if let Some(caps) = SSH_RE.captures(url) {
+        let domain = caps.get(1).map_or("", |m| m.as_str()).to_string();
+        let repo = caps.get(2).map_or("", |m| m.as_str()).to_string();
+
+        return Ok(GitInfo {
+            scheme: "https".to_string(),
+            domain,
+            repo,
+        });
+    }
+
+    bail!("URL 格式不匹配 CNB HTTPS 或 SSH 格式: {url}")
 }
 
 /// 获取最新一次提交的标题和正文
