@@ -1,5 +1,4 @@
 /target
-Cargo.lock
 .windsurf
 .agents
 skills-lock.json
