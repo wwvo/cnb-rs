@@ -1,4 +1,4 @@
-//! CNB CLI - CNB 平台专属命令行工具
+//! CNB CLI - 一个非官方的 CNB 命令行工具
 //!
 //! 通过 `cnb` 或 `git cnb` 命令使用。
 
@@ -7,12 +7,12 @@ use cnb_core::context::AppContext;
 
 mod commands;
 
-/// CNB CLI - CNB 平台专属命令行工具
+/// CNB CLI - 一个非官方的 CNB 命令行工具
 #[derive(Debug, Parser)]
 #[clap(
     name = "cnb",
     version = concat!(env!("CARGO_PKG_VERSION"), " (", env!("GIT_HASH"), " ", env!("GIT_DATE"), ")"),
-    about = "CNB 平台专属命令行工具",
+    about = "一个非官方的 CNB 命令行工具",
 )]
 struct Cli {
     /// 指定 CNB 域名（默认：cnb.cool）
