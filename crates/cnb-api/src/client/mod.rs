@@ -8,6 +8,7 @@ mod gpg_key;
 mod group;
 mod issue;
 mod label;
+mod member;
 mod knowledge;
 mod pull;
 mod release;
