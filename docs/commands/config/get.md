@@ -1,39 +1,30 @@
-# cnb issue create
+# cnb config get
 
 ```
-cnb issue create [flags]
+cnb config get <key>
 ```
 
-创建 Issue。
+获取指定配置项的当前值。
 
-创建成功后输出 Issue 的 Web 链接。
+如果配置项未设置，输出其默认值并标注 `(default)`。
 
 ## 选项
 
-`-t, --title <TITLE>`
-: Issue 标题（必填）
-
-`-b, --body <BODY>`
-: Issue 描述（默认：空）
+- `<key>`: 配置项名称，可选值：`domain`、`git_protocol`
 
 ## 示例
 
 ```bash
-# 创建 Issue
-$ cnb issue create --title "修复登录问题"
+# 获取域名配置
+$ cnb config get domain
+cnb.cool
 
-# 创建带描述的 Issue
-$ cnb issue create -t "新功能需求" -b "详细描述..."
-```
-
-## 另请参阅
-
-- [cnb issue](/issue/)
-  可用配置项：domain, git_protocol
-
+# 获取 Git 协议配置
+$ cnb config get git_protocol
+https (default)
 ```
 
 ## 另请参阅
 
 - [cnb config](/config/)
-```
+- [cnb config set](/config/set)

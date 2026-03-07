@@ -8,13 +8,10 @@ cnb config set <key> <value>
 
 如果配置文件或其父目录不存在，会自动创建。传入不在可用配置项列表中的 key 会报错。
 
-## 参数
+## 选项
 
-`<key>`
-: 配置项名称，可选值：`domain`、`git_protocol`
-
-`<value>`
-: 配置项的值
+- `<key>`: 配置项名称，可选值：`domain`、`git_protocol`
+- `<value>`: 配置项的值
 
 ## 示例
 
