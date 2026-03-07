@@ -79,12 +79,34 @@ RUN cargo zigbuild --release --target x86_64-unknown-linux-musl
 RUN cargo zigbuild --release --target aarch64-unknown-linux-gnu
 RUN cargo zigbuild --release --target aarch64-unknown-linux-musl
 
-# macOS 交叉编译需要禁用 jitterentropy（缺少 CoreServices 框架头文件）
+# ===== macOS 交叉编译环境配置 =====
+# 1. 创建 macOS 框架桩文件（Security/CoreFoundation）
+#    rustls-platform-verifier 依赖 security-framework，链接时需要这些框架
+#    Linux 容器中不存在 macOS 框架，用 Zig 创建空桩满足链接器
+#    运行时 macOS 系统会提供真实框架
+RUN echo 'void __stub(void) {}' > /tmp/stub.c \
+    && for arch in x86_64 aarch64; do \
+         zig_target="${arch}-macos"; \
+         mkdir -p /opt/macos-stubs/${arch}/{Security.framework,CoreFoundation.framework}; \
+         zig cc -target ${zig_target} -shared \
+           -Wl,-install_name,/System/Library/Frameworks/Security.framework/Versions/A/Security \
+           /tmp/stub.c -o /opt/macos-stubs/${arch}/Security.framework/Security; \
+         zig cc -target ${zig_target} -shared \
+           -Wl,-install_name,/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation \
+           /tmp/stub.c -o /opt/macos-stubs/${arch}/CoreFoundation.framework/CoreFoundation; \
+       done \
+    && rm /tmp/stub.c
+
+# 2. 设置 macOS target 的编译环境变量
+#    - 框架搜索路径（RUSTFLAGS）
+#    - 禁用 jitterentropy（缺少 CoreServices 头文件）
+#    - aarch64 定义 ARM NEON/Crypto 宏（Zig 不自动定义）
 ENV AWS_LC_SYS_NO_JITTER_ENTROPY=1
-RUN cargo zigbuild --release --target x86_64-apple-darwin
-# aarch64-apple-darwin: Zig 交叉编译器不会自动定义 ARM NEON/Crypto 宏，
-# 但 Apple Silicon 架构必定支持这些扩展，手动定义以通过 aws-lc-sys 编译检查
 ENV CFLAGS_aarch64_apple_darwin="-D__ARM_NEON=1 -D__ARM_FEATURE_CRYPTO=1"
+ENV CARGO_TARGET_X86_64_APPLE_DARWIN_RUSTFLAGS="-L framework=/opt/macos-stubs/x86_64"
+ENV CARGO_TARGET_AARCH64_APPLE_DARWIN_RUSTFLAGS="-L framework=/opt/macos-stubs/aarch64"
+
+RUN cargo zigbuild --release --target x86_64-apple-darwin
 RUN cargo zigbuild --release --target aarch64-apple-darwin
 
 # 清理工作区 crate 的编译产物（保留外部依赖的缓存）
