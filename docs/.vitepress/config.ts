@@ -158,6 +158,21 @@ export default defineConfig({
             ],
           },
           {
+            text: 'cnb registry',
+            link: '/registry/',
+            items: [
+              { text: 'list', link: '/registry/list' },
+              { text: 'delete', link: '/registry/delete' },
+              { text: 'set-visibility', link: '/registry/set-visibility' },
+              { text: 'package list', link: '/registry/package-list' },
+              { text: 'package detail', link: '/registry/package-detail' },
+              { text: 'package delete', link: '/registry/package-delete' },
+              { text: 'tag list', link: '/registry/tag-list' },
+              { text: 'tag detail', link: '/registry/tag-detail' },
+              { text: 'tag delete', link: '/registry/tag-delete' },
+            ],
+          },
+          {
             text: 'cnb mission',
             link: '/mission/',
             items: [
