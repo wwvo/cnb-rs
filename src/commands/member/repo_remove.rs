@@ -3,7 +3,8 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{confirm_action, success};
+use cnb_tui::confirm::confirm_action;
+use cnb_tui::success;
 
 /// 移除仓库成员
 #[derive(Debug, Parser)]
@@ -21,9 +22,7 @@ pub async fn run(ctx: &AppContext, args: &RepoRemoveArgs) -> Result<()> {
     let client = ctx.api_client()?;
     let repo = ctx.repo()?;
 
-    if !args.yes {
-        confirm_action(&format!("确认移除成员 {}？", args.username))?;
-    }
+    confirm_action(&format!("确认移除成员 {}？", args.username), args.yes)?;
 
     client.remove_repo_member(&repo, &args.username).await?;
     success!("已移除成员 {}", args.username);

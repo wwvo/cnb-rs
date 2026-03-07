@@ -15,6 +15,7 @@ pub mod info;
 pub mod issue;
 pub mod label;
 pub mod knowledge;
+pub mod member;
 pub mod pull;
 pub mod release;
 pub mod repo;

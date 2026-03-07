@@ -99,6 +99,9 @@ enum Commands {
     /// 知识库管理
     Knowledge(commands::knowledge::KnowledgeCommand),
 
+    /// 成员管理
+    Member(commands::member::MemberCommand),
+
     /// 组织管理
     Group(commands::group::GroupCommand),
 
@@ -176,6 +179,7 @@ async fn async_main() -> anyhow::Result<()> {
         Commands::Stars => commands::stars::run(&ctx).await,
         Commands::Label(cmd) => cmd.execute(&ctx).await,
         Commands::Knowledge(cmd) => cmd.execute(&ctx).await,
+        Commands::Member(cmd) => cmd.execute(&ctx).await,
         Commands::Group(cmd) => cmd.execute(&ctx).await,
         Commands::User(cmd) => cmd.execute(&ctx).await,
         Commands::Workspace(cmd) => cmd.execute(&ctx).await,

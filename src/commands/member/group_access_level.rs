@@ -21,7 +21,7 @@ pub struct GroupAccessLevelArgs {
 /// 执行 member group-access-level 命令
 pub async fn run(ctx: &AppContext, args: &GroupAccessLevelArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    let info = client.get_group_access_level(&args.group, args.include_inherit).await?;
+    let info = client.get_member_access_level(&args.group).await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&info)?);

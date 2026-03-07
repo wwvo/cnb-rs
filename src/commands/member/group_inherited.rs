@@ -2,6 +2,7 @@
 
 use anyhow::Result;
 use clap::Parser;
+use cnb_api::types::ListGroupMembersOptions;
 use cnb_core::context::AppContext;
 use cnb_tui::{Column, Table};
 
@@ -26,9 +27,11 @@ pub struct GroupInheritedArgs {
 /// 执行 member group-inherited 命令
 pub async fn run(ctx: &AppContext, args: &GroupInheritedArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    let groups = client.list_group_inherited_members(
-        &args.group, args.role.as_deref(), args.search.as_deref(), 1, 100,
-    ).await?;
+    let opts = ListGroupMembersOptions {
+        page: 1, page_size: 100,
+        role: args.role.clone(), search: args.search.clone(),
+    };
+    let groups = client.list_inherit_members(&args.group, &opts).await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&groups)?);

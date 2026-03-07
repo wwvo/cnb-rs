@@ -48,7 +48,7 @@ impl CnbClient {
     }
 
     /// 查看自己在仓库的权限
-    pub async fn get_repo_access_level(&self, repo: &str, include_inherit: bool) -> Result<MemberAccessLevelInfo, ApiError> {
+    pub async fn get_repo_access_level(&self, repo: &str, include_inherit: bool) -> Result<MemberAccessLevel, ApiError> {
         let repo = Self::encode_path(repo);
         let mut url = format!("{}{repo}/-/members/access-level", self.base_url);
         if include_inherit { url.push_str("?include_inherit=true"); }
@@ -57,7 +57,7 @@ impl CnbClient {
     }
 
     /// 查看指定成员在仓库的权限层级
-    pub async fn get_repo_user_access(&self, repo: &str, username: &str) -> Result<Vec<MemberAccessLevel>, ApiError> {
+    pub async fn get_repo_user_access(&self, repo: &str, username: &str) -> Result<Vec<MemberAccessLevelInPath>, ApiError> {
         let repo = Self::encode_path(repo);
         let username = encode(username);
         let url = format!("{}{repo}/-/members/{username}/access-level", self.base_url);
@@ -89,77 +89,6 @@ impl CnbClient {
         if let Some(n) = names { url.push_str(&format!("&names={}", encode(n))); }
         if let Some(o) = order_by { url.push_str(&format!("&order_by={}", encode(o))); }
         if desc { url.push_str("&desc=true"); }
-        let resp = self.http.get(&url).send().await?;
-        Self::handle_response(resp).await
-    }
-
-    // === 组织成员 ===
-
-    /// 列出组织直接成员
-    pub async fn list_group_members(
-        &self, group: &str, role: Option<&str>, search: Option<&str>, page: u32, page_size: u32,
-    ) -> Result<Vec<MemberInfo>, ApiError> {
-        let group = Self::encode_path(group);
-        let mut url = format!("{}{group}/-/members?page={page}&page_size={page_size}", self.base_url);
-        if let Some(r) = role { url.push_str(&format!("&role={}", encode(r))); }
-        if let Some(s) = search { url.push_str(&format!("&search={}", encode(s))); }
-        let resp = self.http.get(&url).send().await?;
-        Self::handle_response(resp).await
-    }
-
-    /// 添加组织成员
-    pub async fn add_group_member(&self, group: &str, username: &str, req: &MemberRequest) -> Result<(), ApiError> {
-        let group = Self::encode_path(group);
-        let username = encode(username);
-        let url = format!("{}{group}/-/members/{username}", self.base_url);
-        let resp = self.http.post(&url).json(req).send().await?;
-        Self::handle_empty_response(resp).await
-    }
-
-    /// 更新组织成员权限
-    pub async fn update_group_member(&self, group: &str, username: &str, req: &MemberRequest) -> Result<(), ApiError> {
-        let group = Self::encode_path(group);
-        let username = encode(username);
-        let url = format!("{}{group}/-/members/{username}", self.base_url);
-        let resp = self.http.put(&url).json(req).send().await?;
-        Self::handle_empty_response(resp).await
-    }
-
-    /// 移除组织成员
-    pub async fn remove_group_member(&self, group: &str, username: &str) -> Result<(), ApiError> {
-        let group = Self::encode_path(group);
-        let username = encode(username);
-        let url = format!("{}{group}/-/members/{username}", self.base_url);
-        let resp = self.http.delete(&url).send().await?;
-        Self::handle_empty_response(resp).await
-    }
-
-    /// 查看自己在组织的权限
-    pub async fn get_group_access_level(&self, group: &str, include_inherit: bool) -> Result<MemberAccessLevelInfo, ApiError> {
-        let group = Self::encode_path(group);
-        let mut url = format!("{}{group}/-/members/access-level", self.base_url);
-        if include_inherit { url.push_str("?include_inherit=true"); }
-        let resp = self.http.get(&url).send().await?;
-        Self::handle_response(resp).await
-    }
-
-    /// 查看指定成员在组织的权限层级
-    pub async fn get_group_user_access(&self, group: &str, username: &str) -> Result<Vec<MemberAccessLevel>, ApiError> {
-        let group = Self::encode_path(group);
-        let username = encode(username);
-        let url = format!("{}{group}/-/members/{username}/access-level", self.base_url);
-        let resp = self.http.get(&url).send().await?;
-        Self::handle_response(resp).await
-    }
-
-    /// 列出组织继承成员
-    pub async fn list_group_inherited_members(
-        &self, group: &str, role: Option<&str>, search: Option<&str>, page: u32, page_size: u32,
-    ) -> Result<Vec<InheritMembersGroup>, ApiError> {
-        let group = Self::encode_path(group);
-        let mut url = format!("{}{group}/-/inherit-members?page={page}&page_size={page_size}", self.base_url);
-        if let Some(r) = role { url.push_str(&format!("&role={}", encode(r))); }
-        if let Some(s) = search { url.push_str(&format!("&search={}", encode(s))); }
         let resp = self.http.get(&url).send().await?;
         Self::handle_response(resp).await
     }

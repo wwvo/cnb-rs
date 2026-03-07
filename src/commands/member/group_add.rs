@@ -2,7 +2,7 @@
 
 use anyhow::Result;
 use clap::Parser;
-use cnb_api::types::MemberRequest;
+use cnb_api::types::GroupMemberRequest;
 use cnb_core::context::AppContext;
 use cnb_tui::success;
 
@@ -25,9 +25,9 @@ pub struct GroupAddArgs {
 pub async fn run(ctx: &AppContext, args: &GroupAddArgs) -> Result<()> {
     let client = ctx.api_client()?;
 
-    let req = MemberRequest {
+    let req = GroupMemberRequest {
         access_level: args.role.clone(),
-        is_outside_collaborator: None,
+        is_outside_collaborator: false,
     };
 
     client.add_group_member(&args.group, &args.username, &req).await?;

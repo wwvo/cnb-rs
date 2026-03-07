@@ -2,6 +2,7 @@
 
 use anyhow::Result;
 use clap::Parser;
+use cnb_api::types::ListGroupMembersOptions;
 use cnb_core::context::AppContext;
 use cnb_tui::{Column, Table};
 
@@ -26,9 +27,11 @@ pub struct GroupListArgs {
 /// 执行 member group-list 命令
 pub async fn run(ctx: &AppContext, args: &GroupListArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    let members = client.list_group_members(
-        &args.group, args.role.as_deref(), args.search.as_deref(), 1, 100,
-    ).await?;
+    let opts = ListGroupMembersOptions {
+        page: 1, page_size: 100,
+        role: args.role.clone(), search: args.search.clone(),
+    };
+    let members = client.list_group_members(&args.group, &opts).await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&members)?);
