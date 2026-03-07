@@ -216,6 +216,16 @@ export default defineConfig({
             ],
           },
           {
+            text: 'cnb user',
+            link: '/user/',
+            items: [
+              { text: 'followers', link: '/user/followers' },
+              { text: 'following', link: '/user/following' },
+              { text: 'activities', link: '/user/activities' },
+              { text: 'activity-detail', link: '/user/activity-detail' },
+            ],
+          },
+          {
             text: 'cnb gpg-key',
             link: '/gpg-key/',
             items: [{ text: 'list', link: '/gpg-key/list' }],
