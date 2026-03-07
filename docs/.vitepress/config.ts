@@ -206,6 +206,11 @@ export default defineConfig({
               { text: 'closed-clean', link: '/workspace/closed-clean' },
             ],
           },
+          {
+            text: 'cnb gpg-key',
+            link: '/gpg-key/',
+            items: [{ text: 'list', link: '/gpg-key/list' }],
+          },
           { text: 'cnb version', link: '/version' },
         ],
       },
