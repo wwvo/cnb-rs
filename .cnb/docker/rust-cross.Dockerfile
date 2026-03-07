@@ -87,6 +87,17 @@ RUN cargo zigbuild --release --target x86_64-apple-darwin
 ENV CFLAGS_aarch64_apple_darwin="-D__ARM_NEON=1 -D__ARM_FEATURE_CRYPTO=1"
 RUN cargo zigbuild --release --target aarch64-apple-darwin
 
-# 清理临时项目文件（保留 /cargo-target 中的编译缓存）
+# 清理工作区 crate 的编译产物（保留外部依赖的缓存）
+# 预编译使用空源文件，生成的 workspace crate 产物不包含实际符号，
+# 必须删除以确保 CI 构建时 cargo 重新编译项目自身的 crate
+RUN find /cargo-target -type d \( \
+      -name "cnb-*" -o -name "cnb_*" -o -name "git-cnb-*" \
+    \) -exec rm -rf {} + 2>/dev/null; \
+    find /cargo-target -type f \( \
+      -name "cnb-*" -o -name "cnb_*" -o -name "libcnb*" -o -name "git-cnb*" \
+    \) -delete 2>/dev/null; \
+    true
+
+# 清理临时项目文件
 RUN rm -rf /tmp/deps
 WORKDIR /
