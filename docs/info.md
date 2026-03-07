@@ -46,7 +46,7 @@ $ cnb --repo prevailna/cnb info
   RepoLicense      MIT
   RepoStars        128
   RepoForks        32
-  RepoDescription  CNB 平台专属命令行工具
+  RepoDescription  一个非官方的 CNB 命令行工具
 ```
 
 ## 另请参阅

@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'CNB CLI',
-  description: 'CNB 平台专属命令行工具文档',
+  description: '一个非官方的 CNB 命令行工具文档',
   lang: 'zh-CN',
   lastUpdated: true,
   cleanUrls: true,
