@@ -49,3 +49,38 @@ git-fetch-with-cli = true\n\
 [target.x86_64-pc-windows-gnu]\n\
 linker = "x86_64-w64-mingw32-gcc"\n\
 ' >> ${CARGO_HOME}/config.toml
+
+# ===== 预编译项目依赖（加速 CI 构建） =====
+# 使用固定的 target 目录，CI 构建时复用预编译产物
+ENV CARGO_TARGET_DIR=/cargo-target
+
+# 复制项目依赖声明文件
+WORKDIR /tmp/deps
+COPY Cargo.toml Cargo.lock build.rs ./
+COPY crates/cnb-api/Cargo.toml crates/cnb-api/
+COPY crates/cnb-core/Cargo.toml crates/cnb-core/
+COPY crates/cnb-tui/Cargo.toml crates/cnb-tui/
+COPY crates/cnb-chat/Cargo.toml crates/cnb-chat/build.rs crates/cnb-chat/
+
+# 创建空源文件和必要目录（仅用于依赖解析和预编译）
+RUN mkdir -p src && echo 'fn main() {}' > src/main.rs \
+    && mkdir -p crates/cnb-api/src && touch crates/cnb-api/src/lib.rs \
+    && mkdir -p crates/cnb-core/src && touch crates/cnb-core/src/lib.rs \
+    && mkdir -p crates/cnb-tui/src && touch crates/cnb-tui/src/lib.rs \
+    && mkdir -p crates/cnb-chat/src && touch crates/cnb-chat/src/lib.rs \
+    && mkdir -p crates/cnb-chat/references
+
+# 预编译所有 target 的依赖（原生构建）
+RUN cargo build --release --target x86_64-unknown-linux-gnu
+RUN cargo build --release --target x86_64-pc-windows-gnu
+
+# 预编译所有 target 的依赖（zigbuild 交叉编译）
+RUN cargo zigbuild --release --target x86_64-unknown-linux-musl
+RUN cargo zigbuild --release --target aarch64-unknown-linux-gnu
+RUN cargo zigbuild --release --target aarch64-unknown-linux-musl
+RUN cargo zigbuild --release --target x86_64-apple-darwin
+RUN cargo zigbuild --release --target aarch64-apple-darwin
+
+# 清理临时项目文件（保留 /cargo-target 中的编译缓存）
+RUN rm -rf /tmp/deps
+WORKDIR /
