@@ -10,11 +10,13 @@ cnb commit asset-upload [flags]
 
 ## 选项
 
-`-s, --sha1 <SHA1>`
-: Commit 的 SHA1 值（必填）
+- `-s, --sha1 <SHA1>`: Commit 的 SHA1 值（必填）
+- `-f, --file <FILE>`: 要上传的本地文件路径（必填）
 
-`-f, --file <FILE>`
-: 要上传的本地文件路径（必填）
+**继承的全局选项：**
+
+- `--repo <REPO>`: 指定仓库路径（格式：`group/repo`）
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
 
 ## 示例
 

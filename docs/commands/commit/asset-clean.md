@@ -10,14 +10,14 @@ cnb commit asset-clean [flags]
 
 ## 选项
 
-`--keep-days <N>`
-: 删除 N 天前提交的 Commit 的附件
+- `--keep-days <N>`: 删除 N 天前提交的 Commit 的附件
+- `--keep-num <N>`: 保留最近 N 个有附件的 Commit，删除更早的附件
+- `-y, --yes`: 跳过确认提示，直接执行删除
 
-`--keep-num <N>`
-: 保留最近 N 个有附件的 Commit，删除更早的附件
+**继承的全局选项：**
 
-`-y, --yes`
-: 跳过确认提示，直接执行删除
+- `--repo <REPO>`: 指定仓库路径（格式：`group/repo`）
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
 
 ## 示例
 
