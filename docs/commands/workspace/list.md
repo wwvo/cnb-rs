@@ -8,22 +8,14 @@ cnb workspace list [options]
 
 ## 选项
 
-`-s, --status <STATUS>`
-: 状态过滤：`running`（运行中）/ `closed`（已关闭）/ `all`（全部）
+- `-s, --status <STATUS>`: 状态过滤：`running`（运行中）、`closed`（已关闭）、`all`（全部）
+- `-r, --repo <REPO>`: 按仓库路径过滤
+- `-b, --branch <BRANCH>`: 按分支过滤
 
-`-r, --repo <REPO>`
-: 按仓库路径过滤
+**继承的全局选项：**
 
-`-b, --branch <BRANCH>`
-: 按分支过滤
-
-## 输出示例
-
-```
-SLUG                      BRANCH          STATUS    CREATED               DURATION
-my-org/repo1              main            running   2025-01-15 10:30      2h 15m
-my-org/repo2              dev             closed    2025-01-14 08:00      45m
-```
+- `--json`: 以 JSON 格式输出
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
 
 ## 示例
 
@@ -37,10 +29,11 @@ $ cnb workspace list -s running
 # 按仓库过滤
 $ cnb workspace list -r my-org/repo1
 
-# JSON 输出
+# JSON 格式输出
 $ cnb workspace list --json
 ```
 
 ## 另请参阅
 
 - [cnb workspace](/workspace/)
+- [cnb workspace start](/workspace/start)

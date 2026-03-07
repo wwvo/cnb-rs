@@ -8,11 +8,11 @@ cnb workspace delete [options]
 
 ## 选项
 
-`-p, --pipeline-id <ID>`
-: 流水线 ID（必填）
+- `-p, --pipeline-id <ID>`: 流水线 ID（必填）
 
-`--sn <SN>`
-: 流水线构建号（暂未支持，请使用 `--pipeline-id`）
+**继承的全局选项：**
+
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
 
 ## 示例
 
@@ -20,12 +20,6 @@ cnb workspace delete [options]
 # 删除指定工作区
 $ cnb workspace delete -p abc123
 ```
-
-## API
-
-| 方法 | 端点 |
-|------|------|
-| DELETE | `/user/workspaces/{pipeline_id}` |
 
 ## 另请参阅
 

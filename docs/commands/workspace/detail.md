@@ -6,20 +6,17 @@ cnb workspace detail --sn <SN> [options]
 
 查看工作区详情，获取各种 IDE 的访问地址。
 
+输出包含 WebIDE、VS Code、Cursor、CodeBuddy、SSH 等接入方式的链接。
+
 ## 选项
 
-`--sn <SN>`
-: 流水线构建号（必填）
+- `--sn <SN>`: 流水线构建号（必填）
 
-## 输出示例
+**继承的全局选项：**
 
-```
-WebIDE:     https://cnb.cool/workspace/webide/...
-VSCode:     vscode://vscode-remote/ssh-remote+...
-Cursor:     cursor://vscode-remote/ssh-remote+...
-CodeBuddy:  codebuddy://vscode-remote/ssh-remote+...
-SSH:        ssh -o StrictHostKeyChecking=no ...
-```
+- `--repo <REPO>`: 指定仓库路径（格式：`group/repo`）
+- `--json`: 以 JSON 格式输出
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
 
 ## 示例
 
@@ -27,15 +24,9 @@ SSH:        ssh -o StrictHostKeyChecking=no ...
 # 查看工作区详情
 $ cnb workspace detail --sn 20250115-001
 
-# JSON 输出
+# JSON 格式输出
 $ cnb workspace detail --sn 20250115-001 --json
 ```
-
-## API
-
-| 方法 | 端点 |
-|------|------|
-| GET | `/{repo}/-/workspace/detail/{sn}` |
 
 ## 另请参阅
 
