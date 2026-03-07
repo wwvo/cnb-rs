@@ -27,6 +27,8 @@ cnb repo clone <repo> [flags]
 
 可通过 `cnb config set git_protocol ssh` 切换协议。
 
+> **注意**：CNB 暂不支持 SSH 克隆，当前仅 HTTPS 协议可用。
+
 ## 示例
 
 ```bash

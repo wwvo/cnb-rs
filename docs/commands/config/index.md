@@ -5,7 +5,7 @@
 当前支持的配置项：
 
 - `domain` — CNB 平台域名（默认：`cnb.cool`）
-- `git_protocol` — Git 协议偏好 {`https` | `ssh`}（默认：`https`）
+- `git_protocol` — Git 协议偏好 {`https` | `ssh`}（默认：`https`，CNB 暂不支持 SSH 克隆）
 
 配置文件路径：`~/.cnb/config.toml`
 
