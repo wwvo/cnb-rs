@@ -10,11 +10,12 @@ cnb group update-logo [flags]
 
 ## 选项
 
-`-g, --group <GROUP>`
-: 组织名称（必填）
+- `-g, --group <GROUP>`: 组织名称（必填）
+- `--logo-path <FILE>`: Logo 文件路径（必填）
 
-`--logo-path <FILE>`
-: Logo 文件路径（必填）
+**继承的全局选项：**
+
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
 
 ## 示例
 
@@ -26,3 +27,4 @@ $ cnb group update-logo --group my-org --logo-path ./logo.png
 ## 另请参阅
 
 - [cnb group](/group/)
+- [cnb group update](/group/update)

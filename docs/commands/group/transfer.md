@@ -6,18 +6,15 @@ cnb group transfer <GROUP> --target <TARGET> [options]
 
 将组织转移到另一个父组织下。**此操作需要交互确认**。
 
-## 参数
-
-`GROUP`
-: 要转移的组织路径（必填）
-
 ## 选项
 
-`-t, --target <TARGET>`
-: 目标父组织路径（必填）
+- `<GROUP>`: 要转移的组织路径（必填）
+- `-t, --target <TARGET>`: 目标父组织路径（必填）
+- `--confirm`: 跳过交互确认
 
-`--confirm`
-: 跳过交互确认
+**继承的全局选项：**
+
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
 
 ## 示例
 
@@ -28,12 +25,6 @@ $ cnb group transfer child-org --target parent-org
 # 跳过确认
 $ cnb group transfer child-org --target parent-org --confirm
 ```
-
-## API
-
-| 方法 | 端点 |
-|------|------|
-| POST | `/{group}/-/transfer` |
 
 ## 另请参阅
 

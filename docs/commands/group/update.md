@@ -6,33 +6,20 @@ cnb group update <GROUP> [options]
 
 更新组织信息。至少需要指定一个修改项。
 
-## 参数
-
-`GROUP`
-: 组织路径（必填）
-
 ## 选项
 
-`-d, --description <TEXT>`
-: 更新描述
+- `<GROUP>`: 组织路径（必填）
+- `-d, --description <TEXT>`: 更新描述
+- `-r, --remark <TEXT>`: 更新备注
+- `-e, --email <EMAIL>`: 更新联系邮箱
+- `-s, --site <URL>`: 更新网站
+- `--domain <DOMAIN>`: 更新域名
+- `--wechat-mp <ID>`: 更新微信公众号
+- `--readme-repo <PATH>`: 设置 README 仓库路径
 
-`-r, --remark <TEXT>`
-: 更新备注
+**继承的全局选项：**
 
-`-e, --email <EMAIL>`
-: 更新联系邮箱
-
-`-s, --site <URL>`
-: 更新网站
-
-`--domain <DOMAIN>`
-: 更新域名
-
-`--wechat-mp <ID>`
-: 更新微信公众号
-
-`--readme-repo <PATH>`
-: 设置 README 仓库路径
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
 
 ## 示例
 
@@ -46,12 +33,6 @@ $ cnb group update my-org --email contact@example.com --site https://example.com
 # 设置 README 仓库
 $ cnb group update my-org --readme-repo my-org/readme
 ```
-
-## API
-
-| 方法 | 端点 |
-|------|------|
-| PUT | `/{group}` |
 
 ## 另请参阅
 
