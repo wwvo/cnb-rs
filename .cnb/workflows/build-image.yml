@@ -2,6 +2,9 @@ x-build-image-job: &build-image-job
   - name: build-rust-cross-image
     runner:
       cpus: 8
+    ifModify:
+      - ".cnb/docker/rust-cross.Dockerfile"
+      - "Cargo.lock"
     services:
       - docker
     stages:
@@ -11,20 +14,7 @@ x-build-image-job: &build-image-job
         script: docker push ${CNB_DOCKER_REGISTRY}/${CNB_REPO_SLUG_LOWERCASE}:rust-cross
 
 main:
-  push:
-    - name: build-rust-cross-image
-      runner:
-        cpus: 8
-      ifModify:
-        - ".cnb/docker/rust-cross.Dockerfile"
-        - "Cargo.lock"
-      services:
-        - docker
-      stages:
-        - name: 构建镜像
-          script: docker build -t ${CNB_DOCKER_REGISTRY}/${CNB_REPO_SLUG_LOWERCASE}:rust-cross -f .cnb/docker/rust-cross.Dockerfile .
-        - name: 推送镜像
-          script: docker push ${CNB_DOCKER_REGISTRY}/${CNB_REPO_SLUG_LOWERCASE}:rust-cross
+  push: *build-image-job
 
 '**':
   web_trigger_build-image: *build-image-job
