@@ -46,4 +46,46 @@ impl CnbClient {
         let resp = self.http.post(&url).json(req).send().await?;
         Self::handle_response(resp).await
     }
+
+    /// 按 ID 获取 Release
+    pub async fn get_release_by_id(&self, release_id: &str) -> Result<Release, ApiError> {
+        let release_id = encode(release_id);
+        let url = format!("{}{}/-/releases/{release_id}", self.base_url, self.repo);
+        let resp = self.http.get(&url).send().await?;
+        Self::handle_response(resp).await
+    }
+
+    /// 获取最新 Release
+    pub async fn get_latest_release(&self) -> Result<Release, ApiError> {
+        let url = format!("{}{}/-/releases/latest", self.base_url, self.repo);
+        let resp = self.http.get(&url).send().await?;
+        Self::handle_response(resp).await
+    }
+
+    /// 更新 Release
+    pub async fn update_release(&self, release_id: &str, req: &UpdateReleaseRequest) -> Result<Release, ApiError> {
+        let release_id = encode(release_id);
+        let url = format!("{}{}/-/releases/{release_id}", self.base_url, self.repo);
+        let resp = self.http.patch(&url).json(req).send().await?;
+        Self::handle_response(resp).await
+    }
+
+    /// 删除 Release
+    pub async fn delete_release(&self, release_id: &str) -> Result<(), ApiError> {
+        let release_id = encode(release_id);
+        let url = format!("{}{}/-/releases/{release_id}", self.base_url, self.repo);
+        let resp = self.http.delete(&url).send().await?;
+        Self::handle_empty_response(resp).await
+    }
+
+    /// 获取 Release 附件下载重定向 URL
+    pub async fn get_release_download_url(&self, tag: &str, filename: &str, share: bool) -> Result<String, ApiError> {
+        let tag = encode(tag);
+        let filename = encode(filename);
+        let share_param = if share { "?share=true" } else { "" };
+        let url = format!("{}{}/-/releases/download/{tag}/{filename}{share_param}", self.base_url, self.repo);
+        let resp = self.http.get(&url).send().await?;
+        // API 返回 302 重定向，reqwest 默认跟随重定向，最终 URL 即为下载地址
+        Ok(resp.url().to_string())
+    }
 }
