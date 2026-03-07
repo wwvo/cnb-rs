@@ -11,7 +11,7 @@ mod commands;
 #[derive(Debug, Parser)]
 #[clap(
     name = "cnb",
-    version = concat!(env!("CARGO_PKG_VERSION"), " (", env!("TARGET"), ")"),
+    version = concat!(env!("CARGO_PKG_VERSION"), " (", env!("GIT_HASH"), " ", env!("GIT_DATE"), ")"),
     about = "CNB 平台专属命令行工具",
 )]
 struct Cli {
