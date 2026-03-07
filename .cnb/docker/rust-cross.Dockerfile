@@ -19,6 +19,10 @@ RUN curl -sSfL https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/
 # 安装 cargo-zigbuild 和 git-cliff
 RUN cargo binstall --no-confirm cargo-zigbuild git-cliff
 
+# 配置 rustup 使用 tuna 镜像源（加速下载工具链组件）
+ENV RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
+ENV RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
+
 # 添加所有交叉编译 targets
 RUN rustup target add \
     x86_64-unknown-linux-musl \
