@@ -4,6 +4,7 @@ mod ai;
 mod commit;
 mod group;
 mod issue;
+mod label;
 mod knowledge;
 mod pull;
 mod release;
