@@ -128,6 +128,20 @@ export default defineConfig({
             ],
           },
           {
+            text: 'cnb build',
+            link: '/build/',
+            items: [
+              { text: 'start', link: '/build/start' },
+              { text: 'stop', link: '/build/stop' },
+              { text: 'status', link: '/build/status' },
+              { text: 'list', link: '/build/list' },
+              { text: 'stage', link: '/build/stage' },
+              { text: 'download-log', link: '/build/download-log' },
+              { text: 'delete-log', link: '/build/delete-log' },
+              { text: 'crontab-sync', link: '/build/crontab-sync' },
+            ],
+          },
+          {
             text: 'cnb label',
             link: '/label/',
             items: [
@@ -148,47 +162,12 @@ export default defineConfig({
             ],
           },
           {
-            text: 'cnb build',
-            link: '/build/',
+            text: 'cnb badge',
+            link: '/badge/',
             items: [
-              { text: 'start', link: '/build/start' },
-              { text: 'stop', link: '/build/stop' },
-              { text: 'status', link: '/build/status' },
-              { text: 'list', link: '/build/list' },
-              { text: 'stage', link: '/build/stage' },
-              { text: 'download-log', link: '/build/download-log' },
-              { text: 'delete-log', link: '/build/delete-log' },
-              { text: 'crontab-sync', link: '/build/crontab-sync' },
-            ],
-          },
-          {
-            text: 'cnb registry',
-            link: '/registry/',
-            items: [
-              { text: 'list', link: '/registry/list' },
-              { text: 'delete', link: '/registry/delete' },
-              { text: 'set-visibility', link: '/registry/set-visibility' },
-              { text: 'package list', link: '/registry/package-list' },
-              { text: 'package detail', link: '/registry/package-detail' },
-              { text: 'package delete', link: '/registry/package-delete' },
-              { text: 'tag list', link: '/registry/tag-list' },
-              { text: 'tag detail', link: '/registry/tag-detail' },
-              { text: 'tag delete', link: '/registry/tag-delete' },
-            ],
-          },
-          {
-            text: 'cnb mission',
-            link: '/mission/',
-            items: [
-              { text: 'list', link: '/mission/list' },
-              { text: 'create', link: '/mission/create' },
-              { text: 'delete', link: '/mission/delete' },
-              { text: 'set-visibility', link: '/mission/set-visibility' },
-              { text: 'view list', link: '/mission/view-list' },
-              { text: 'view get', link: '/mission/view-get' },
-              { text: 'view set', link: '/mission/view-set' },
-              { text: 'view add', link: '/mission/view-add' },
-              { text: 'view sort', link: '/mission/view-sort' },
+              { text: 'get', link: '/badge/get' },
+              { text: 'list', link: '/badge/list' },
+              { text: 'upload', link: '/badge/upload' },
             ],
           },
           {
@@ -215,15 +194,7 @@ export default defineConfig({
               { text: 'collaborator-remove', link: '/member/collaborator-remove' },
             ],
           },
-          {
-            text: 'cnb badge',
-            link: '/badge/',
-            items: [
-              { text: 'get', link: '/badge/get' },
-              { text: 'list', link: '/badge/list' },
-              { text: 'upload', link: '/badge/upload' },
-            ],
-          },
+          { text: 'cnb browse', link: '/browse' },
           { text: 'cnb download', link: '/download' },
           { text: 'cnb info', link: '/info' },
           { text: 'cnb stats', link: '/stats' },
@@ -231,9 +202,8 @@ export default defineConfig({
         ],
       },
       {
-        text: '其他命令',
+        text: '组织与制品管理',
         items: [
-          { text: 'cnb completion', link: '/completion' },
           {
             text: 'cnb group',
             link: '/group/',
@@ -252,6 +222,36 @@ export default defineConfig({
             ],
           },
           {
+            text: 'cnb mission',
+            link: '/mission/',
+            items: [
+              { text: 'list', link: '/mission/list' },
+              { text: 'create', link: '/mission/create' },
+              { text: 'delete', link: '/mission/delete' },
+              { text: 'set-visibility', link: '/mission/set-visibility' },
+              { text: 'view list', link: '/mission/view-list' },
+              { text: 'view get', link: '/mission/view-get' },
+              { text: 'view set', link: '/mission/view-set' },
+              { text: 'view add', link: '/mission/view-add' },
+              { text: 'view sort', link: '/mission/view-sort' },
+            ],
+          },
+          {
+            text: 'cnb registry',
+            link: '/registry/',
+            items: [
+              { text: 'list', link: '/registry/list' },
+              { text: 'delete', link: '/registry/delete' },
+              { text: 'set-visibility', link: '/registry/set-visibility' },
+              { text: 'package list', link: '/registry/package-list' },
+              { text: 'package detail', link: '/registry/package-detail' },
+              { text: 'package delete', link: '/registry/package-delete' },
+              { text: 'tag list', link: '/registry/tag-list' },
+              { text: 'tag detail', link: '/registry/tag-detail' },
+              { text: 'tag delete', link: '/registry/tag-delete' },
+            ],
+          },
+          {
             text: 'cnb knowledge',
             link: '/knowledge/',
             items: [
@@ -261,18 +261,11 @@ export default defineConfig({
               { text: 'query', link: '/knowledge/query' },
             ],
           },
-          {
-            text: 'cnb workspace',
-            link: '/workspace/',
-            items: [
-              { text: 'list', link: '/workspace/list' },
-              { text: 'start', link: '/workspace/start' },
-              { text: 'stop', link: '/workspace/stop' },
-              { text: 'delete', link: '/workspace/delete' },
-              { text: 'detail', link: '/workspace/detail' },
-              { text: 'closed-clean', link: '/workspace/closed-clean' },
-            ],
-          },
+        ],
+      },
+      {
+        text: '用户与安全',
+        items: [
           {
             text: 'cnb user',
             link: '/user/',
@@ -288,6 +281,24 @@ export default defineConfig({
             link: '/gpg-key/',
             items: [{ text: 'list', link: '/gpg-key/list' }],
           },
+        ],
+      },
+      {
+        text: '其他命令',
+        items: [
+          {
+            text: 'cnb workspace',
+            link: '/workspace/',
+            items: [
+              { text: 'list', link: '/workspace/list' },
+              { text: 'start', link: '/workspace/start' },
+              { text: 'stop', link: '/workspace/stop' },
+              { text: 'delete', link: '/workspace/delete' },
+              { text: 'detail', link: '/workspace/detail' },
+              { text: 'closed-clean', link: '/workspace/closed-clean' },
+            ],
+          },
+          { text: 'cnb completion', link: '/completion' },
           { text: 'cnb version', link: '/version' },
         ],
       },
