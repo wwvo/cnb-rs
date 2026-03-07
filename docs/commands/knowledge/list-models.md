@@ -8,6 +8,12 @@ cnb knowledge list-models
 
 每行输出一个模型名称。
 
+## 选项
+
+**继承的全局选项：**
+
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
+
 ## 示例
 
 ```bash

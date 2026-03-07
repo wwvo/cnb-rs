@@ -10,14 +10,14 @@ cnb knowledge query [flags]
 
 ## 选项
 
-`-q, --query <QUERY>`
-: 查询文本（必填）
+- `-q, --query <QUERY>`: 查询文本（必填）
+- `--score-threshold <THRESHOLD>`: 分数阈值，仅返回分数高于此值的结果
+- `--top-k <N>`: 返回结果数量上限
 
-`--score-threshold <THRESHOLD>`
-: 分数阈值，仅返回分数高于此值的结果
+**继承的全局选项：**
 
-`--top-k <N>`
-: 返回结果数量上限
+- `--repo <REPO>`: 指定仓库路径（格式：`group/repo`）
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
 
 ## 示例
 

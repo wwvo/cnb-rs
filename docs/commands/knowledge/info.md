@@ -6,6 +6,15 @@ cnb knowledge info
 
 获取当前仓库的知识库信息。
 
+## 选项
+
+**继承的全局选项：**
+
+- `--repo <REPO>`: 指定仓库路径（格式：`group/repo`）
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
+
+## 输出字段
+
 输出以下字段：
 
 - `ID` — 知识库 ID
