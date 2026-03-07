@@ -7,8 +7,7 @@ cnb auth logout
 退出登录，移除当前域名的认证配置。
 
 仅移除本地存储的认证信息，**不会撤销远程 Token**。
-如需撤销已生成的 Token，请访问 CNB 平台的
-[个人设置 > 访问令牌](https://cnb.cool/profile/token) 页面。
+如需撤销已生成的 Token，请访问 CNB 平台的 [个人设置 > 访问令牌](https://cnb.cool/profile/token) 页面。
 
 根据 Token 来源执行不同操作：
 
@@ -23,8 +22,7 @@ cnb auth logout
 
 **继承的全局选项：**
 
-`--domain <DOMAIN>`
-: 指定要退出登录的目标域名（默认：`cnb.cool`）
+- `--domain <DOMAIN>`: 指定要退出登录的目标域名（默认：`cnb.cool`）
 
 ## 示例
 
