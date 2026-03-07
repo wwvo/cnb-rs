@@ -3,3 +3,6 @@ branch:
       - name: 部署文档站点
         description: 部署文档站点
         event: web_trigger_deploy-docs
+      - name: 构建交叉编译镜像
+        description: 构建并推送 Rust 交叉编译基础镜像
+        event: web_trigger_build-image
