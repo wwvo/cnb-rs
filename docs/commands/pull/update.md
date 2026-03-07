@@ -8,21 +8,17 @@ cnb pull update <NUMBER> [flags]
 
 至少需要指定 `--title`、`--body` 或 `--state` 中的一个。
 
-## 参数
-
-`<NUMBER>`
-: PR 编号（必填）
-
 ## 选项
 
-`-t, --title <TITLE>`
-: 修改标题
+- `<NUMBER>`: PR 编号（必填）
+- `-t, --title <TITLE>`: 修改标题
+- `-b, --body <BODY>`: 修改描述
+- `-s, --state <STATE>`: 修改状态：`open`、`closed`
 
-`-b, --body <BODY>`
-: 修改描述
+**继承的全局选项：**
 
-`-s, --state <STATE>`
-: 修改状态，可选值：`open`、`closed`
+- `--repo <REPO>`: 指定仓库路径（格式：`group/repo`）
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
 
 ## 示例
 

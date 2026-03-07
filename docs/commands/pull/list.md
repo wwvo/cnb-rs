@@ -13,6 +13,14 @@ cnb pull list
 
 输出为表格格式，包含 PR 编号、标题、阻塞状态和类型标记。
 
+## 选项
+
+**继承的全局选项：**
+
+- `--repo <REPO>`: 指定仓库路径（格式：`group/repo`）
+- `--json`: 以 JSON 格式输出
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
+
 ## 示例
 
 ```bash

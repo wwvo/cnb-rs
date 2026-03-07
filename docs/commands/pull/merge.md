@@ -6,21 +6,17 @@ cnb pull merge <NUMBER> [flags]
 
 合并指定的 Pull Request。
 
-## 参数
-
-`<NUMBER>`
-: PR 编号（必填）
-
 ## 选项
 
-`-t, --commit-title <TITLE>`
-: 合并提交标题（必填）
+- `<NUMBER>`: PR 编号（必填）
+- `-t, --commit-title <TITLE>`: 合并提交标题（必填）
+- `-m, --commit-message <MESSAGE>`: 合并提交信息（默认：空）
+- `-s, --merge-style <STYLE>`: 合并方式：`merge`、`squash`、`rebase`（默认：`merge`）
 
-`-m, --commit-message <MESSAGE>`
-: 合并提交信息（默认: 空）
+**继承的全局选项：**
 
-`-s, --merge-style <STYLE>`
-: 合并方式，可选值：`merge`、`squash`、`rebase`（默认: `merge`）
+- `--repo <REPO>`: 指定仓库路径（格式：`group/repo`）
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
 
 ## 示例
 

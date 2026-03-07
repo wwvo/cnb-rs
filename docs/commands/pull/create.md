@@ -12,20 +12,16 @@ cnb pull create [flags]
 
 ## 选项
 
-`-B, --base-branch <BRANCH>`
-: 目标分支（默认: 远程仓库的 HEAD 分支）
+- `-B, --base-branch <BRANCH>`: 目标分支（默认：远程仓库的 HEAD 分支）
+- `-H, --head-branch <BRANCH>`: 源分支（默认：当前 Git 分支）
+- `-R, --remote-repo <OWNER/REPO>`: 目标仓库路径（默认：当前仓库，用于跨仓库 PR）
+- `--title <TITLE>`: PR 标题（默认：最新 commit 的标题）
+- `--body <BODY>`: PR 描述（默认：空）
 
-`-H, --head-branch <BRANCH>`
-: 源分支（默认: 当前 Git 分支）
+**继承的全局选项：**
 
-`-R, --remote-repo <OWNER/REPO>`
-: 目标仓库路径（默认: 当前仓库，用于跨仓库 PR）
-
-`--title <TITLE>`
-: PR 标题（默认: 最新 commit 的标题）
-
-`--body <BODY>`
-: PR 描述（默认: 空）
+- `--repo <REPO>`: 指定仓库路径（格式：`group/repo`）
+- `--domain <DOMAIN>`: 指定目标域名（默认：`cnb.cool`）
 
 ## 示例
 
