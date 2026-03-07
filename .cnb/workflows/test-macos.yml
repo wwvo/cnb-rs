@@ -8,5 +8,5 @@
         cpus: 4
       stages:
         - name: 构建 macOS
-          image: docker.cnb.cool/prevailna/cnb:rust-cross
+          image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-cross
           script: bash .cnb/scripts/build-target.sh x86_64-apple-darwin aarch64-apple-darwin

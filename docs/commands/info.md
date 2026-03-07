@@ -31,7 +31,7 @@ cnb info
 $ cnb info
 
 # 指定仓库
-$ cnb --repo prevailna/cnb info
+$ cnb --repo wwvo/cnb-cli/cnb info
 ```
 
 ## 输出示例
@@ -41,7 +41,7 @@ $ cnb --repo prevailna/cnb info
   MyUserName       zhangsan
   MyNickName       张三
   MyEmail          zhangsan@example.com
-  RepoName         prevailna/cnb
+  RepoName         wwvo/cnb-cli/cnb
   RepoID           67890
   RepoLicense      MIT
   RepoStars        128

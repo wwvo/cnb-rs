@@ -14,7 +14,7 @@ cnb stars
 
 ```bash
 $ cnb stars
-$ cnb --repo prevailna/cnb stars
+$ cnb --repo wwvo/cnb-cli/cnb stars
 ```
 
 ## 另请参阅

@@ -7,7 +7,7 @@ header = """# Changelog\n
 """
 body = """
 {%- macro remote_url() -%}
-    https://cnb.cool/prevailna/cnb
+    https://cnb.cool/wwvo/cnb-cli/cnb
 {%- endmacro -%}
 
 {% if version -%}

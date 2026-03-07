@@ -5,7 +5,7 @@ x-release-job: &release-job
       cpus: 2
     stages:
       - name: 生成 CHANGELOG
-        image: docker.cnb.cool/prevailna/cnb:rust-cross
+        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-cross
         script: bash .cnb/scripts/generate-changelog.sh
       - name: 创建 Release
         type: git:release
@@ -24,7 +24,7 @@ x-release-job: &release-job
       cpus: 4
     stages:
       - name: 构建 Linux x86_64
-        image: docker.cnb.cool/prevailna/cnb:rust-cross
+        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-cross
         script: bash .cnb/scripts/build-target.sh x86_64-unknown-linux-gnu x86_64-unknown-linux-musl
       - name: 等待 Release 就绪
         type: cnb:await
@@ -42,7 +42,7 @@ x-release-job: &release-job
       cpus: 4
     stages:
       - name: 构建 Linux ARM64
-        image: docker.cnb.cool/prevailna/cnb:rust-cross
+        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-cross
         script: bash .cnb/scripts/build-target.sh aarch64-unknown-linux-gnu aarch64-unknown-linux-musl
       - name: 等待 Release 就绪
         type: cnb:await
@@ -60,7 +60,7 @@ x-release-job: &release-job
       cpus: 4
     stages:
       - name: 构建 Windows
-        image: docker.cnb.cool/prevailna/cnb:rust-cross
+        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-cross
         script: bash .cnb/scripts/build-target.sh x86_64-pc-windows-gnu
       - name: 等待 Release 就绪
         type: cnb:await
@@ -78,7 +78,7 @@ x-release-job: &release-job
       cpus: 4
     stages:
       - name: 构建 macOS
-        image: docker.cnb.cool/prevailna/cnb:rust-cross
+        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-cross
         script: bash .cnb/scripts/build-target.sh x86_64-apple-darwin aarch64-apple-darwin
       - name: 等待 Release 就绪
         type: cnb:await

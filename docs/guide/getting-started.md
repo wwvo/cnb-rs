@@ -2,7 +2,7 @@
 
 ## 安装
 
-从 [Release 页面](https://cnb.cool/prevailna/cnb/-/releases) 下载适合你平台的二进制文件。
+从 [Release 页面](https://cnb.cool/wwvo/cnb-cli/cnb/-/releases) 下载适合你平台的二进制文件。
 
 ## 登录
 

@@ -37,7 +37,7 @@
 
 ## 安装
 
-从 [Release 页面](https://cnb.cool/prevailna/cnb/-/releases) 下载适合你平台的二进制文件。
+从 [Release 页面](https://cnb.cool/wwvo/cnb-cli/cnb/-/releases) 下载适合你平台的二进制文件。
 
 ## 快速开始
 
@@ -85,7 +85,7 @@ cnb/
 **前置条件：** [Rust](https://www.rust-lang.org/tools/install)（edition 2024）
 
 ```bash
-git clone https://cnb.cool/prevailna/cnb.git
+git clone https://cnb.cool/wwvo/cnb-cli/cnb.git
 cd cnb
 cargo build --release
 ```
