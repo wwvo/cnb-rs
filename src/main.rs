@@ -83,6 +83,9 @@ enum Commands {
     /// Star 趋势图
     Stars,
 
+    /// 标签管理
+    Label(commands::label::LabelCommand),
+
     /// 知识库管理
     Knowledge(commands::knowledge::KnowledgeCommand),
 
@@ -155,6 +158,7 @@ async fn async_main() -> anyhow::Result<()> {
         Commands::Download(ref args) => args.execute(&ctx).await,
         Commands::Stats => commands::stats::run().await,
         Commands::Stars => commands::stars::run(&ctx).await,
+        Commands::Label(cmd) => cmd.execute(&ctx).await,
         Commands::Knowledge(cmd) => cmd.execute(&ctx).await,
         Commands::Group(cmd) => cmd.execute(&ctx).await,
         Commands::Workspace(cmd) => cmd.execute(&ctx).await,

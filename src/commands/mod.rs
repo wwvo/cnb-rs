@@ -10,6 +10,7 @@ pub mod download;
 pub mod group;
 pub mod info;
 pub mod issue;
+pub mod label;
 pub mod knowledge;
 pub mod pull;
 pub mod release;
