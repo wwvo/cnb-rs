@@ -21,7 +21,7 @@ pub async fn run(ctx: &AppContext, args: &FollowingArgs) -> Result<()> {
     let client = ctx.api_client()?;
     let username = match &args.username {
         Some(u) => u.clone(),
-        None => client.get_current_user().await?.username,
+        None => client.me().await?.username,
     };
 
     let users = client.get_following(&username, 1, args.limit).await?;

@@ -20,7 +20,7 @@ pub async fn run(ctx: &AppContext, args: &ActivitiesArgs) -> Result<()> {
     let client = ctx.api_client()?;
     let username = match &args.username {
         Some(u) => u.clone(),
-        None => client.get_current_user().await?.username,
+        None => client.me().await?.username,
     };
 
     let result = client.get_activities(&username, args.date.as_deref()).await?;

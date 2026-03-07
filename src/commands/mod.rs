@@ -20,5 +20,6 @@ pub mod release;
 pub mod repo;
 pub mod stars;
 pub mod stats;
+pub mod user;
 pub mod version;
 pub mod workspace;

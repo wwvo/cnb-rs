@@ -102,6 +102,9 @@ enum Commands {
     /// 组织管理
     Group(commands::group::GroupCommand),
 
+    /// 用户信息
+    User(commands::user::UserCommand),
+
     /// 云原生工作区管理
     Workspace(commands::workspace::WorkspaceCommand),
 }
@@ -174,6 +177,7 @@ async fn async_main() -> anyhow::Result<()> {
         Commands::Label(cmd) => cmd.execute(&ctx).await,
         Commands::Knowledge(cmd) => cmd.execute(&ctx).await,
         Commands::Group(cmd) => cmd.execute(&ctx).await,
+        Commands::User(cmd) => cmd.execute(&ctx).await,
         Commands::Workspace(cmd) => cmd.execute(&ctx).await,
     }
 }
