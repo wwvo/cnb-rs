@@ -1,0 +1,14 @@
+# 排除构建产物和大目录
+target/
+.git/
+docs/
+
+# 排除源代码（预编译只需要 Cargo.toml/Cargo.lock/build.rs）
+**/src/
+crates/cnb-chat/references/
+
+# 排除其他不需要的文件
+*.md
+.cnb/
+.vscode/
+.windsurf/
