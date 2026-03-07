@@ -12,6 +12,7 @@ mod member;
 mod mission;
 mod knowledge;
 mod pull;
+mod registry;
 mod release;
 mod repo;
 mod star;
