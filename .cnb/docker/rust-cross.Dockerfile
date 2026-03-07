@@ -87,7 +87,8 @@ RUN cargo zigbuild --release --target aarch64-unknown-linux-musl
 RUN echo 'void __stub(void) {}' > /tmp/stub.c \
     && for arch in x86_64 aarch64; do \
          zig_target="${arch}-macos"; \
-         mkdir -p /opt/macos-stubs/${arch}/{Security.framework,CoreFoundation.framework}; \
+         mkdir -p /opt/macos-stubs/${arch}/Security.framework; \
+         mkdir -p /opt/macos-stubs/${arch}/CoreFoundation.framework; \
          zig cc -target ${zig_target} -shared \
            -Wl,-install_name,/System/Library/Frameworks/Security.framework/Versions/A/Security \
            /tmp/stub.c -o /opt/macos-stubs/${arch}/Security.framework/Security; \
