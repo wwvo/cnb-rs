@@ -13,6 +13,20 @@ x-release-job: &release-job
           title: $CNB_BRANCH
           descriptionFromFile: LATEST_CHANGELOG.md
           latest: true
+      - name: 更新 CHANGELOG.md
+        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-cross
+        script: |
+          # 配置 git
+          git config user.name "CNB Bot"
+          git config user.email "bot@cnb.cool"
+
+          # 生成完整 CHANGELOG
+          git cliff -o CHANGELOG.md
+
+          # 提交推送
+          git add CHANGELOG.md
+          git commit -m "chore: update CHANGELOG.md for $CNB_BRANCH"
+          git push origin HEAD:main
       - name: Release 已就绪
         type: cnb:resolve
         options:
