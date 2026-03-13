@@ -80,7 +80,7 @@ impl Config {
         let path = Self::config_path();
         let mut config = if path.exists() {
             let content = std::fs::read_to_string(&path)?;
-            toml::from_str::<Config>(&content).unwrap_or_default()
+            toml::from_str::<Config>(&content)?
         } else {
             Config::default()
         };
@@ -106,7 +106,7 @@ impl Config {
         let path = Self::config_path();
         let mut config = if path.exists() {
             let content = std::fs::read_to_string(&path)?;
-            toml::from_str::<Config>(&content).unwrap_or_default()
+            toml::from_str::<Config>(&content)?
         } else {
             Config::default()
         };
@@ -131,7 +131,7 @@ impl Config {
         }
 
         let content = std::fs::read_to_string(&path)?;
-        let mut config = toml::from_str::<Config>(&content).unwrap_or_default();
+        let mut config = toml::from_str::<Config>(&content)?;
 
         let removed = if let Some(auth) = &mut config.auth {
             auth.hosts.remove(domain).is_some()
