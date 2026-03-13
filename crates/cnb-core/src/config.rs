@@ -160,6 +160,9 @@ impl Config {
 /// 获取 CNB 主目录：~/.cnb/
 pub fn cnb_home_dir() -> PathBuf {
     dirs::home_dir()
-        .unwrap_or_else(|| PathBuf::from("."))
+        .unwrap_or_else(|| {
+            tracing::warn!("无法获取用户主目录，配置文件将使用当前目录下的 .cnb/");
+            PathBuf::from(".")
+        })
         .join(".cnb")
 }
