@@ -293,13 +293,13 @@ impl ListReposOptions {
             format!("page_size={}", self.page_size),
         ];
         if let Some(s) = &self.search {
-            params.push(format!("search={s}"));
+            params.push(format!("search={}", urlencoding::encode(s)));
         }
         if let Some(f) = &self.filter_type {
-            params.push(format!("filter_type={f}"));
+            params.push(format!("filter_type={}", urlencoding::encode(f)));
         }
         if let Some(o) = &self.order_by {
-            params.push(format!("order_by={o}"));
+            params.push(format!("order_by={}", urlencoding::encode(o)));
         }
         if self.desc {
             params.push("desc=true".to_string());
