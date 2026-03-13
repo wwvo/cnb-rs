@@ -142,8 +142,7 @@ fn main() {
     };
 
     if let Err(e) = rt.block_on(async_main()) {
-        // 使用 stdout 而非 stderr 输出错误，因为 Windows PowerShell 的 stderr 不支持 UTF-8
-        println!("Error: {e}");
+        eprintln!("Error: {e}");
         std::process::exit(1);
     }
 }
