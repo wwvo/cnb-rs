@@ -277,11 +277,14 @@ fn filter_files(files: Vec<DownFile>, include: &[String], exclude: &[String]) ->
         .collect()
 }
 
-/// 截断文件名显示
+/// 截断文件名显示（UTF-8 安全）
 fn truncate_filename(path: &str, max_len: usize) -> String {
-    if path.len() <= max_len {
+    let char_count = path.chars().count();
+    if char_count <= max_len {
         return path.to_string();
     }
     let half = (max_len - 3) / 2;
-    format!("{}...{}", &path[..half], &path[path.len() - half..])
+    let prefix: String = path.chars().take(half).collect();
+    let suffix: String = path.chars().skip(char_count - half).collect();
+    format!("{prefix}...{suffix}")
 }

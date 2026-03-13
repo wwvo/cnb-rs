@@ -91,8 +91,9 @@ pub async fn run_agent(
             }
             Some(Action::Curl(curl_cmd)) => {
                 // 截断显示
-                let display = if curl_cmd.len() > 200 {
-                    format!("{}...", &curl_cmd[..200])
+                let display = if curl_cmd.chars().count() > 200 {
+                    let truncated: String = curl_cmd.chars().take(200).collect();
+                    format!("{truncated}...")
                 } else {
                     curl_cmd.clone()
                 };
