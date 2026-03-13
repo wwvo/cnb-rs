@@ -25,7 +25,7 @@ impl CnbClient {
     pub async fn get_build_status(&self, sn: &str) -> Result<BuildStatusResult, ApiError> {
         let sn = encode(sn);
         let url = format!("{}{}/-/build/status/{sn}", self.base_url, self.repo);
-        let resp = self.http.get(&url).send().await?;
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
@@ -51,7 +51,7 @@ impl CnbClient {
         if let Some(ref end_time) = opts.end_time {
             url.push_str(&format!("&endTime={}", encode(end_time)));
         }
-        let resp = self.http.get(&url).send().await?;
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
@@ -61,7 +61,7 @@ impl CnbClient {
         let pipeline_id = encode(pipeline_id);
         let stage_id = encode(stage_id);
         let url = format!("{}{}/-/build/logs/stage/{sn}/{pipeline_id}/{stage_id}", self.base_url, self.repo);
-        let resp = self.http.get(&url).send().await?;
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
@@ -69,7 +69,7 @@ impl CnbClient {
     pub async fn download_build_log(&self, pipeline_id: &str) -> Result<String, ApiError> {
         let pipeline_id = encode(pipeline_id);
         let url = format!("{}{}/-/build/runner/download/log/{pipeline_id}", self.base_url, self.repo);
-        let resp = self.http.get(&url).send().await?;
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         let status = resp.status().as_u16();
         if (200..300).contains(&status) {
             let text = resp.text().await.map_err(ApiError::Network)?;

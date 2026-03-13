@@ -40,7 +40,7 @@ impl CnbClient {
         if let Some(ref order_by) = opts.order_by {
             url.push_str(&format!("&order_by={}", encode(order_by)));
         }
-        let resp = self.http.get(&url).send().await?;
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
@@ -67,7 +67,7 @@ impl CnbClient {
     pub async fn get_issue(&self, number: &str) -> Result<IssueDetail, ApiError> {
         let number = encode(number);
         let url = format!("{}{}/-/issues/{number}", self.base_url, self.repo);
-        let resp = self.http.get(&url).send().await?;
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
@@ -88,7 +88,7 @@ impl CnbClient {
         let number = encode(number);
         let url = format!("{}{}/-/issues/{number}/comments?page={page}&page_size={page_size}",
             self.base_url, self.repo);
-        let resp = self.http.get(&url).send().await?;
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
@@ -107,7 +107,7 @@ impl CnbClient {
     pub async fn list_issue_assignees(&self, number: &str) -> Result<Vec<IssueAssignee>, ApiError> {
         let number = encode(number);
         let url = format!("{}{}/-/issues/{number}/assignees", self.base_url, self.repo);
-        let resp = self.http.get(&url).send().await?;
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
@@ -122,7 +122,7 @@ impl CnbClient {
     pub async fn list_issue_labels(&self, number: &str) -> Result<Vec<IssueLabel>, ApiError> {
         let number = encode(number);
         let url = format!("{}{}/-/issues/{number}/labels", self.base_url, self.repo);
-        let resp = self.http.get(&url).send().await?;
+        let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
