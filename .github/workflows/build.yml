@@ -188,9 +188,13 @@ jobs:
       - name: Delete existing CNB release attachments
         env:
           CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
+        shell: bash
         run: |
           set -euo pipefail
 
+          log_file="$(mktemp)"
+
+          set +e
           docker run --rm \
             -e TZ=Asia/Shanghai \
             -e CNB_TOKEN="${CNB_TOKEN}" \
@@ -201,7 +205,21 @@ jobs:
             -e PLUGIN_TYPE="DELETE" \
             -v "${PWD}:${PWD}" \
             -w "${PWD}" \
-            cnbcool/attachments:latest
+            cnbcool/attachments:latest 2>&1 | tee "${log_file}"
+          status="${PIPESTATUS[0]}"
+          set -e
+
+          if [[ "${status}" -eq 0 ]]; then
+            exit 0
+          fi
+
+          if grep -Eq "附件不存在|attachment.*not.*exist|attachments?.*not.*found" "${log_file}"; then
+            echo "CNB release 当前没有附件，跳过删除"
+            exit 0
+          fi
+
+          echo "删除 CNB release 附件失败" >&2
+          exit "${status}"
 
       - name: Upload attachments to CNB Release
         env:
