@@ -1,5 +1,5 @@
 main:
-  review:
+  pull_request.mergeable:
     - stages:
         - name: automerge
           type: git:auto-merge

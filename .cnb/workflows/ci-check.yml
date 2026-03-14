@@ -5,13 +5,14 @@ x-ci-check-job: &ci-check-job
     stages:
       - name: cargo check
         image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-cross
-        script: cargo check --workspace
+        script: cargo check --workspace --target x86_64-unknown-linux-gnu
       - name: cargo test
         image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-cross
-        script: cargo test --workspace
+        script: cargo test --workspace --target x86_64-unknown-linux-gnu
 
 main:
   push: *ci-check-job
+  pull_request: *ci-check-job
 
 '**':
   web_trigger_ci-check: *ci-check-job

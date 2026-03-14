@@ -8,7 +8,7 @@ x-pre-release-check-job: &pre-release-check-job
         script: bash .cnb/scripts/check-release-tag.sh
       - name: cargo test
         image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-cross
-        script: cargo test --workspace
+        script: cargo test --workspace --target x86_64-unknown-linux-gnu
       - name: 发版前检查通过
         type: cnb:resolve
         options:
