@@ -1,9 +1,9 @@
 x-build-image-check-job: &build-image-check-job
-  - name: build-rust-cross-image-check
+  - name: build-rust-ci-image-check
     runner:
-      cpus: 8
+      cpus: 4
     ifModify:
-      - ".cnb/docker/rust-cross.Dockerfile"
+      - ".cnb/docker/rust-ci.Dockerfile"
       - "Cargo.lock"
     services:
       - docker
@@ -12,11 +12,11 @@ x-build-image-check-job: &build-image-check-job
         script: bash .cnb/scripts/build-image.sh build
 
 x-build-image-publish-job: &build-image-publish-job
-  - name: build-rust-cross-image
+  - name: build-rust-ci-image
     runner:
-      cpus: 8
+      cpus: 4
     ifModify:
-      - ".cnb/docker/rust-cross.Dockerfile"
+      - ".cnb/docker/rust-ci.Dockerfile"
       - "Cargo.lock"
     services:
       - docker

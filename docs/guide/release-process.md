@@ -40,6 +40,8 @@ release PR 合并到 `main` 后，`main push` 流水线会自动执行：
 
 这一步不再需要手工执行 `git tag` 和 `git push origin <tag>`。
 
+CNB 会单独维护一个 `rust-ci` 镜像，用于预热 Linux 校验依赖，并在 `Cargo.lock` 变更时重建。为避免镜像首次发布前出现自举循环，现阶段默认消费方仍使用已存在的 `rust-cross` 镜像；待 `rust-ci` 首次发布完成后，再切换 `fmt/check/clippy/test` 等流程的消费镜像。
+
 ## 3. tag 在 CNB 创建 release 并同步到 GitHub
 
 标签创建后，CNB 的 `tag_push` 流水线会自动执行以下步骤：

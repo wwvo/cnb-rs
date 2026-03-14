@@ -6,7 +6,6 @@ include:
   - .cnb/workflows/pre-release-check.yml
   - .cnb/workflows/release.yml
   - .cnb/workflows/build-image.yml
-  - .cnb/workflows/test-macos.yml
   - .cnb/workflows/automerge.yml
 
 $:

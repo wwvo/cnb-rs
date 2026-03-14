@@ -3,8 +3,8 @@
 set -euo pipefail
 
 action="${1:-build-and-push}"
-image="${CNB_DOCKER_REGISTRY}/${CNB_REPO_SLUG_LOWERCASE}:rust-cross"
-dockerfile=".cnb/docker/rust-cross.Dockerfile"
+image="${CNB_DOCKER_REGISTRY}/${CNB_REPO_SLUG_LOWERCASE}:rust-ci"
+dockerfile=".cnb/docker/rust-ci.Dockerfile"
 
 build_image() {
   docker build -t "${image}" -f "${dockerfile}" .

@@ -1,5 +1,5 @@
 #!/bin/bash
-# 通用多平台构建脚本（使用预配置的 rust-cross 镜像）
+# 通用多平台构建脚本（保留给临时实验用途）
 # 用法: build-target.sh <target1> [target2] ...
 set -euo pipefail
 

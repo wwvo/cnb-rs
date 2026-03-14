@@ -9,9 +9,6 @@ branch:
       - name: 部署文档站点
         description: 部署文档站点
         event: web_trigger_deploy-docs
-      - name: 构建交叉编译镜像
-        description: 构建并推送 Rust 交叉编译基础镜像
+      - name: 构建 Rust CI 镜像
+        description: 预热 Linux CI 依赖并更新 rust-ci 镜像
         event: web_trigger_build-image
-      - name: 测试 macOS 构建
-        description: 仅测试 macOS 交叉编译（验证框架桩文件）
-        event: web_trigger_test-macos
