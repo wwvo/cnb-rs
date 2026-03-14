@@ -30,8 +30,14 @@ pub async fn run(ctx: &AppContext, args: &GroupAccessLevelArgs) -> Result<()> {
 
     println!("权限等级: {}", format_access_level(&info.access_level));
     println!("继承:     {}", if info.inherit { "是" } else { "否" });
-    println!("读权限:   {}", if info.read_privilege { "是" } else { "否" });
-    println!("写权限:   {}", if info.write_privilege { "是" } else { "否" });
+    println!(
+        "读权限:   {}",
+        if info.read_privilege { "是" } else { "否" }
+    );
+    println!(
+        "写权限:   {}",
+        if info.write_privilege { "是" } else { "否" }
+    );
 
     Ok(())
 }

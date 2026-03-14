@@ -67,16 +67,16 @@ mod tests {
 
     #[test]
     fn content_type_deserialize() {
-        let blob: ContentType = serde_json::from_str(r#""blob""#)
-            .unwrap_or_else(|e| panic!("反序列化失败：{e}"));
+        let blob: ContentType =
+            serde_json::from_str(r#""blob""#).unwrap_or_else(|e| panic!("反序列化失败：{e}"));
         assert_eq!(blob, ContentType::Blob);
 
-        let lfs: ContentType = serde_json::from_str(r#""lfs""#)
-            .unwrap_or_else(|e| panic!("反序列化失败：{e}"));
+        let lfs: ContentType =
+            serde_json::from_str(r#""lfs""#).unwrap_or_else(|e| panic!("反序列化失败：{e}"));
         assert_eq!(lfs, ContentType::Lfs);
 
-        let tree: ContentType = serde_json::from_str(r#""tree""#)
-            .unwrap_or_else(|e| panic!("反序列化失败：{e}"));
+        let tree: ContentType =
+            serde_json::from_str(r#""tree""#).unwrap_or_else(|e| panic!("反序列化失败：{e}"));
         assert_eq!(tree, ContentType::Tree);
     }
 
@@ -88,8 +88,8 @@ mod tests {
             "content": "dGVzdA==",
             "size": 4
         }"#;
-        let content: Content = serde_json::from_str(json)
-            .unwrap_or_else(|e| panic!("反序列化失败：{e}"));
+        let content: Content =
+            serde_json::from_str(json).unwrap_or_else(|e| panic!("反序列化失败：{e}"));
         assert_eq!(content.path, "src/main.rs");
         assert_eq!(content.content_type, ContentType::Blob);
         assert_eq!(content.content, "dGVzdA==");
@@ -107,8 +107,8 @@ mod tests {
                 {"path": "src/lib.rs", "type": "blob"}
             ]
         }"#;
-        let content: Content = serde_json::from_str(json)
-            .unwrap_or_else(|e| panic!("反序列化失败：{e}"));
+        let content: Content =
+            serde_json::from_str(json).unwrap_or_else(|e| panic!("反序列化失败：{e}"));
         assert_eq!(content.content_type, ContentType::Tree);
         assert_eq!(content.entries.len(), 2);
         assert_eq!(content.entries[0].path, "src/main.rs");
@@ -119,8 +119,8 @@ mod tests {
     fn content_deserialize_defaults() {
         // 最小 JSON，验证 default 字段
         let json = r#"{"path": "test", "type": "blob"}"#;
-        let content: Content = serde_json::from_str(json)
-            .unwrap_or_else(|e| panic!("反序列化失败：{e}"));
+        let content: Content =
+            serde_json::from_str(json).unwrap_or_else(|e| panic!("反序列化失败：{e}"));
         assert_eq!(content.content, "");
         assert_eq!(content.lfs_download_url, "");
         assert_eq!(content.size, 0);

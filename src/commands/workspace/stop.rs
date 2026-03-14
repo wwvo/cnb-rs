@@ -1,6 +1,6 @@
 //! cnb workspace stop 子命令 - 停止工作区
 
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use clap::Parser;
 use cnb_api::types::StopWorkspaceRequest;
 use cnb_core::context::AppContext;

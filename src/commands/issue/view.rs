@@ -44,27 +44,21 @@ pub async fn run(ctx: &AppContext, args: &ViewArgs) -> Result<()> {
     }
 
     // 详情表格模式
-    let mut table = Table::new(vec![
-        Column::new("字段", 12),
-        Column::new("值", 65),
-    ]);
+    let mut table = Table::new(vec![Column::new("字段", 12), Column::new("值", 65)]);
 
-    table.add_row(vec![
-        "编号".to_string(),
-        format!("#{}", issue.number),
-    ]);
+    table.add_row(vec!["编号".to_string(), format!("#{}", issue.number)]);
     table.add_row(vec!["标题".to_string(), issue.title.clone()]);
-    table.add_row(vec!["状态".to_string(), format_state(&issue.state, &issue.state_reason)]);
+    table.add_row(vec![
+        "状态".to_string(),
+        format_state(&issue.state, &issue.state_reason),
+    ]);
 
     if !issue.priority.is_empty() {
         table.add_row(vec!["优先级".to_string(), issue.priority.clone()]);
     }
 
     if let Some(ref author) = issue.author {
-        table.add_row(vec![
-            "作者".to_string(),
-            format_user(author),
-        ]);
+        table.add_row(vec!["作者".to_string(), format_user(author)]);
     }
 
     if !issue.assignees.is_empty() {
@@ -100,10 +94,7 @@ pub async fn run(ctx: &AppContext, args: &ViewArgs) -> Result<()> {
         table.add_row(vec!["结束日期".to_string(), issue.ended_at.clone()]);
     }
     if issue.comment_count > 0 {
-        table.add_row(vec![
-            "评论数".to_string(),
-            issue.comment_count.to_string(),
-        ]);
+        table.add_row(vec!["评论数".to_string(), issue.comment_count.to_string()]);
     }
 
     table.print();

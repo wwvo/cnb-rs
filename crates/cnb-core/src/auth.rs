@@ -21,10 +21,7 @@ pub enum TokenSource {
 /// 获取指定域名的认证 Token 及其来源
 pub fn get_token_with_source(domain: &str, config: &Config) -> Option<(String, TokenSource)> {
     // 优先级 1: 域名特定环境变量
-    let env_key = format!(
-        "CNB_TOKEN_{}",
-        domain.replace(['.', '-'], "")
-    );
+    let env_key = format!("CNB_TOKEN_{}", domain.replace(['.', '-'], ""));
     if let Ok(token) = std::env::var(&env_key)
         && !token.is_empty()
     {

@@ -4,7 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_api::types::ListIssuesOptions;
 use cnb_core::context::AppContext;
-use cnb_tui::{info, Column, Table};
+use cnb_tui::{Column, Table, info};
 
 /// 列出仓库的 Issue
 #[derive(Debug, Parser)]
@@ -106,7 +106,11 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
         table.add_row(vec![
             issue.number.clone(),
             issue.title.clone(),
-            if issue.priority.is_empty() { "-".to_string() } else { issue.priority.clone() },
+            if issue.priority.is_empty() {
+                "-".to_string()
+            } else {
+                issue.priority.clone()
+            },
             author,
             issue.last_acted_at.clone(),
             stale_days.to_string(),

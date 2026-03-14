@@ -42,10 +42,13 @@ pub async fn run(ctx: &AppContext, args: &ViewArgs) -> Result<()> {
     }
 
     // 表格模式
-    let language = repo
-        .languages
-        .as_ref()
-        .map_or("-", |l| if l.language.is_empty() { "-" } else { &l.language });
+    let language = repo.languages.as_ref().map_or("-", |l| {
+        if l.language.is_empty() {
+            "-"
+        } else {
+            &l.language
+        }
+    });
 
     let updated_at = repo
         .last_updated_at
@@ -59,10 +62,7 @@ pub async fn run(ctx: &AppContext, args: &ViewArgs) -> Result<()> {
         .and_then(|v| v.as_str())
         .unwrap_or("-");
 
-    let mut table = Table::new(vec![
-        Column::new("字段", 12),
-        Column::new("值", 60),
-    ]);
+    let mut table = Table::new(vec![Column::new("字段", 12), Column::new("值", 60)]);
 
     table.add_row(vec!["名称".to_string(), repo.path.clone()]);
     if !repo.description.is_empty() {
@@ -71,7 +71,10 @@ pub async fn run(ctx: &AppContext, args: &ViewArgs) -> Result<()> {
     table.add_row(vec!["Star".to_string(), repo.star_count.to_string()]);
     table.add_row(vec!["Fork".to_string(), repo.fork_count.to_string()]);
     table.add_row(vec!["Issue".to_string(), repo.open_issue_count.to_string()]);
-    table.add_row(vec!["PR".to_string(), repo.open_pull_request_count.to_string()]);
+    table.add_row(vec![
+        "PR".to_string(),
+        repo.open_pull_request_count.to_string(),
+    ]);
     table.add_row(vec!["可见性".to_string(), visibility.to_string()]);
     if !repo.license.is_empty() {
         table.add_row(vec!["许可证".to_string(), repo.license.clone()]);

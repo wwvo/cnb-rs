@@ -28,10 +28,16 @@ pub struct ListArgs {
 /// 执行 mission list 命令
 pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    let missions = client.list_missions(
-        &args.group, args.search.as_deref(), args.order_by.as_deref(),
-        args.desc, 1, 100,
-    ).await?;
+    let missions = client
+        .list_missions(
+            &args.group,
+            args.search.as_deref(),
+            args.order_by.as_deref(),
+            args.desc,
+            1,
+            100,
+        )
+        .await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&missions)?);

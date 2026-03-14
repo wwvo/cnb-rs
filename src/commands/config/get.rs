@@ -16,7 +16,10 @@ pub fn run(ctx: &AppContext, args: &GetArgs) -> anyhow::Result<()> {
     let key = args.key.as_str();
 
     if !Config::VALID_KEYS.contains(&key) {
-        anyhow::bail!("未知配置项: {key}\n可用配置项: {}", Config::VALID_KEYS.join(", "));
+        anyhow::bail!(
+            "未知配置项: {key}\n可用配置项: {}",
+            Config::VALID_KEYS.join(", ")
+        );
     }
 
     let config = ctx.config();

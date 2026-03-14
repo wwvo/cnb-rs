@@ -21,7 +21,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 生成 phf 风格的 match 函数
     writeln!(out, "/// 根据 \"service/apiname\" 路径获取嵌入的 API 文档")?;
-    writeln!(out, "pub fn get_embedded_doc(key: &str) -> Option<&'static str> {{")?;
+    writeln!(
+        out,
+        "pub fn get_embedded_doc(key: &str) -> Option<&'static str> {{"
+    )?;
     writeln!(out, "    match key {{")?;
 
     for (key, rel_path) in &entries {
@@ -31,7 +34,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .canonicalize()?
             .to_string_lossy()
             .replace('\\', "/");
-        writeln!(out, "        \"{key}\" => Some(include_str!(\"{abs_str}\")),")?;
+        writeln!(
+            out,
+            "        \"{key}\" => Some(include_str!(\"{abs_str}\")),"
+        )?;
     }
 
     writeln!(out, "        _ => None,")?;
@@ -48,7 +54,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     writeln!(out)?;
     writeln!(out, "/// 列出所有 API 服务分类")?;
-    writeln!(out, "pub fn list_embedded_services() -> &'static [&'static str] {{")?;
+    writeln!(
+        out,
+        "pub fn list_embedded_services() -> &'static [&'static str] {{"
+    )?;
     write!(out, "    &[")?;
     for s in &services {
         write!(out, "\"{s}\", ")?;
@@ -59,7 +68,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 生成列出所有 key 的函数
     writeln!(out)?;
     writeln!(out, "/// 列出所有嵌入的文档 key")?;
-    writeln!(out, "pub fn list_embedded_keys() -> &'static [&'static str] {{")?;
+    writeln!(
+        out,
+        "pub fn list_embedded_keys() -> &'static [&'static str] {{"
+    )?;
     write!(out, "    &[")?;
     for (key, _) in &entries {
         write!(out, "\"{key}\", ")?;
@@ -71,7 +83,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 /// 递归收集 .md 文件，key 格式为 "service/apiname"（无 .md 后缀）
-fn collect_md_files(base: &Path, dir: &Path, entries: &mut Vec<(String, String)>) -> Result<(), Box<dyn std::error::Error>> {
+fn collect_md_files(
+    base: &Path,
+    dir: &Path,
+    entries: &mut Vec<(String, String)>,
+) -> Result<(), Box<dyn std::error::Error>> {
     let mut items: Vec<_> = fs::read_dir(dir)?.filter_map(Result::ok).collect();
     items.sort_by_key(std::fs::DirEntry::file_name);
 

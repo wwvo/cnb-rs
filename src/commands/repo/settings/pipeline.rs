@@ -72,8 +72,14 @@ async fn run_get(ctx: &AppContext, args: &PipeGetArgs) -> Result<()> {
     }
 
     println!("流水线构建设置:");
-    println!("  自动触发构建:           {}", bool_icon(settings.auto_trigger));
-    println!("  Fork 仓库自动触发:      {}", bool_icon(settings.forked_repo_auto_trigger));
+    println!(
+        "  自动触发构建:           {}",
+        bool_icon(settings.auto_trigger)
+    );
+    println!(
+        "  Fork 仓库自动触发:      {}",
+        bool_icon(settings.forked_repo_auto_trigger)
+    );
 
     Ok(())
 }

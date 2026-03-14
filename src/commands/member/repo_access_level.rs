@@ -18,7 +18,9 @@ pub struct RepoAccessLevelArgs {
 pub async fn run(ctx: &AppContext, args: &RepoAccessLevelArgs) -> Result<()> {
     let client = ctx.api_client()?;
     let repo = ctx.repo()?;
-    let info = client.get_repo_access_level(&repo, args.include_inherit).await?;
+    let info = client
+        .get_repo_access_level(repo, args.include_inherit)
+        .await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&info)?);
@@ -27,8 +29,14 @@ pub async fn run(ctx: &AppContext, args: &RepoAccessLevelArgs) -> Result<()> {
 
     println!("权限等级: {}", format_access_level(&info.access_level));
     println!("继承:     {}", if info.inherit { "是" } else { "否" });
-    println!("读权限:   {}", if info.read_privilege { "是" } else { "否" });
-    println!("写权限:   {}", if info.write_privilege { "是" } else { "否" });
+    println!(
+        "读权限:   {}",
+        if info.read_privilege { "是" } else { "否" }
+    );
+    println!(
+        "写权限:   {}",
+        if info.write_privilege { "是" } else { "否" }
+    );
 
     Ok(())
 }

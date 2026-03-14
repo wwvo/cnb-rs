@@ -1,6 +1,6 @@
 //! cnb release asset-delete 子命令 - 删除单个 Release 附件
 
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use clap::Parser;
 use cnb_core::context::AppContext;
 use cnb_tui::confirm::confirm_action;
@@ -27,23 +27,17 @@ pub async fn run(ctx: &AppContext, args: &AssetDeleteArgs) -> Result<()> {
     let client = ctx.api_client()?;
 
     // 先通过 tag 获取 release
-    let release = client
-        .get_release_by_tag(client.repo(), &args.tag)
-        .await?;
+    let release = client.get_release_by_tag(client.repo(), &args.tag).await?;
 
     // 查找匹配的附件
-    let asset = release
-        .assets
-        .iter()
-        .find(|a| a.name == args.asset_name);
+    let asset = release.assets.iter().find(|a| a.name == args.asset_name);
 
-    let asset = match asset {
-        Some(a) => a,
-        None => bail!(
+    let Some(asset) = asset else {
+        bail!(
             "在 Release \"{}\" 中未找到附件 \"{}\"",
             args.tag,
             args.asset_name
-        ),
+        )
     };
 
     if !confirm_action(
@@ -56,9 +50,7 @@ pub async fn run(ctx: &AppContext, args: &AssetDeleteArgs) -> Result<()> {
         return Ok(());
     }
 
-    client
-        .delete_release_asset(&release.id, &asset.id)
-        .await?;
+    client.delete_release_asset(&release.id, &asset.id).await?;
     success!(
         "附件 \"{}\" 已从 Release \"{}\" 中删除",
         args.asset_name,

@@ -43,7 +43,9 @@ pub async fn run(ctx: &AppContext, args: &EditArgs) -> Result<()> {
         && args.start_date.is_none()
         && args.end_date.is_none()
     {
-        anyhow::bail!("请至少指定一个修改项（--title、--body、--priority、--start-date、--end-date）");
+        anyhow::bail!(
+            "请至少指定一个修改项（--title、--body、--priority、--start-date、--end-date）"
+        );
     }
 
     let client = ctx.api_client()?;

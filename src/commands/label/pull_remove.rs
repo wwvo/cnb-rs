@@ -19,7 +19,9 @@ pub struct PullRemoveArgs {
 pub async fn run(ctx: &AppContext, args: &PullRemoveArgs) -> Result<()> {
     let client = ctx.api_client()?;
 
-    client.remove_pull_label(&args.number.to_string(), &args.name).await?;
+    client
+        .remove_pull_label(&args.number.to_string(), &args.name)
+        .await?;
 
     success!("已从 Pull #{} 移除标签: {}", args.number, args.name);
 

@@ -4,14 +4,14 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
 
-pub mod start;
-pub mod stop;
-pub mod status;
+pub mod crontab_sync;
+pub mod delete_log;
+pub mod download_log;
 pub mod list;
 pub mod stage;
-pub mod download_log;
-pub mod delete_log;
-pub mod crontab_sync;
+pub mod start;
+pub mod status;
+pub mod stop;
 
 /// 构建管理
 #[derive(Debug, Parser)]

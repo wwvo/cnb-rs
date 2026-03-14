@@ -40,7 +40,9 @@ pub async fn run(ctx: &AppContext, args: &VisibilityArgs) -> Result<()> {
     }
 
     let client = ctx.api_client()?;
-    client.set_repo_visibility(&args.repo, &args.visibility).await?;
+    client
+        .set_repo_visibility(&args.repo, &args.visibility)
+        .await?;
 
     success!("仓库可见性已修改为 {} ({})", args.visibility, args.repo);
 

@@ -27,7 +27,7 @@ pub async fn run(ctx: &AppContext, args: &RepoRemoveArgs) -> Result<()> {
         return Ok(());
     }
 
-    client.remove_repo_member(&repo, &args.username).await?;
+    client.remove_repo_member(repo, &args.username).await?;
     success!("已移除成员 {}", args.username);
 
     Ok(())

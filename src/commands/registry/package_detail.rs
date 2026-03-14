@@ -21,7 +21,9 @@ pub struct PackageDetailArgs {
 /// 执行 registry package detail 命令
 pub async fn run(ctx: &AppContext, args: &PackageDetailArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    let detail = client.get_package(&args.registry, &args.pkg_type, &args.name).await?;
+    let detail = client
+        .get_package(&args.registry, &args.pkg_type, &args.name)
+        .await?;
 
     // 制品详情结构因类型而异，统一使用 JSON 输出
     println!("{}", serde_json::to_string_pretty(&detail)?);

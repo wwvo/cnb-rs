@@ -41,16 +41,19 @@ pub async fn run(ctx: &AppContext, args: &CloneArgs) -> Result<()> {
     }
 
     // 执行 git clone
-    let status = cmd.status().map_err(|e| anyhow::anyhow!("执行 git clone 失败：{e}"))?;
+    let status = cmd
+        .status()
+        .map_err(|e| anyhow::anyhow!("执行 git clone 失败：{e}"))?;
 
     if !status.success() {
         anyhow::bail!("git clone 退出码：{}", status.code().unwrap_or(-1));
     }
 
     // 确定目标目录名
-    let target = args.dir.as_deref().unwrap_or_else(|| {
-        args.repo.rsplit('/').next().unwrap_or(&args.repo)
-    });
+    let target = args
+        .dir
+        .as_deref()
+        .unwrap_or_else(|| args.repo.rsplit('/').next().unwrap_or(&args.repo));
     success!("仓库已克隆到 ./{target}");
 
     Ok(())

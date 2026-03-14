@@ -79,12 +79,13 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     ]);
 
     for repo in &repos {
-        let language = repo
-            .languages
-            .as_ref()
-            .map_or("-".to_string(), |l| {
-                if l.language.is_empty() { "-".to_string() } else { l.language.clone() }
-            });
+        let language = repo.languages.as_ref().map_or("-".to_string(), |l| {
+            if l.language.is_empty() {
+                "-".to_string()
+            } else {
+                l.language.clone()
+            }
+        });
 
         let updated_at = repo
             .last_updated_at

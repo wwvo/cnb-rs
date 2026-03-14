@@ -19,7 +19,10 @@ pub struct IssueClearArgs {
 
 /// 执行 label issue-clear 命令
 pub async fn run(ctx: &AppContext, args: &IssueClearArgs) -> Result<()> {
-    if !confirm_action(&format!("确认清空 Issue #{} 的所有标签？", args.number), args.yes)? {
+    if !confirm_action(
+        &format!("确认清空 Issue #{} 的所有标签？", args.number),
+        args.yes,
+    )? {
         info!("已取消");
         return Ok(());
     }

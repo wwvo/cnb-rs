@@ -1,6 +1,6 @@
+use super::CnbClient;
 use crate::error::ApiError;
 use crate::types::*;
-use super::CnbClient;
 
 impl CnbClient {
     /// 获取全部 Star 用户（自动分页）
@@ -22,7 +22,10 @@ impl CnbClient {
             let count = result.users.len();
             all_users.extend(result.users);
             if (count as u32) < page_size {
-                return Ok(StarUsers { total, users: all_users });
+                return Ok(StarUsers {
+                    total,
+                    users: all_users,
+                });
             }
             page += 1;
         }

@@ -28,12 +28,17 @@ pub async fn run(ctx: &AppContext, args: &AssetUploadArgs) -> Result<()> {
         asset_name: file_name.to_string(),
         size: file_size,
     };
-    let upload_info = client
-        .get_commit_asset_upload_url(&args.sha1, &req)
-        .await?;
+    let upload_info = client.get_commit_asset_upload_url(&args.sha1, &req).await?;
 
     let path = std::path::Path::new(&args.file_path);
-    upload::upload_and_confirm(client.http_client(), path, &upload_info.upload_url, &upload_info.verify_url, client.token()).await?;
+    upload::upload_and_confirm(
+        client.http_client(),
+        path,
+        &upload_info.upload_url,
+        &upload_info.verify_url,
+        client.token(),
+    )
+    .await?;
 
     success!("文件 {file_name} 已上传到 Commit {}", args.sha1);
 

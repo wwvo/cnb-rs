@@ -3,10 +3,10 @@
 //! 将 AI 生成的 curl 命令解析为 HTTP 请求参数，用 reqwest 直接发请求，
 //! 无需依赖外部 curl/shell。
 
-use std::sync::LazyLock;
 use regex_lite::Regex;
 use serde::Serialize;
 use std::collections::HashMap;
+use std::sync::LazyLock;
 
 /// curl 执行结果
 #[derive(Debug, Serialize)]
@@ -149,8 +149,8 @@ pub async fn exec_curl(
             let text = resp.text().await.unwrap_or_default();
 
             // 尝试解析为 JSON
-            let data: serde_json::Value = serde_json::from_str(&text)
-                .unwrap_or(serde_json::Value::String(text));
+            let data: serde_json::Value =
+                serde_json::from_str(&text).unwrap_or(serde_json::Value::String(text));
 
             if (200..300).contains(&status) {
                 CurlResult {
@@ -176,9 +176,8 @@ pub async fn exec_curl(
 
 /// 将命令行字符串拆分为 token 列表，保留引号内内容为完整 token
 fn tokenize(cmd: &str) -> Vec<String> {
-    static TOKENIZE_RE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"'[^']*'|"[^"]*"|\S+"#).unwrap_or_else(|_| unreachable!())
-    });
+    static TOKENIZE_RE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r#"'[^']*'|"[^"]*"|\S+"#).unwrap_or_else(|_| unreachable!()));
 
     TOKENIZE_RE
         .find_iter(cmd)
@@ -222,7 +221,14 @@ mod tests {
         let tokens = tokenize(r#"curl -X GET "https://example.com" -H "Accept: text/html""#);
         assert_eq!(
             tokens,
-            vec!["curl", "-X", "GET", "\"https://example.com\"", "-H", "\"Accept: text/html\""]
+            vec![
+                "curl",
+                "-X",
+                "GET",
+                "\"https://example.com\"",
+                "-H",
+                "\"Accept: text/html\""
+            ]
         );
     }
 

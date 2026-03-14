@@ -35,9 +35,7 @@ pub async fn run(ctx: &AppContext, args: &ViewArgs) -> Result<()> {
         return Ok(());
     }
 
-    let release = client
-        .get_release_by_tag(client.repo(), &args.tag)
-        .await?;
+    let release = client.get_release_by_tag(client.repo(), &args.tag).await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&release)?);

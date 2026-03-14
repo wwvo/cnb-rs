@@ -2,9 +2,10 @@
 
 use anyhow::Result;
 use clap::Parser;
+use cnb_api::types::ListRegistriesOptions;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
 use cnb_tui::fmt::format_bytes;
+use cnb_tui::{Column, Table};
 
 /// 列出组织下的制品库
 #[derive(Debug, Parser)]
@@ -33,10 +34,15 @@ pub struct ListArgs {
 /// 执行 registry list 命令
 pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    let registries = client.list_registries(
-        &args.group, args.registry_type.as_deref(), args.search.as_deref(),
-        args.order_by.as_deref(), args.desc, 1, 100,
-    ).await?;
+    let opts = ListRegistriesOptions {
+        registry_type: args.registry_type.clone(),
+        search: args.search.clone(),
+        order_by: args.order_by.clone(),
+        desc: args.desc,
+        page: 1,
+        page_size: 100,
+    };
+    let registries = client.list_registries(&args.group, &opts).await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&registries)?);
@@ -63,7 +69,11 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
         } else {
             r.visibility_level.to_string()
         };
-        let last_push = r.last_push_time.get(..10).unwrap_or(&r.last_push_time).to_string();
+        let last_push = r
+            .last_push_time
+            .get(..10)
+            .unwrap_or(&r.last_push_time)
+            .to_string();
         table.add_row(vec![
             r.name.clone(),
             r.kind.clone(),

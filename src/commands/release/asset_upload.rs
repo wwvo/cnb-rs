@@ -37,7 +37,14 @@ pub async fn run(ctx: &AppContext, args: &AssetUploadArgs) -> Result<()> {
         .await?;
 
     let path = std::path::Path::new(&args.file_path);
-    upload::upload_and_confirm(client.http_client(), path, &upload_info.upload_url, &upload_info.verify_url, client.token()).await?;
+    upload::upload_and_confirm(
+        client.http_client(),
+        path,
+        &upload_info.upload_url,
+        &upload_info.verify_url,
+        client.token(),
+    )
+    .await?;
 
     success!("文件 {file_name} 已上传到 Release {}", args.tag_name);
 

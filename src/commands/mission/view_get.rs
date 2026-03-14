@@ -18,7 +18,9 @@ pub struct ViewGetArgs {
 /// 执行 mission view get 命令
 pub async fn run(ctx: &AppContext, args: &ViewGetArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    let config = client.get_mission_view_config(&args.mission, &args.view_id).await?;
+    let config = client
+        .get_mission_view_config(&args.mission, &args.view_id)
+        .await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&config)?);
@@ -32,15 +34,15 @@ pub async fn run(ctx: &AppContext, args: &ViewGetArgs) -> Result<()> {
     };
 
     println!("View ID:  {}", config.id);
-    println!("Type:     {}", view_type);
+    println!("Type:     {view_type}");
     println!("Fields:   {}", config.fields.len());
     println!("Filters:  {}", config.selectors.len());
     println!("Sorts:    {}", config.sorts.len());
 
-    if !config.group.is_null() {
-        if let Some(field) = config.group.get("field").and_then(|v| v.as_str()) {
-            println!("Group By: {}", field);
-        }
+    if !config.group.is_null()
+        && let Some(field) = config.group.get("field").and_then(|value| value.as_str())
+    {
+        println!("Group By: {field}");
     }
 
     Ok(())

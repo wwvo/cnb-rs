@@ -1,6 +1,6 @@
 //! cnb release update 子命令 - 更新 Release
 
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use clap::Parser;
 use cnb_api::types::UpdateReleaseRequest;
 use cnb_core::context::AppContext;
@@ -49,9 +49,7 @@ pub async fn run(ctx: &AppContext, args: &UpdateArgs) -> Result<()> {
     let client = ctx.api_client()?;
 
     // 先通过 tag 获取 release ID
-    let release = client
-        .get_release_by_tag(client.repo(), &args.tag)
-        .await?;
+    let release = client.get_release_by_tag(client.repo(), &args.tag).await?;
 
     let req = UpdateReleaseRequest {
         name: args.name.clone(),

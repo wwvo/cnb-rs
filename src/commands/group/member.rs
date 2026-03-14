@@ -5,8 +5,8 @@ use clap::Parser;
 use cnb_api::types::{GroupMemberRequest, ListGroupMembersOptions};
 use cnb_core::context::AppContext;
 use cnb_tui::confirm::confirm_action;
-use cnb_tui::{info, success};
 use cnb_tui::table::{Column, Table};
+use cnb_tui::{info, success};
 
 /// 组织成员管理
 #[derive(Debug, Parser)]
@@ -283,31 +283,27 @@ async fn run_access_level(ctx: &AppContext, args: &MemberAccessLevelArgs) -> Res
             return Ok(());
         }
 
-        let mut table = Table::new(vec![
-            Column::new("组织", 24),
-            Column::new("权限", 12),
-        ]);
+        let mut table = Table::new(vec![Column::new("组织", 24), Column::new("权限", 12)]);
 
         for l in &levels {
-            table.add_row(vec![
-                l.path.clone(),
-                format_access_level(&l.access_level),
-            ]);
+            table.add_row(vec![l.path.clone(), format_access_level(&l.access_level)]);
         }
 
         table.print();
     } else {
         // 查看当前用户的权限
-        let level = client
-            .get_member_access_level(&args.group)
-            .await?;
+        let level = client.get_member_access_level(&args.group).await?;
 
         if ctx.json() {
             println!("{}", serde_json::to_string_pretty(&level)?);
             return Ok(());
         }
 
-        println!("当前用户在 {} 的权限：{}", args.group, serde_json::to_string(&level)?);
+        println!(
+            "当前用户在 {} 的权限：{}",
+            args.group,
+            serde_json::to_string(&level)?
+        );
     }
 
     Ok(())

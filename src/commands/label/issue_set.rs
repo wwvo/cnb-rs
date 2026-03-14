@@ -25,9 +25,15 @@ pub async fn run(ctx: &AppContext, args: &IssueSetArgs) -> Result<()> {
         labels: args.labels.clone(),
     };
 
-    client.set_issue_labels(&args.number.to_string(), &req).await?;
+    client
+        .set_issue_labels(&args.number.to_string(), &req)
+        .await?;
 
-    success!("已替换 Issue #{} 的标签为: {}", args.number, args.labels.join(", "));
+    success!(
+        "已替换 Issue #{} 的标签为: {}",
+        args.number,
+        args.labels.join(", ")
+    );
 
     Ok(())
 }

@@ -11,19 +11,21 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
     let client = ctx.api_client()?;
     let commits = client.list_all_commits().await?;
 
-    let asset_lists = try_join_all(
-        commits.iter().map(|c| client.get_commit_assets(&c.sha)),
-    )
-    .await?;
+    let asset_lists =
+        try_join_all(commits.iter().map(|c| client.get_commit_assets(&c.sha))).await?;
 
     if ctx.json() {
         // 构建带 sha 的附件列表
-        let json: Vec<_> = commits.iter().zip(asset_lists.iter())
+        let json: Vec<_> = commits
+            .iter()
+            .zip(asset_lists.iter())
             .filter(|(_, assets)| !assets.is_empty())
-            .map(|(c, assets)| serde_json::json!({
-                "sha": c.sha,
-                "assets": assets,
-            }))
+            .map(|(c, assets)| {
+                serde_json::json!({
+                    "sha": c.sha,
+                    "assets": assets,
+                })
+            })
             .collect();
         println!("{}", serde_json::to_string_pretty(&json)?);
         return Ok(());

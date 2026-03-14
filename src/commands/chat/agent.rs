@@ -12,7 +12,7 @@ use cnb_chat::curl::exec_curl;
 use cnb_chat::docs::get_api_doc;
 use cnb_chat::prompt::build_system_prompt;
 
-use cnb_tui::style::{dim, clear_line};
+use cnb_tui::style::{clear_line, dim};
 
 use super::stream::print_stream;
 
@@ -25,11 +25,7 @@ const DEFAULT_MODEL: &str = "hunyuan-a13b";
 /// 执行 Agent 循环
 ///
 /// `stream_output` 控制最终回答是否流式输出
-pub async fn run_agent(
-    client: &CnbClient,
-    question: &str,
-    stream_output: bool,
-) -> Result<()> {
+pub async fn run_agent(client: &CnbClient, question: &str, stream_output: bool) -> Result<()> {
     let token = client.token().to_string();
     let curl_vars: HashMap<String, String> =
         [("<CNB_TOKEN>".to_string(), token)].into_iter().collect();
@@ -113,9 +109,7 @@ pub async fn run_agent(
 
                 let result_json = serde_json::to_string_pretty(&result.data)
                     .unwrap_or_else(|_| "null".to_string());
-                messages.push(ChatMessage::user(&format!(
-                    "curl 执行结果:\n{result_json}"
-                )));
+                messages.push(ChatMessage::user(&format!("curl 执行结果:\n{result_json}")));
             }
         }
     }
@@ -125,10 +119,7 @@ pub async fn run_agent(
 }
 
 /// 对最终回答使用流式输出
-async fn stream_final_answer(
-    client: &CnbClient,
-    messages: &[ChatMessage],
-) -> Result<()> {
+async fn stream_final_answer(client: &CnbClient, messages: &[ChatMessage]) -> Result<()> {
     let req = ChatCompletionsRequest {
         model: DEFAULT_MODEL.to_string(),
         stream: true,

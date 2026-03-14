@@ -5,8 +5,8 @@ use clap::Parser;
 use cnb_api::types::ListWorkspacesOptions;
 use cnb_core::context::AppContext;
 use cnb_tui::fmt::format_rfc3339;
-use cnb_tui::table::{Column, Table};
 use cnb_tui::info;
+use cnb_tui::table::{Column, Table};
 
 /// 列出我的工作区
 #[derive(Debug, Parser)]

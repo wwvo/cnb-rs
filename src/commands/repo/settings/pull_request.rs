@@ -91,15 +91,29 @@ async fn run_get(ctx: &AppContext, args: &PrGetArgs) -> Result<()> {
     println!(
         "  允许直接提交合并:       {}  (信息风格: {})",
         bool_icon(settings.allow_merge_commit_merge),
-        if settings.merge_commit_message_style.is_empty() { "default" } else { &settings.merge_commit_message_style }
+        if settings.merge_commit_message_style.is_empty() {
+            "default"
+        } else {
+            &settings.merge_commit_message_style
+        }
     );
-    println!("  允许变基合并:           {}", bool_icon(settings.allow_rebase_merge));
+    println!(
+        "  允许变基合并:           {}",
+        bool_icon(settings.allow_rebase_merge)
+    );
     println!(
         "  允许压缩合并:           {}  (信息风格: {})",
         bool_icon(settings.allow_squash_merge),
-        if settings.squash_commit_message_style.is_empty() { "default" } else { &settings.squash_commit_message_style }
+        if settings.squash_commit_message_style.is_empty() {
+            "default"
+        } else {
+            &settings.squash_commit_message_style
+        }
     );
-    println!("  自动添加管理员为评审者: {}", bool_icon(settings.master_auto_as_reviewer));
+    println!(
+        "  自动添加管理员为评审者: {}",
+        bool_icon(settings.master_auto_as_reviewer)
+    );
 
     Ok(())
 }

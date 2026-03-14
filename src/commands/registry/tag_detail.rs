@@ -28,9 +28,15 @@ pub struct TagDetailArgs {
 /// 执行 registry tag detail 命令
 pub async fn run(ctx: &AppContext, args: &TagDetailArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    let detail = client.get_package_tag_detail(
-        &args.registry, &args.pkg_type, &args.name, &args.tag, args.arch.as_deref(),
-    ).await?;
+    let detail = client
+        .get_package_tag_detail(
+            &args.registry,
+            &args.pkg_type,
+            &args.name,
+            &args.tag,
+            args.arch.as_deref(),
+        )
+        .await?;
 
     // 标签详情结构因制品类型而异，统一 JSON 输出
     println!("{}", serde_json::to_string_pretty(&detail)?);

@@ -37,7 +37,9 @@ pub async fn run(ctx: &AppContext, args: &ViewSetArgs) -> Result<()> {
     };
 
     let config: MissionViewConfig = serde_json::from_str(&json_str)?;
-    client.set_mission_view_config(&args.mission, &config).await?;
+    client
+        .set_mission_view_config(&args.mission, &config)
+        .await?;
     success!("视图配置已更新");
 
     Ok(())

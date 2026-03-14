@@ -57,10 +57,7 @@ pub async fn run(ctx: &AppContext, args: &StartArgs) -> Result<()> {
         (branch, git_ref)
     };
 
-    let req = StartWorkspaceRequest {
-        branch,
-        git_ref,
-    };
+    let req = StartWorkspaceRequest { branch, git_ref };
 
     let resp = client.start_workspace(repo, &req).await?;
 

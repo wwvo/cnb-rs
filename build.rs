@@ -1,3 +1,15 @@
+fn command_output(program: &str, args: &[&str]) -> String {
+    std::process::Command::new(program)
+        .args(args)
+        .output()
+        .ok()
+        .filter(|output| output.status.success())
+        .map_or_else(
+            || "unknown".to_string(),
+            |output| String::from_utf8_lossy(&output.stdout).trim().to_string(),
+        )
+}
+
 fn main() {
     // 目标平台
     let target = std::env::var("TARGET").unwrap_or_else(|_| "unknown".to_string());
@@ -8,32 +20,14 @@ fn main() {
     println!("cargo:rustc-env=BUILD_PROFILE={profile}");
 
     // Git commit hash（短）
-    let git_hash = std::process::Command::new("git")
-        .args(["rev-parse", "--short=7", "HEAD"])
-        .output()
-        .ok()
-        .filter(|o| o.status.success())
-        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
-        .unwrap_or_else(|| "unknown".to_string());
+    let git_hash = command_output("git", &["rev-parse", "--short=7", "HEAD"]);
     println!("cargo:rustc-env=GIT_HASH={git_hash}");
 
     // Git commit 日期
-    let git_date = std::process::Command::new("git")
-        .args(["log", "-1", "--format=%cs"])
-        .output()
-        .ok()
-        .filter(|o| o.status.success())
-        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
-        .unwrap_or_else(|| "unknown".to_string());
+    let git_date = command_output("git", &["log", "-1", "--format=%cs"]);
     println!("cargo:rustc-env=GIT_DATE={git_date}");
 
     // rustc 版本
-    let rustc_version = std::process::Command::new("rustc")
-        .args(["--version"])
-        .output()
-        .ok()
-        .filter(|o| o.status.success())
-        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
-        .unwrap_or_else(|| "unknown".to_string());
+    let rustc_version = command_output("rustc", &["--version"]);
     println!("cargo:rustc-env=RUSTC_VERSION_INFO={rustc_version}");
 }

@@ -2,8 +2,8 @@
 //!
 //! 从 SKILL.md 提取精简 API 索引，构建两阶段检索的 System Prompt。
 
-use std::sync::LazyLock;
 use regex_lite::Regex;
+use std::sync::LazyLock;
 
 /// 嵌入 SKILL.md 内容
 const SKILL_CONTENT: &str = include_str!("../SKILL.md");
@@ -23,18 +23,14 @@ pub fn get_api_endpoint() -> String {
 ///
 /// 格式："- APIName: 描述 [service/apiname]"
 pub fn get_compact_index() -> String {
-    static SERVICE_RE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"^### (.+?) 服务$").unwrap_or_else(|_| unreachable!())
-    });
-    static API_RE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"^#### (.+)$").unwrap_or_else(|_| unreachable!())
-    });
-    static DESC_RE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"^\*\*描述：\*\* (.+)$").unwrap_or_else(|_| unreachable!())
-    });
-    static DOC_RE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"^\*\*详细文档：\*\*").unwrap_or_else(|_| unreachable!())
-    });
+    static SERVICE_RE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^### (.+?) 服务$").unwrap_or_else(|_| unreachable!()));
+    static API_RE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^#### (.+)$").unwrap_or_else(|_| unreachable!()));
+    static DESC_RE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^\*\*描述：\*\* (.+)$").unwrap_or_else(|_| unreachable!()));
+    static DOC_RE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^\*\*详细文档：\*\*").unwrap_or_else(|_| unreachable!()));
 
     let mut current_service = String::new();
     let mut result: Vec<String> = Vec::new();

@@ -68,7 +68,10 @@ mod tests {
     #[test]
     fn error_is_debug() {
         // 确保 ApiError 实现了 Debug
-        let err = ApiError::HttpStatus { status: 500, body: "error".to_string() };
+        let err = ApiError::HttpStatus {
+            status: 500,
+            body: "error".to_string(),
+        };
         let debug = format!("{err:?}");
         assert!(debug.contains("HttpStatus"));
     }

@@ -35,7 +35,9 @@ fn format_duration_ms(ms: i64) -> String {
 /// 执行 build stage 命令
 pub async fn run(ctx: &AppContext, args: &StageArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    let result = client.get_build_stage(&args.sn, &args.pipeline_id, &args.stage_id).await?;
+    let result = client
+        .get_build_stage(&args.sn, &args.pipeline_id, &args.stage_id)
+        .await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&result)?);

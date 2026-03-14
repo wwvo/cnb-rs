@@ -240,7 +240,11 @@ async fn run_list(ctx: &AppContext, args: &BpListArgs) -> Result<()> {
         };
 
         let review = if rule.required_pull_request_reviews {
-            format!("{} ({}人)", bool_icon(true), rule.required_approved_review_count)
+            format!(
+                "{} ({}人)",
+                bool_icon(true),
+                rule.required_approved_review_count
+            )
         } else {
             bool_icon(false).to_string()
         };
@@ -279,30 +283,84 @@ async fn run_get(ctx: &AppContext, args: &BpGetArgs) -> Result<()> {
     println!();
     println!("推送权限:");
     println!("  允许所有人推送:         {}", bool_icon(bp.allow_pushes));
-    println!("  仅允许管理员推送:       {}", bool_icon(bp.allow_master_pushes));
+    println!(
+        "  仅允许管理员推送:       {}",
+        bool_icon(bp.allow_master_pushes)
+    );
     println!();
     println!("强制推送:");
-    println!("  允许所有人强推:         {}", bool_icon(bp.allow_force_pushes));
-    println!("  仅允许管理员强推:       {}", bool_icon(bp.allow_master_force_pushes));
+    println!(
+        "  允许所有人强推:         {}",
+        bool_icon(bp.allow_force_pushes)
+    );
+    println!(
+        "  仅允许管理员强推:       {}",
+        bool_icon(bp.allow_master_force_pushes)
+    );
     println!();
     println!("分支管理:");
-    println!("  允许创建:               {}", if bp.allow_creation { "所有人" } else if bp.allow_master_creation { "仅管理员" } else { "✗" });
-    println!("  允许删除:               {}", if bp.allow_deletions { "所有人" } else if bp.allow_master_deletions { "仅管理员" } else { "✗" });
+    println!(
+        "  允许创建:               {}",
+        if bp.allow_creation {
+            "所有人"
+        } else if bp.allow_master_creation {
+            "仅管理员"
+        } else {
+            "✗"
+        }
+    );
+    println!(
+        "  允许删除:               {}",
+        if bp.allow_deletions {
+            "所有人"
+        } else if bp.allow_master_deletions {
+            "仅管理员"
+        } else {
+            "✗"
+        }
+    );
     println!();
     println!("合并控制:");
-    println!("  必须通过 PR:            {}", bool_icon(bp.required_must_push_via_pull_request));
-    println!("  仅允许自动合并:         {}", bool_icon(bp.required_must_auto_merge));
-    println!("  允许管理员手动合并:     {}", bool_icon(bp.allow_master_manual_merge));
+    println!(
+        "  必须通过 PR:            {}",
+        bool_icon(bp.required_must_push_via_pull_request)
+    );
+    println!(
+        "  仅允许自动合并:         {}",
+        bool_icon(bp.required_must_auto_merge)
+    );
+    println!(
+        "  允许管理员手动合并:     {}",
+        bool_icon(bp.allow_master_manual_merge)
+    );
     println!();
     println!("代码评审:");
-    println!("  需要评审:               {}", bool_icon(bp.required_pull_request_reviews));
-    println!("  评审者数量:             {}", bp.required_approved_review_count);
-    println!("  评审通过率:             {}%", bp.required_approved_review_ratio);
-    println!("  需管理员批准:           {}", bool_icon(bp.required_master_approve));
+    println!(
+        "  需要评审:               {}",
+        bool_icon(bp.required_pull_request_reviews)
+    );
+    println!(
+        "  评审者数量:             {}",
+        bp.required_approved_review_count
+    );
+    println!(
+        "  评审通过率:             {}%",
+        bp.required_approved_review_ratio
+    );
+    println!(
+        "  需管理员批准:           {}",
+        bool_icon(bp.required_master_approve)
+    );
     println!();
     println!("其他:");
-    println!("  仅允许线性提交:         {}", bool_icon(bp.required_linear_history));
-    println!("  需通过状态检查:         {}", bool_icon(bp.required_status_checks));
+    println!(
+        "  仅允许线性提交:         {}",
+        bool_icon(bp.required_linear_history)
+    );
+    println!(
+        "  需通过状态检查:         {}",
+        bool_icon(bp.required_status_checks)
+    );
 
     Ok(())
 }
@@ -360,7 +418,9 @@ async fn run_update(ctx: &AppContext, args: &BpUpdateArgs) -> Result<()> {
     };
 
     let client = ctx.api_client()?;
-    client.update_branch_protection(repo_path, &args.id, &req).await?;
+    client
+        .update_branch_protection(repo_path, &args.id, &req)
+        .await?;
 
     success!("分支保护规则已更新 ({})", args.id);
 
@@ -373,10 +433,7 @@ async fn run_delete(ctx: &AppContext, args: &BpDeleteArgs) -> Result<()> {
         None => ctx.repo()?,
     };
 
-    if !confirm_action(
-        &format!("确认删除分支保护规则 {} ？", args.id),
-        args.yes,
-    )? {
+    if !confirm_action(&format!("确认删除分支保护规则 {} ？", args.id), args.yes)? {
         info!("已取消");
         return Ok(());
     }

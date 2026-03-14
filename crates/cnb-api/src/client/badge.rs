@@ -1,17 +1,25 @@
 //! 徽章相关 API
 
+use super::CnbClient;
 use crate::error::ApiError;
 use crate::types::*;
-use super::CnbClient;
 use urlencoding::encode;
 
 impl CnbClient {
     /// 获取指定徽章（JSON 数据）
-    pub async fn get_badge(&self, sha: &str, badge: &str, branch: Option<&str>) -> Result<BadgeResult, ApiError> {
+    pub async fn get_badge(
+        &self,
+        sha: &str,
+        badge: &str,
+        branch: Option<&str>,
+    ) -> Result<BadgeResult, ApiError> {
         let sha = encode(sha);
         let badge_name = format!("{badge}.json");
         let badge_encoded = encode(&badge_name);
-        let mut url = format!("{}{}/-/badge/git/{sha}/{badge_encoded}", self.base_url, self.repo);
+        let mut url = format!(
+            "{}{}/-/badge/git/{sha}/{badge_encoded}",
+            self.base_url, self.repo
+        );
         if let Some(b) = branch {
             url.push_str(&format!("?branch={}", encode(b)));
         }
@@ -20,10 +28,18 @@ impl CnbClient {
     }
 
     /// 获取指定徽章（SVG）
-    pub async fn get_badge_svg(&self, sha: &str, badge: &str, branch: Option<&str>) -> Result<String, ApiError> {
+    pub async fn get_badge_svg(
+        &self,
+        sha: &str,
+        badge: &str,
+        branch: Option<&str>,
+    ) -> Result<String, ApiError> {
         let sha = encode(sha);
         let badge_encoded = encode(badge);
-        let mut url = format!("{}{}/-/badge/git/{sha}/{badge_encoded}", self.base_url, self.repo);
+        let mut url = format!(
+            "{}{}/-/badge/git/{sha}/{badge_encoded}",
+            self.base_url, self.repo
+        );
         if let Some(b) = branch {
             url.push_str(&format!("?branch={}", encode(b)));
         }
@@ -44,7 +60,10 @@ impl CnbClient {
     }
 
     /// 上传自定义徽章
-    pub async fn upload_badge(&self, req: &UploadBadgeRequest) -> Result<UploadBadgeResult, ApiError> {
+    pub async fn upload_badge(
+        &self,
+        req: &UploadBadgeRequest,
+    ) -> Result<UploadBadgeResult, ApiError> {
         let url = format!("{}{}/-/badge/upload", self.base_url, self.repo);
         let resp = self.http.post(&url).json(req).send().await?;
         Self::handle_response(resp).await

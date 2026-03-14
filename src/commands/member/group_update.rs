@@ -30,7 +30,9 @@ pub async fn run(ctx: &AppContext, args: &GroupUpdateArgs) -> Result<()> {
         is_outside_collaborator: false,
     };
 
-    client.update_group_member(&args.group, &args.username, &req).await?;
+    client
+        .update_group_member(&args.group, &args.username, &req)
+        .await?;
     success!("已更新 {} 的权限为 {}", args.username, args.role);
 
     Ok(())

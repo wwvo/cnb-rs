@@ -93,7 +93,10 @@ impl Config {
                 }
                 config.git_protocol = Some(value.to_string());
             }
-            _ => anyhow::bail!("未知配置项：{key}\n可用配置项：{}", Self::VALID_KEYS.join(", ")),
+            _ => anyhow::bail!(
+                "未知配置项：{key}\n可用配置项：{}",
+                Self::VALID_KEYS.join(", ")
+            ),
         }
 
         Self::write_config(&path, &config)

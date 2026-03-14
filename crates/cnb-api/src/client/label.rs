@@ -1,17 +1,24 @@
 //! 标签相关 API
 
+use super::CnbClient;
 use crate::error::ApiError;
 use crate::types::*;
-use super::CnbClient;
 use urlencoding::encode;
 
 impl CnbClient {
     // ==================== 仓库标签 ====================
 
     /// 列出仓库标签
-    pub async fn list_labels(&self, page: u32, page_size: u32, keyword: Option<&str>) -> Result<Vec<Label>, ApiError> {
-        let mut url = format!("{}{}/-/labels?page={page}&page_size={page_size}",
-            self.base_url, self.repo);
+    pub async fn list_labels(
+        &self,
+        page: u32,
+        page_size: u32,
+        keyword: Option<&str>,
+    ) -> Result<Vec<Label>, ApiError> {
+        let mut url = format!(
+            "{}{}/-/labels?page={page}&page_size={page_size}",
+            self.base_url, self.repo
+        );
         if let Some(kw) = keyword {
             url.push_str(&format!("&keyword={}", encode(kw)));
         }
@@ -24,10 +31,9 @@ impl CnbClient {
         let kw = keyword.map(String::from);
         self.paginate(|page, page_size| {
             let kw = kw.clone();
-            async move {
-                self.list_labels(page, page_size, kw.as_deref()).await
-            }
-        }).await
+            async move { self.list_labels(page, page_size, kw.as_deref()).await }
+        })
+        .await
     }
 
     /// 创建仓库标签
@@ -38,7 +44,11 @@ impl CnbClient {
     }
 
     /// 更新仓库标签
-    pub async fn update_label(&self, name: &str, req: &UpdateLabelRequest) -> Result<Label, ApiError> {
+    pub async fn update_label(
+        &self,
+        name: &str,
+        req: &UpdateLabelRequest,
+    ) -> Result<Label, ApiError> {
         let name = encode(name);
         let url = format!("{}{}/-/labels/{name}", self.base_url, self.repo);
         let resp = self.http.patch(&url).json(req).send().await?;
@@ -64,7 +74,11 @@ impl CnbClient {
     }
 
     /// 添加 Pull 标签
-    pub async fn add_pull_labels(&self, number: &str, req: &LabelListRequest) -> Result<(), ApiError> {
+    pub async fn add_pull_labels(
+        &self,
+        number: &str,
+        req: &LabelListRequest,
+    ) -> Result<(), ApiError> {
         let number = encode(number);
         let url = format!("{}{}/-/pulls/{number}/labels", self.base_url, self.repo);
         let resp = self.http.post(&url).json(req).send().await?;
@@ -72,7 +86,11 @@ impl CnbClient {
     }
 
     /// 设置（替换）Pull 标签
-    pub async fn set_pull_labels(&self, number: &str, req: &LabelListRequest) -> Result<(), ApiError> {
+    pub async fn set_pull_labels(
+        &self,
+        number: &str,
+        req: &LabelListRequest,
+    ) -> Result<(), ApiError> {
         let number = encode(number);
         let url = format!("{}{}/-/pulls/{number}/labels", self.base_url, self.repo);
         let resp = self.http.put(&url).json(req).send().await?;
@@ -83,7 +101,10 @@ impl CnbClient {
     pub async fn remove_pull_label(&self, number: &str, label_name: &str) -> Result<(), ApiError> {
         let number = encode(number);
         let label_name = encode(label_name);
-        let url = format!("{}{}/-/pulls/{number}/labels/{label_name}", self.base_url, self.repo);
+        let url = format!(
+            "{}{}/-/pulls/{number}/labels/{label_name}",
+            self.base_url, self.repo
+        );
         let resp = self.http.delete(&url).send().await?;
         Self::handle_empty_response(resp).await
     }

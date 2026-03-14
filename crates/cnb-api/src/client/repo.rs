@@ -1,8 +1,8 @@
 //! 仓库相关 API
 
+use super::CnbClient;
 use crate::error::ApiError;
 use crate::types::*;
-use super::CnbClient;
 
 impl CnbClient {
     /// 获取指定路径的仓库信息
@@ -20,14 +20,27 @@ impl CnbClient {
     }
 
     /// 列出指定用户的仓库（GET /users/{username}/repos）
-    pub async fn list_user_repos(&self, username: &str, opts: &ListReposOptions) -> Result<Vec<Repo>, ApiError> {
-        let url = format!("{}users/{}/repos?{}", self.base_url, username, opts.query_string());
+    pub async fn list_user_repos(
+        &self,
+        username: &str,
+        opts: &ListReposOptions,
+    ) -> Result<Vec<Repo>, ApiError> {
+        let url = format!(
+            "{}users/{}/repos?{}",
+            self.base_url,
+            username,
+            opts.query_string()
+        );
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
     /// 列出组织的仓库（GET /{slug}/-/repos）
-    pub async fn list_group_repos(&self, slug: &str, opts: &ListReposOptions) -> Result<Vec<Repo>, ApiError> {
+    pub async fn list_group_repos(
+        &self,
+        slug: &str,
+        opts: &ListReposOptions,
+    ) -> Result<Vec<Repo>, ApiError> {
         let url = format!("{}{}/-/repos?{}", self.base_url, slug, opts.query_string());
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
@@ -41,7 +54,11 @@ impl CnbClient {
     }
 
     /// 更新仓库信息（PATCH /{repo}）
-    pub async fn update_repo(&self, repo_path: &str, req: &UpdateRepoRequest) -> Result<(), ApiError> {
+    pub async fn update_repo(
+        &self,
+        repo_path: &str,
+        req: &UpdateRepoRequest,
+    ) -> Result<(), ApiError> {
         let url = format!("{}{}", self.base_url, repo_path);
         let resp = self.http.patch(&url).json(req).send().await?;
         Self::handle_empty_response(resp).await
@@ -55,8 +72,16 @@ impl CnbClient {
     }
 
     /// 获取仓库的 Fork 列表（GET /{repo}/-/forks）
-    pub async fn list_forks(&self, repo_path: &str, page: u32, page_size: u32) -> Result<ForkList, ApiError> {
-        let url = format!("{}{}/-/forks?page={page}&page_size={page_size}", self.base_url, repo_path);
+    pub async fn list_forks(
+        &self,
+        repo_path: &str,
+        page: u32,
+        page_size: u32,
+    ) -> Result<ForkList, ApiError> {
+        let url = format!(
+            "{}{}/-/forks?page={page}&page_size={page_size}",
+            self.base_url, repo_path
+        );
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
@@ -76,8 +101,15 @@ impl CnbClient {
     }
 
     /// 设置仓库可见性（POST /{repo}/-/settings/set_visibility?visibility=xxx）
-    pub async fn set_repo_visibility(&self, repo_path: &str, visibility: &str) -> Result<(), ApiError> {
-        let url = format!("{}{}/-/settings/set_visibility?visibility={}", self.base_url, repo_path, visibility);
+    pub async fn set_repo_visibility(
+        &self,
+        repo_path: &str,
+        visibility: &str,
+    ) -> Result<(), ApiError> {
+        let url = format!(
+            "{}{}/-/settings/set_visibility?visibility={}",
+            self.base_url, repo_path, visibility
+        );
         let resp = self.http.post(&url).send().await?;
         Self::handle_empty_response(resp).await
     }
@@ -108,7 +140,11 @@ impl CnbClient {
     }
 
     /// 设置组织的仓库墙（PUT /{slug}/-/pinned-repos）
-    pub async fn set_pinned_repos_by_group(&self, slug: &str, repos: &[String]) -> Result<Vec<Repo>, ApiError> {
+    pub async fn set_pinned_repos_by_group(
+        &self,
+        slug: &str,
+        repos: &[String],
+    ) -> Result<Vec<Repo>, ApiError> {
         let url = format!("{}{}/-/pinned-repos", self.base_url, slug);
         let resp = self.http.put(&url).json(&repos).send().await?;
         Self::handle_response(resp).await
@@ -158,13 +194,20 @@ impl CnbClient {
         repo_path: &str,
         top: u32,
     ) -> Result<Vec<TopContributor>, ApiError> {
-        let url = format!("{}{}/-/top-activity-users?top={top}", self.base_url, repo_path);
+        let url = format!(
+            "{}{}/-/top-activity-users?top={top}",
+            self.base_url, repo_path
+        );
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
     /// 获取仓库动态（GET /events/{repo}/-/{date}）
-    pub async fn get_events(&self, repo_path: &str, date: &str) -> Result<serde_json::Value, ApiError> {
+    pub async fn get_events(
+        &self,
+        repo_path: &str,
+        date: &str,
+    ) -> Result<serde_json::Value, ApiError> {
         let url = format!("{}events/{}/-/{}", self.base_url, repo_path, date);
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
@@ -189,78 +232,140 @@ impl CnbClient {
     // ============================
 
     /// 列出分支保护规则（GET /{repo}/-/settings/branch-protections）
-    pub async fn list_branch_protections(&self, repo_path: &str) -> Result<Vec<BranchProtection>, ApiError> {
-        let url = format!("{}{}/-/settings/branch-protections", self.base_url, repo_path);
+    pub async fn list_branch_protections(
+        &self,
+        repo_path: &str,
+    ) -> Result<Vec<BranchProtection>, ApiError> {
+        let url = format!(
+            "{}{}/-/settings/branch-protections",
+            self.base_url, repo_path
+        );
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
     /// 获取分支保护规则详情（GET /{repo}/-/settings/branch-protections/{id}）
-    pub async fn get_branch_protection(&self, repo_path: &str, id: &str) -> Result<BranchProtection, ApiError> {
-        let url = format!("{}{}/-/settings/branch-protections/{}", self.base_url, repo_path, id);
+    pub async fn get_branch_protection(
+        &self,
+        repo_path: &str,
+        id: &str,
+    ) -> Result<BranchProtection, ApiError> {
+        let url = format!(
+            "{}{}/-/settings/branch-protections/{}",
+            self.base_url, repo_path, id
+        );
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
     /// 创建分支保护规则（POST /{repo}/-/settings/branch-protections）
-    pub async fn create_branch_protection(&self, repo_path: &str, req: &BranchProtectionRequest) -> Result<BranchProtection, ApiError> {
-        let url = format!("{}{}/-/settings/branch-protections", self.base_url, repo_path);
+    pub async fn create_branch_protection(
+        &self,
+        repo_path: &str,
+        req: &BranchProtectionRequest,
+    ) -> Result<BranchProtection, ApiError> {
+        let url = format!(
+            "{}{}/-/settings/branch-protections",
+            self.base_url, repo_path
+        );
         let resp = self.http.post(&url).json(req).send().await?;
         Self::handle_response(resp).await
     }
 
     /// 更新分支保护规则（PATCH /{repo}/-/settings/branch-protections/{id}）
-    pub async fn update_branch_protection(&self, repo_path: &str, id: &str, req: &BranchProtectionRequest) -> Result<BranchProtection, ApiError> {
-        let url = format!("{}{}/-/settings/branch-protections/{}", self.base_url, repo_path, id);
+    pub async fn update_branch_protection(
+        &self,
+        repo_path: &str,
+        id: &str,
+        req: &BranchProtectionRequest,
+    ) -> Result<BranchProtection, ApiError> {
+        let url = format!(
+            "{}{}/-/settings/branch-protections/{}",
+            self.base_url, repo_path, id
+        );
         let resp = self.http.patch(&url).json(req).send().await?;
         Self::handle_response(resp).await
     }
 
     /// 删除分支保护规则（DELETE /{repo}/-/settings/branch-protections/{id}）
-    pub async fn delete_branch_protection(&self, repo_path: &str, id: &str) -> Result<(), ApiError> {
-        let url = format!("{}{}/-/settings/branch-protections/{}", self.base_url, repo_path, id);
+    pub async fn delete_branch_protection(
+        &self,
+        repo_path: &str,
+        id: &str,
+    ) -> Result<(), ApiError> {
+        let url = format!(
+            "{}{}/-/settings/branch-protections/{}",
+            self.base_url, repo_path, id
+        );
         let resp = self.http.delete(&url).send().await?;
         Self::handle_empty_response(resp).await
     }
 
     /// 获取合并请求设置（GET /{repo}/-/settings/pull-request）
-    pub async fn get_pull_request_settings(&self, repo_path: &str) -> Result<PullRequestSettings, ApiError> {
+    pub async fn get_pull_request_settings(
+        &self,
+        repo_path: &str,
+    ) -> Result<PullRequestSettings, ApiError> {
         let url = format!("{}{}/-/settings/pull-request", self.base_url, repo_path);
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
     /// 更新合并请求设置（PUT /{repo}/-/settings/pull-request）
-    pub async fn set_pull_request_settings(&self, repo_path: &str, req: &PullRequestSettingsRequest) -> Result<(), ApiError> {
+    pub async fn set_pull_request_settings(
+        &self,
+        repo_path: &str,
+        req: &PullRequestSettingsRequest,
+    ) -> Result<(), ApiError> {
         let url = format!("{}{}/-/settings/pull-request", self.base_url, repo_path);
         let resp = self.http.put(&url).json(req).send().await?;
         Self::handle_empty_response(resp).await
     }
 
     /// 获取推送限制设置（GET /{repo}/-/settings/push-limit）
-    pub async fn get_push_limit_settings(&self, repo_path: &str) -> Result<PushLimitSettings, ApiError> {
+    pub async fn get_push_limit_settings(
+        &self,
+        repo_path: &str,
+    ) -> Result<PushLimitSettings, ApiError> {
         let url = format!("{}{}/-/settings/push-limit", self.base_url, repo_path);
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
     /// 更新推送限制设置（PUT /{repo}/-/settings/push-limit）
-    pub async fn set_push_limit_settings(&self, repo_path: &str, req: &PushLimitSettingsRequest) -> Result<(), ApiError> {
+    pub async fn set_push_limit_settings(
+        &self,
+        repo_path: &str,
+        req: &PushLimitSettingsRequest,
+    ) -> Result<(), ApiError> {
         let url = format!("{}{}/-/settings/push-limit", self.base_url, repo_path);
         let resp = self.http.put(&url).json(req).send().await?;
         Self::handle_empty_response(resp).await
     }
 
     /// 获取流水线构建设置（GET /{repo}/-/settings/cloud-native-build）
-    pub async fn get_pipeline_settings(&self, repo_path: &str) -> Result<PipelineSettings, ApiError> {
-        let url = format!("{}{}/-/settings/cloud-native-build", self.base_url, repo_path);
+    pub async fn get_pipeline_settings(
+        &self,
+        repo_path: &str,
+    ) -> Result<PipelineSettings, ApiError> {
+        let url = format!(
+            "{}{}/-/settings/cloud-native-build",
+            self.base_url, repo_path
+        );
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
     /// 更新流水线构建设置（PUT /{repo}/-/settings/cloud-native-build）
-    pub async fn set_pipeline_settings(&self, repo_path: &str, req: &PipelineSettingsRequest) -> Result<(), ApiError> {
-        let url = format!("{}{}/-/settings/cloud-native-build", self.base_url, repo_path);
+    pub async fn set_pipeline_settings(
+        &self,
+        repo_path: &str,
+        req: &PipelineSettingsRequest,
+    ) -> Result<(), ApiError> {
+        let url = format!(
+            "{}{}/-/settings/cloud-native-build",
+            self.base_url, repo_path
+        );
         let resp = self.http.put(&url).json(req).send().await?;
         Self::handle_empty_response(resp).await
     }

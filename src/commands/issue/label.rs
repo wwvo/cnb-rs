@@ -4,8 +4,8 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_api::types::IssueLabelRequest;
 use cnb_core::context::AppContext;
-use cnb_tui::{info, success};
 use cnb_tui::table::{Column, Table};
+use cnb_tui::{info, success};
 
 /// Issue 标签管理
 #[derive(Debug, Parser)]
@@ -142,9 +142,7 @@ async fn run_set(ctx: &AppContext, args: &LabelModifyArgs) -> Result<()> {
 /// 删除指定标签
 async fn run_remove(ctx: &AppContext, args: &LabelRemoveArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    client
-        .remove_issue_label(&args.number, &args.name)
-        .await?;
+    client.remove_issue_label(&args.number, &args.name).await?;
     success!("Issue #{} 标签 '{}' 已删除", args.number, args.name);
 
     Ok(())

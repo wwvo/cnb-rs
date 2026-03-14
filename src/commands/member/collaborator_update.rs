@@ -23,7 +23,9 @@ pub struct CollaboratorUpdateArgs {
 /// 执行 member collaborator-update 命令
 pub async fn run(ctx: &AppContext, args: &CollaboratorUpdateArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    client.update_outside_collaborator(&args.group, &args.username, &args.role).await?;
+    client
+        .update_outside_collaborator(&args.group, &args.username, &args.role)
+        .await?;
     success!("已更新外部贡献者 {} 的权限为 {}", args.username, args.role);
 
     Ok(())

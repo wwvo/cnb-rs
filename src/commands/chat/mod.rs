@@ -3,11 +3,11 @@
 //! 使用自然语言与 CNB OpenAPI 交互。
 
 use anyhow::Result;
+use clap::Args;
 use cnb_api::client::CnbClient;
 use cnb_core::context::AppContext;
-use clap::Args;
-use rustyline::error::ReadlineError;
 use rustyline::DefaultEditor;
+use rustyline::error::ReadlineError;
 
 pub mod agent;
 pub mod stream;
@@ -45,8 +45,7 @@ pub async fn interactive_chat(client: &CnbClient) -> Result<()> {
     let mut rl = DefaultEditor::new()?;
 
     // 加载历史记录（忽略文件不存在的错误）
-    let history_path = dirs::data_local_dir()
-        .map(|d| d.join("cnb").join("chat_history.txt"));
+    let history_path = dirs::data_local_dir().map(|d| d.join("cnb").join("chat_history.txt"));
     if let Some(ref path) = history_path {
         if let Some(parent) = path.parent() {
             let _ = std::fs::create_dir_all(parent);

@@ -35,10 +35,7 @@ pub async fn run(ctx: &AppContext, args: &ViewArgs) -> Result<()> {
         return Ok(());
     }
 
-    let mut table = Table::new(vec![
-        Column::new("字段", 12),
-        Column::new("值", 50),
-    ]);
+    let mut table = Table::new(vec![Column::new("字段", 12), Column::new("值", 50)]);
 
     table.add_row(vec!["名称".to_string(), group.name.clone()]);
     table.add_row(vec!["路径".to_string(), group.path.clone()]);
@@ -65,16 +62,19 @@ pub async fn run(ctx: &AppContext, args: &ViewArgs) -> Result<()> {
     ]);
     table.add_row(vec![
         "子组织".to_string(),
-        format!("{} (总计 {})", group.sub_group_count, group.all_sub_group_count),
+        format!(
+            "{} (总计 {})",
+            group.sub_group_count, group.all_sub_group_count
+        ),
     ]);
     table.add_row(vec![
         "仓库".to_string(),
-        format!("{} (总计 {})", group.sub_repo_count, group.all_sub_repo_count),
+        format!(
+            "{} (总计 {})",
+            group.sub_repo_count, group.all_sub_repo_count
+        ),
     ]);
-    table.add_row(vec![
-        "关注者".to_string(),
-        group.follow_count.to_string(),
-    ]);
+    table.add_row(vec!["关注者".to_string(), group.follow_count.to_string()]);
 
     if !group.created_at.is_empty() {
         table.add_row(vec!["创建时间".to_string(), group.created_at.clone()]);

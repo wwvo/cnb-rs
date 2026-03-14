@@ -32,7 +32,10 @@ pub async fn run(ctx: &AppContext, _args: &ListArgs) -> Result<()> {
     ]);
 
     for badge in &result.badges {
-        let status = badge.group.as_ref().map_or("-".to_string(), |g| g.status.clone());
+        let status = badge
+            .group
+            .as_ref()
+            .map_or("-".to_string(), |g| g.status.clone());
         table.add_row(vec![
             badge.name.clone(),
             badge.badge_type.clone(),

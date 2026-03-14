@@ -4,7 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
 use cnb_tui::confirm::confirm_action;
-use cnb_tui::{info, success, fail};
+use cnb_tui::{fail, info, success};
 
 /// 删除构建日志
 #[derive(Debug, Parser)]

@@ -87,3 +87,23 @@ pub struct PackageTag {
 pub struct SetRegistryVisibilityRequest {
     pub visibility: String,
 }
+
+/// 列出制品库的查询参数
+#[derive(Debug, Default, Clone)]
+pub struct ListRegistriesOptions {
+    pub registry_type: Option<String>,
+    pub search: Option<String>,
+    pub order_by: Option<String>,
+    pub desc: bool,
+    pub page: u32,
+    pub page_size: u32,
+}
+
+/// 列出制品标签的查询参数
+#[derive(Debug, Default, Clone)]
+pub struct ListPackageTagsOptions {
+    pub tag_name: Option<String>,
+    pub ordering: Option<String>,
+    pub page: u32,
+    pub page_size: u32,
+}

@@ -3,7 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{success, fail};
+use cnb_tui::{fail, success};
 
 /// 同步定时任务
 #[derive(Debug, Parser)]

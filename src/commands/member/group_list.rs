@@ -28,8 +28,10 @@ pub struct GroupListArgs {
 pub async fn run(ctx: &AppContext, args: &GroupListArgs) -> Result<()> {
     let client = ctx.api_client()?;
     let opts = ListGroupMembersOptions {
-        page: 1, page_size: 100,
-        role: args.role.clone(), search: args.search.clone(),
+        page: 1,
+        page_size: 100,
+        role: args.role.clone(),
+        search: args.search.clone(),
     };
     let members = client.list_group_members(&args.group, &opts).await?;
 

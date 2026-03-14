@@ -28,8 +28,10 @@ pub struct GroupInheritedArgs {
 pub async fn run(ctx: &AppContext, args: &GroupInheritedArgs) -> Result<()> {
     let client = ctx.api_client()?;
     let opts = ListGroupMembersOptions {
-        page: 1, page_size: 100,
-        role: args.role.clone(), search: args.search.clone(),
+        page: 1,
+        page_size: 100,
+        role: args.role.clone(),
+        search: args.search.clone(),
     };
     let groups = client.list_inherit_members(&args.group, &opts).await?;
 

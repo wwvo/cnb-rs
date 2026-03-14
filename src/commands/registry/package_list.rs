@@ -27,10 +27,16 @@ pub struct PackageListArgs {
 /// 执行 registry package list 命令
 pub async fn run(ctx: &AppContext, args: &PackageListArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    let packages = client.list_packages(
-        &args.registry, &args.pkg_type, args.name.as_deref(),
-        args.ordering.as_deref(), 1, 100,
-    ).await?;
+    let packages = client
+        .list_packages(
+            &args.registry,
+            &args.pkg_type,
+            args.name.as_deref(),
+            args.ordering.as_deref(),
+            1,
+            100,
+        )
+        .await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&packages)?);
@@ -53,7 +59,10 @@ pub async fn run(ctx: &AppContext, args: &PackageListArgs) -> Result<()> {
     for p in &packages {
         let last_push = if let Some(pusher) = p.last_pusher.as_object() {
             let name = pusher.get("name").and_then(|v| v.as_str()).unwrap_or("-");
-            let push_at = pusher.get("push_at").and_then(|v| v.as_str()).unwrap_or("-");
+            let push_at = pusher
+                .get("push_at")
+                .and_then(|v| v.as_str())
+                .unwrap_or("-");
             let date = push_at.get(..10).unwrap_or(push_at);
             format!("{name} ({date})")
         } else {

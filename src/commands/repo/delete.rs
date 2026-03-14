@@ -18,10 +18,7 @@ pub struct DeleteArgs {
 }
 
 pub async fn run(ctx: &AppContext, args: &DeleteArgs) -> Result<()> {
-    if !confirm_action(
-        &format!("确定删除 {} ？此操作不可逆", args.repo),
-        args.yes,
-    )? {
+    if !confirm_action(&format!("确定删除 {} ？此操作不可逆", args.repo), args.yes)? {
         info!("已取消");
         return Ok(());
     }

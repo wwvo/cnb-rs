@@ -3,7 +3,7 @@
 use anyhow::Result;
 use cnb_core::context::AppContext;
 use cnb_tui::fmt::format_rfc3339;
-use cnb_tui::{info, Column, Table};
+use cnb_tui::{Column, Table, info};
 
 /// 执行 release list 命令
 pub async fn run(ctx: &AppContext) -> Result<()> {

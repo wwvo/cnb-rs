@@ -59,9 +59,6 @@ pub fn validate_file(file_path: &str) -> anyhow::Result<(&str, i64)> {
         anyhow::bail!("{file_path} 不是有效的文件");
     }
     let metadata = std::fs::metadata(path)?;
-    let file_name = path
-        .file_name()
-        .and_then(|n| n.to_str())
-        .unwrap_or("file");
+    let file_name = path.file_name().and_then(|n| n.to_str()).unwrap_or("file");
     Ok((file_name, i64::try_from(metadata.len())?))
 }

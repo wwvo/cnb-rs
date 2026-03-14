@@ -11,7 +11,7 @@ pub fn dim(text: &str) -> String {
 
 /// 清除当前行（回到行首并擦除内容）
 pub fn clear_line() {
-    use crossterm::{cursor, terminal, execute};
+    use crossterm::{cursor, execute, terminal};
     let _ = execute!(
         std::io::stderr(),
         cursor::MoveToColumn(0),

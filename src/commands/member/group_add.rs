@@ -30,7 +30,9 @@ pub async fn run(ctx: &AppContext, args: &GroupAddArgs) -> Result<()> {
         is_outside_collaborator: false,
     };
 
-    client.add_group_member(&args.group, &args.username, &req).await?;
+    client
+        .add_group_member(&args.group, &args.username, &req)
+        .await?;
     success!("已添加 {} 为组织成员 ({})", args.username, args.role);
 
     Ok(())

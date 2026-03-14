@@ -91,11 +91,7 @@ fn display_width(s: &str) -> usize {
 /// 获取单个字符的显示宽度
 fn char_width(c: char) -> usize {
     // CJK 统一表意文字、CJK 兼容表意文字、全角字符等占 2 列
-    if is_wide_char(c) {
-        2
-    } else {
-        1
-    }
+    if is_wide_char(c) { 2 } else { 1 }
 }
 
 /// 判断字符是否为宽字符（CJK 等）

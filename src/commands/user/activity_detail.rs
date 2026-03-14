@@ -31,12 +31,9 @@ pub async fn run(ctx: &AppContext, args: &ActivityDetailArgs) -> Result<()> {
         None => client.me().await?.username,
     };
 
-    let result = client.get_repo_activity_details(
-        &username,
-        &args.activity_type,
-        &args.repo,
-        &args.date,
-    ).await?;
+    let result = client
+        .get_repo_activity_details(&username, &args.activity_type, &args.repo, &args.date)
+        .await?;
 
     // activity-detail 返回的是动态结构，统一 JSON 输出
     println!("{}", serde_json::to_string_pretty(&result)?);

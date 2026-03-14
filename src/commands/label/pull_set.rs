@@ -25,9 +25,15 @@ pub async fn run(ctx: &AppContext, args: &PullSetArgs) -> Result<()> {
         labels: args.labels.clone(),
     };
 
-    client.set_pull_labels(&args.number.to_string(), &req).await?;
+    client
+        .set_pull_labels(&args.number.to_string(), &req)
+        .await?;
 
-    success!("已替换 Pull #{} 的标签为: {}", args.number, args.labels.join(", "));
+    success!(
+        "已替换 Pull #{} 的标签为: {}",
+        args.number,
+        args.labels.join(", ")
+    );
 
     Ok(())
 }

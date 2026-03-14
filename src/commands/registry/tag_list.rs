@@ -2,6 +2,7 @@
 
 use anyhow::Result;
 use clap::Parser;
+use cnb_api::types::ListPackageTagsOptions;
 use cnb_core::context::AppContext;
 
 /// 列出制品标签
@@ -29,10 +30,15 @@ pub struct TagListArgs {
 /// 执行 registry tag list 命令
 pub async fn run(ctx: &AppContext, args: &TagListArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    let tags = client.list_package_tags(
-        &args.registry, &args.pkg_type, &args.name,
-        args.tag_name.as_deref(), args.ordering.as_deref(), 1, 100,
-    ).await?;
+    let opts = ListPackageTagsOptions {
+        tag_name: args.tag_name.clone(),
+        ordering: args.ordering.clone(),
+        page: 1,
+        page_size: 100,
+    };
+    let tags = client
+        .list_package_tags(&args.registry, &args.pkg_type, &args.name, &opts)
+        .await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&tags)?);

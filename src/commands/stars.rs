@@ -6,7 +6,7 @@ use anyhow::Result;
 use chrono::{Duration, NaiveDate, NaiveDateTime};
 use cnb_core::context::AppContext;
 use cnb_tui::time::start_of_week;
-use cnb_tui::{info, TerminalGuard};
+use cnb_tui::{TerminalGuard, info};
 use ratatui::layout::{Constraint, Layout};
 use ratatui::style::{Color, Style};
 use ratatui::widgets::{Axis, Block, Borders, Chart, Dataset, GraphType};
@@ -107,12 +107,14 @@ fn render_star_chart(data: &[(NaiveDate, f64)], total: i64) -> Result<()> {
             .constraints([Constraint::Min(1)])
             .split(frame.area());
 
-        let datasets = vec![Dataset::default()
-            .name(format!("stars (total: {total})"))
-            .marker(ratatui::symbols::Marker::Braille)
-            .graph_type(GraphType::Line)
-            .style(Style::default().fg(Color::Yellow))
-            .data(&chart_data)];
+        let datasets = vec![
+            Dataset::default()
+                .name(format!("stars (total: {total})"))
+                .marker(ratatui::symbols::Marker::Braille)
+                .graph_type(GraphType::Line)
+                .style(Style::default().fg(Color::Yellow))
+                .data(&chart_data),
+        ];
 
         let chart = Chart::new(datasets)
             .block(
@@ -121,10 +123,12 @@ fn render_star_chart(data: &[(NaiveDate, f64)], total: i64) -> Result<()> {
                     .title(format!(" Star 趋势（共 {total} 个）按 q 退出 ")),
             )
             .x_axis(
-                Axis::default()
-                    .title("week")
-                    .bounds([0.0, x_max])
-                    .labels(x_labels.iter().map(|s| ratatui::text::Span::raw(s.clone())).collect::<Vec<_>>()),
+                Axis::default().title("week").bounds([0.0, x_max]).labels(
+                    x_labels
+                        .iter()
+                        .map(|s| ratatui::text::Span::raw(s.clone()))
+                        .collect::<Vec<_>>(),
+                ),
             )
             .y_axis(
                 Axis::default()

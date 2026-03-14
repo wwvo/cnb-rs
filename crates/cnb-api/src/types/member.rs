@@ -70,3 +70,15 @@ pub struct MemberRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_outside_collaborator: Option<bool>,
 }
+
+/// 列出仓库所有有效成员的查询参数
+#[derive(Debug, Default, Clone)]
+pub struct ListRepoAllMembersOptions {
+    pub role: Option<String>,
+    pub search: Option<String>,
+    pub names: Option<String>,
+    pub order_by: Option<String>,
+    pub desc: bool,
+    pub page: u32,
+    pub page_size: u32,
+}

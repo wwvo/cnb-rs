@@ -27,7 +27,9 @@ pub async fn run(ctx: &AppContext, args: &RepoUpdateArgs) -> Result<()> {
         is_outside_collaborator: None,
     };
 
-    client.update_repo_member(&repo, &args.username, &req).await?;
+    client
+        .update_repo_member(repo, &args.username, &req)
+        .await?;
     success!("已更新 {} 的权限为 {}", args.username, args.role);
 
     Ok(())

@@ -62,7 +62,11 @@ pub async fn run(ctx: &AppContext, args: &StartArgs) -> Result<()> {
         event: args.event.clone(),
         config: args.config.clone(),
         env,
-        sync: if args.sync { Some("true".to_string()) } else { None },
+        sync: if args.sync {
+            Some("true".to_string())
+        } else {
+            None
+        },
     };
 
     let result = client.start_build(&req).await?;

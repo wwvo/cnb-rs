@@ -2,8 +2,8 @@
 //!
 //! 从 AI 响应内容中解析 `get_api_doc` 或 `curl` 动作指令。
 
-use std::sync::LazyLock;
 use regex_lite::Regex;
+use std::sync::LazyLock;
 
 /// AI 响应中的动作指令
 #[derive(Debug)]
@@ -17,12 +17,10 @@ pub enum Action {
 static DOC_RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(?s)```get_api_doc\s*(.*?)```").unwrap_or_else(|_| unreachable!())
 });
-static CURL_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?s)```bash\s*(curl.*?)```").unwrap_or_else(|_| unreachable!())
-});
-static LINE_CONT_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"\\\n\s*").unwrap_or_else(|_| unreachable!())
-});
+static CURL_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?s)```bash\s*(curl.*?)```").unwrap_or_else(|_| unreachable!()));
+static LINE_CONT_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"\\\n\s*").unwrap_or_else(|_| unreachable!()));
 
 /// 解析 AI 响应中的动作指令
 ///

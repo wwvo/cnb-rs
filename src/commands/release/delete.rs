@@ -30,9 +30,7 @@ pub async fn run(ctx: &AppContext, args: &DeleteArgs) -> Result<()> {
     let client = ctx.api_client()?;
 
     // 先通过 tag 获取 release ID
-    let release = client
-        .get_release_by_tag(client.repo(), &args.tag)
-        .await?;
+    let release = client.get_release_by_tag(client.repo(), &args.tag).await?;
 
     client.delete_release(&release.id).await?;
     success!("Release \"{}\" 已删除", args.tag);

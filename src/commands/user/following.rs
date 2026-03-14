@@ -46,7 +46,11 @@ pub async fn run(ctx: &AppContext, args: &FollowingArgs) -> Result<()> {
         table.add_row(vec![
             user.username.clone(),
             user.nickname.clone(),
-            if user.is_following { "✓".to_string() } else { "✗".to_string() },
+            if user.is_following {
+                "✓".to_string()
+            } else {
+                "✗".to_string()
+            },
         ]);
     }
 

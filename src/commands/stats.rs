@@ -6,7 +6,7 @@
 
 use anyhow::Result;
 use chrono::{DateTime, Duration, NaiveDate, Utc};
-use cnb_tui::{info, TerminalGuard};
+use cnb_tui::{TerminalGuard, info};
 use ratatui::layout::{Constraint, Direction, Layout};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::Line;
@@ -42,8 +42,7 @@ pub async fn run() -> Result<()> {
 
         *user_map.entry(user).or_insert(0) += 1;
 
-        let commit_time = DateTime::from_timestamp(timestamp, 0)
-            .unwrap_or_default();
+        let commit_time = DateTime::from_timestamp(timestamp, 0).unwrap_or_default();
         let week_key = get_start_of_week(&commit_time);
         if let Some(count) = weekly_map.get_mut(&week_key) {
             *count += 1;
@@ -83,10 +82,7 @@ fn generate_last_weeks(today_week: NaiveDate, limit: usize) -> HashMap<NaiveDate
 }
 
 /// 使用 ratatui 渲染仪表盘
-fn render_dashboard(
-    top_users: &[(String, usize)],
-    week_data: &[(NaiveDate, usize)],
-) -> Result<()> {
+fn render_dashboard(top_users: &[(String, usize)], week_data: &[(NaiveDate, usize)]) -> Result<()> {
     let items: Vec<(String, usize)> = top_users.to_vec();
 
     let chart_data: Vec<(f64, f64)> = week_data
@@ -95,25 +91,19 @@ fn render_dashboard(
         .map(|(i, (_, count))| (i as f64, *count as f64))
         .collect();
 
-    let max_y = week_data
-        .iter()
-        .map(|(_, c)| *c)
-        .max()
-        .unwrap_or(1)
-        .max(1) as f64;
+    let max_y = week_data.iter().map(|(_, c)| *c).max().unwrap_or(1).max(1) as f64;
 
     let x_max = chart_data.len().saturating_sub(1).max(1) as f64;
 
-    let x_labels: Vec<String> = if let (Some(first), Some(last)) =
-        (week_data.first(), week_data.last())
-    {
-        vec![
-            first.0.format("%Y-%m").to_string(),
-            last.0.format("%Y-%m").to_string(),
-        ]
-    } else {
-        vec![]
-    };
+    let x_labels: Vec<String> =
+        if let (Some(first), Some(last)) = (week_data.first(), week_data.last()) {
+            vec![
+                first.0.format("%Y-%m").to_string(),
+                last.0.format("%Y-%m").to_string(),
+            ]
+        } else {
+            vec![]
+        };
 
     let mut guard = TerminalGuard::new()?;
     guard.run_loop(|frame| {
@@ -124,28 +114,24 @@ fn render_dashboard(
 
         let list_items: Vec<ListItem> = items
             .iter()
-            .map(|(user, commits)| {
-                ListItem::new(Line::raw(format!("[{commits:>4}] {user}")))
-            })
+            .map(|(user, commits)| ListItem::new(Line::raw(format!("[{commits:>4}] {user}"))))
             .collect();
 
         let list = List::new(list_items)
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(" 历史提交榜 "),
-            )
+            .block(Block::default().borders(Borders::ALL).title(" 历史提交榜 "))
             .style(Style::default().fg(Color::White))
             .highlight_style(Style::default().add_modifier(Modifier::BOLD));
 
         frame.render_widget(list, chunks[0]);
 
-        let datasets = vec![Dataset::default()
-            .name("commits/week")
-            .marker(ratatui::symbols::Marker::Braille)
-            .graph_type(GraphType::Line)
-            .style(Style::default().fg(Color::Green))
-            .data(&chart_data)];
+        let datasets = vec![
+            Dataset::default()
+                .name("commits/week")
+                .marker(ratatui::symbols::Marker::Braille)
+                .graph_type(GraphType::Line)
+                .style(Style::default().fg(Color::Green))
+                .data(&chart_data),
+        ];
 
         let chart = Chart::new(datasets)
             .block(
@@ -154,10 +140,12 @@ fn render_dashboard(
                     .title(" 过去 80 周的提交曲线 "),
             )
             .x_axis(
-                Axis::default()
-                    .title("week")
-                    .bounds([0.0, x_max])
-                    .labels(x_labels.iter().map(|s| ratatui::text::Span::raw(s.clone())).collect::<Vec<_>>()),
+                Axis::default().title("week").bounds([0.0, x_max]).labels(
+                    x_labels
+                        .iter()
+                        .map(|s| ratatui::text::Span::raw(s.clone()))
+                        .collect::<Vec<_>>(),
+                ),
             )
             .y_axis(
                 Axis::default()

@@ -81,15 +81,30 @@ async fn run_get(ctx: &AppContext, args: &PlGetArgs) -> Result<()> {
 
     println!("推送限制设置:");
     if settings.check_single_push_number {
-        println!("  单次推送数量限制:       {} (最多 {} 个分支/标签)", bool_icon(true), settings.allow_single_push_number);
+        println!(
+            "  单次推送数量限制:       {} (最多 {} 个分支/标签)",
+            bool_icon(true),
+            settings.allow_single_push_number
+        );
     } else {
         println!("  单次推送数量限制:       {}", bool_icon(false));
     }
-    println!("  仅管理员管理标签/版本:  {}", bool_icon(settings.only_master_can_push_tag));
+    println!(
+        "  仅管理员管理标签/版本:  {}",
+        bool_icon(settings.only_master_can_push_tag)
+    );
     println!(
         "  提交作者检查:           {} ({})",
-        if settings.push_commit_must_be == "any" { "不检查" } else { "已启用" },
-        if settings.push_commit_must_be.is_empty() { "any" } else { &settings.push_commit_must_be }
+        if settings.push_commit_must_be == "any" {
+            "不检查"
+        } else {
+            "已启用"
+        },
+        if settings.push_commit_must_be.is_empty() {
+            "any"
+        } else {
+            &settings.push_commit_must_be
+        }
     );
 
     Ok(())

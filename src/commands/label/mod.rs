@@ -4,20 +4,20 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
 
-pub mod list;
 pub mod create;
-pub mod update;
 pub mod delete;
-pub mod issue_list;
 pub mod issue_add;
-pub mod issue_set;
-pub mod issue_remove;
 pub mod issue_clear;
-pub mod pull_list;
+pub mod issue_list;
+pub mod issue_remove;
+pub mod issue_set;
+pub mod list;
 pub mod pull_add;
-pub mod pull_set;
-pub mod pull_remove;
 pub mod pull_clear;
+pub mod pull_list;
+pub mod pull_remove;
+pub mod pull_set;
+pub mod update;
 
 /// 标签管理
 #[derive(Debug, Parser)]

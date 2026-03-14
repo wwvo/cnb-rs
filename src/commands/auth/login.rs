@@ -38,9 +38,10 @@ pub async fn run(ctx: &AppContext, args: &LoginArgs) -> Result<()> {
     let base_web_url = format!("{DEFAULT_SCHEME}://{domain}/");
     let client = CnbClient::new(&base_url, &base_web_url, &token, "")?;
 
-    let user = client.me().await.map_err(|e| {
-        anyhow::anyhow!("Token 验证失败：{e}")
-    })?;
+    let user = client
+        .me()
+        .await
+        .map_err(|e| anyhow::anyhow!("Token 验证失败：{e}"))?;
 
     // 保存到配置文件
     Config::save_auth(domain, &token, &user.username)?;

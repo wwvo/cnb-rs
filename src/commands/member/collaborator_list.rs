@@ -26,9 +26,15 @@ pub struct CollaboratorListArgs {
 /// 执行 member collaborator-list 命令
 pub async fn run(ctx: &AppContext, args: &CollaboratorListArgs) -> Result<()> {
     let client = ctx.api_client()?;
-    let collaborators = client.list_outside_collaborators(
-        &args.group, args.role.as_deref(), args.search.as_deref(), 1, 100,
-    ).await?;
+    let collaborators = client
+        .list_outside_collaborators(
+            &args.group,
+            args.role.as_deref(),
+            args.search.as_deref(),
+            1,
+            100,
+        )
+        .await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&collaborators)?);

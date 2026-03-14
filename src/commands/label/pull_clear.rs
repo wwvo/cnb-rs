@@ -19,7 +19,10 @@ pub struct PullClearArgs {
 
 /// 执行 label pull-clear 命令
 pub async fn run(ctx: &AppContext, args: &PullClearArgs) -> Result<()> {
-    if !confirm_action(&format!("确认清空 Pull #{} 的所有标签？", args.number), args.yes)? {
+    if !confirm_action(
+        &format!("确认清空 Pull #{} 的所有标签？", args.number),
+        args.yes,
+    )? {
         info!("已取消");
         return Ok(());
     }

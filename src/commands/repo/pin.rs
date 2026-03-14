@@ -4,8 +4,8 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
 use cnb_tui::info;
-use cnb_tui::table::{Column, Table};
 use cnb_tui::success;
+use cnb_tui::table::{Column, Table};
 
 /// 管理仓库墙（置顶仓库）
 #[derive(Debug, Parser)]
@@ -85,12 +85,13 @@ async fn run_list(ctx: &AppContext, args: &PinListArgs) -> Result<()> {
     ]);
 
     for repo in &repos {
-        let language = repo
-            .languages
-            .as_ref()
-            .map_or("-".to_string(), |l| {
-                if l.language.is_empty() { "-".to_string() } else { l.language.clone() }
-            });
+        let language = repo.languages.as_ref().map_or("-".to_string(), |l| {
+            if l.language.is_empty() {
+                "-".to_string()
+            } else {
+                l.language.clone()
+            }
+        });
 
         let desc = if repo.description.len() > 28 {
             format!("{}...", &repo.description[..28])
@@ -114,9 +115,15 @@ async fn run_list(ctx: &AppContext, args: &PinListArgs) -> Result<()> {
 async fn run_set(ctx: &AppContext, args: &PinSetArgs) -> Result<()> {
     let client = ctx.api_client()?;
 
-    let result = client.set_pinned_repos_by_group(&args.group, &args.repos).await?;
+    let result = client
+        .set_pinned_repos_by_group(&args.group, &args.repos)
+        .await?;
 
-    success!("已更新 {} 的仓库墙（共 {} 个仓库）", args.group, result.len());
+    success!(
+        "已更新 {} 的仓库墙（共 {} 个仓库）",
+        args.group,
+        result.len()
+    );
 
     Ok(())
 }

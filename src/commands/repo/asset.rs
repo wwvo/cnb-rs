@@ -116,10 +116,7 @@ async fn run_delete(ctx: &AppContext, args: &AssetDeleteArgs) -> Result<()> {
         None => ctx.repo()?,
     };
 
-    if !confirm_action(
-        &format!("确认删除资产 {} ？", args.id),
-        args.yes,
-    )? {
+    if !confirm_action(&format!("确认删除资产 {} ？", args.id), args.yes)? {
         info!("已取消");
         return Ok(());
     }

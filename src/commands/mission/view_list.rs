@@ -39,11 +39,7 @@ pub async fn run(ctx: &AppContext, args: &ViewListArgs) -> Result<()> {
         } else {
             v.view_type.to_string()
         };
-        table.add_row(vec![
-            v.id.clone(),
-            v.name.clone(),
-            view_type,
-        ]);
+        table.add_row(vec![v.id.clone(), v.name.clone(), view_type]);
     }
 
     table.print();

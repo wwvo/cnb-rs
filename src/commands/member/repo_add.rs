@@ -28,10 +28,14 @@ pub async fn run(ctx: &AppContext, args: &RepoAddArgs) -> Result<()> {
 
     let req = MemberRequest {
         access_level: args.role.clone(),
-        is_outside_collaborator: if args.outside_collaborator { Some(true) } else { None },
+        is_outside_collaborator: if args.outside_collaborator {
+            Some(true)
+        } else {
+            None
+        },
     };
 
-    client.add_repo_member(&repo, &args.username, &req).await?;
+    client.add_repo_member(repo, &args.username, &req).await?;
 
     if args.outside_collaborator {
         success!("已添加 {} 为外部贡献者 ({})", args.username, args.role);

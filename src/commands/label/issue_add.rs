@@ -25,9 +25,15 @@ pub async fn run(ctx: &AppContext, args: &IssueAddArgs) -> Result<()> {
         labels: args.labels.clone(),
     };
 
-    client.add_issue_labels(&args.number.to_string(), &req).await?;
+    client
+        .add_issue_labels(&args.number.to_string(), &req)
+        .await?;
 
-    success!("已为 Issue #{} 添加标签: {}", args.number, args.labels.join(", "));
+    success!(
+        "已为 Issue #{} 添加标签: {}",
+        args.number,
+        args.labels.join(", ")
+    );
 
     Ok(())
 }

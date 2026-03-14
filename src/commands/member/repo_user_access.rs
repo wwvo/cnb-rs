@@ -18,7 +18,7 @@ pub struct RepoUserAccessArgs {
 pub async fn run(ctx: &AppContext, args: &RepoUserAccessArgs) -> Result<()> {
     let client = ctx.api_client()?;
     let repo = ctx.repo()?;
-    let levels = client.get_repo_user_access(&repo, &args.username).await?;
+    let levels = client.get_repo_user_access(repo, &args.username).await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&levels)?);

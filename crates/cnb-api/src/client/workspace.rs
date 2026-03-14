@@ -1,11 +1,14 @@
+use super::CnbClient;
 use crate::error::ApiError;
 use crate::types::*;
-use super::CnbClient;
 use urlencoding::encode;
 
 impl CnbClient {
     pub async fn list_workspaces(
-        &self, status: &str, page: i32, page_size: i32,
+        &self,
+        status: &str,
+        page: i32,
+        page_size: i32,
     ) -> Result<WorkspaceListResponse, ApiError> {
         let mut url = format!(
             "{}user/workspaces?page={page}&page_size={page_size}",
@@ -20,7 +23,8 @@ impl CnbClient {
 
     /// 列出工作区（带更多过滤参数）
     pub async fn list_workspaces_with_options(
-        &self, opts: &ListWorkspacesOptions,
+        &self,
+        opts: &ListWorkspacesOptions,
     ) -> Result<WorkspaceListResponse, ApiError> {
         let mut url = format!(
             "{}user/workspaces?page={}&page_size={}",
@@ -48,7 +52,9 @@ impl CnbClient {
 
     /// 启动工作区
     pub async fn start_workspace(
-        &self, repo: &str, req: &StartWorkspaceRequest,
+        &self,
+        repo: &str,
+        req: &StartWorkspaceRequest,
     ) -> Result<StartWorkspaceResponse, ApiError> {
         let repo = Self::encode_path(repo);
         let url = format!("{}{repo}/-/workspace/start", self.base_url);
@@ -58,7 +64,8 @@ impl CnbClient {
 
     /// 停止工作区
     pub async fn stop_workspace(
-        &self, req: &StopWorkspaceRequest,
+        &self,
+        req: &StopWorkspaceRequest,
     ) -> Result<StopWorkspaceResponse, ApiError> {
         let url = format!("{}workspace/stop", self.base_url);
         let resp = self.http.post(&url).json(req).send().await?;
@@ -67,7 +74,9 @@ impl CnbClient {
 
     /// 获取工作区详情
     pub async fn get_workspace_detail(
-        &self, repo: &str, sn: &str,
+        &self,
+        repo: &str,
+        sn: &str,
     ) -> Result<WorkspaceDetailResponse, ApiError> {
         let repo = Self::encode_path(repo);
         let sn = encode(sn);

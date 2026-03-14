@@ -28,13 +28,17 @@ pub async fn run(ctx: &AppContext, args: &GetArgs) -> Result<()> {
 
     // 如果全局 --json 或未指定 --svg，根据情况选择
     if ctx.json() && !args.svg {
-        let result = client.get_badge(&args.sha, &args.badge, args.branch.as_deref()).await?;
+        let result = client
+            .get_badge(&args.sha, &args.badge, args.branch.as_deref())
+            .await?;
         println!("{}", serde_json::to_string_pretty(&result)?);
         return Ok(());
     }
 
     // SVG 模式
-    let svg = client.get_badge_svg(&args.sha, &args.badge, args.branch.as_deref()).await?;
+    let svg = client
+        .get_badge_svg(&args.sha, &args.badge, args.branch.as_deref())
+        .await?;
     print!("{svg}");
 
     Ok(())

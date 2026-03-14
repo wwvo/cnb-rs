@@ -2,6 +2,7 @@
 
 use anyhow::Result;
 use clap::Parser;
+use cnb_api::types::ListRepoAllMembersOptions;
 use cnb_core::context::AppContext;
 use cnb_tui::{Column, Table};
 
@@ -35,15 +36,16 @@ pub struct RepoAllArgs {
 pub async fn run(ctx: &AppContext, args: &RepoAllArgs) -> Result<()> {
     let client = ctx.api_client()?;
     let repo = ctx.repo()?;
-    let members = client.list_repo_all_members(
-        &repo,
-        args.role.as_deref(),
-        args.search.as_deref(),
-        args.names.as_deref(),
-        args.order_by.as_deref(),
-        args.desc,
-        1, 100,
-    ).await?;
+    let opts = ListRepoAllMembersOptions {
+        role: args.role.clone(),
+        search: args.search.clone(),
+        names: args.names.clone(),
+        order_by: args.order_by.clone(),
+        desc: args.desc,
+        page: 1,
+        page_size: 100,
+    };
+    let members = client.list_repo_all_members(repo, &opts).await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&members)?);

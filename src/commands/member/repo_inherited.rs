@@ -23,9 +23,9 @@ pub struct RepoInheritedArgs {
 pub async fn run(ctx: &AppContext, args: &RepoInheritedArgs) -> Result<()> {
     let client = ctx.api_client()?;
     let repo = ctx.repo()?;
-    let groups = client.list_repo_inherited_members(
-        &repo, args.role.as_deref(), args.search.as_deref(), 1, 100,
-    ).await?;
+    let groups = client
+        .list_repo_inherited_members(repo, args.role.as_deref(), args.search.as_deref(), 1, 100)
+        .await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&groups)?);

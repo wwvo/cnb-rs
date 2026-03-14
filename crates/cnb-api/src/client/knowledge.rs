@@ -1,6 +1,6 @@
+use super::CnbClient;
 use crate::error::ApiError;
 use crate::types::*;
-use super::CnbClient;
 
 impl CnbClient {
     pub async fn list_knowledge_models(&self) -> Result<Vec<KnowledgeModel>, ApiError> {
@@ -22,7 +22,8 @@ impl CnbClient {
     }
 
     pub async fn query_knowledge_base(
-        &self, req: &QueryKnowledgeBaseRequest,
+        &self,
+        req: &QueryKnowledgeBaseRequest,
     ) -> Result<Vec<KnowledgeQueryResult>, ApiError> {
         let url = format!("{}{}/-/knowledgebase/query", self.base_url, self.repo);
         let resp = self.http.post(&url).json(req).send().await?;

@@ -1,8 +1,8 @@
 //! 构建相关 API
 
+use super::CnbClient;
 use crate::error::ApiError;
 use crate::types::*;
-use super::CnbClient;
 use urlencoding::encode;
 
 impl CnbClient {
@@ -30,9 +30,14 @@ impl CnbClient {
     }
 
     /// 列出构建记录
-    pub async fn get_build_logs(&self, opts: &BuildListOptions) -> Result<BuildLogsResult, ApiError> {
-        let mut url = format!("{}{}/-/build/logs?page={}&page_size={}",
-            self.base_url, self.repo, opts.page, opts.page_size);
+    pub async fn get_build_logs(
+        &self,
+        opts: &BuildListOptions,
+    ) -> Result<BuildLogsResult, ApiError> {
+        let mut url = format!(
+            "{}{}/-/build/logs?page={}&page_size={}",
+            self.base_url, self.repo, opts.page, opts.page_size
+        );
         if let Some(ref status) = opts.status {
             url.push_str(&format!("&status={}", encode(status)));
         }
@@ -56,11 +61,19 @@ impl CnbClient {
     }
 
     /// 查看 Stage 详情
-    pub async fn get_build_stage(&self, sn: &str, pipeline_id: &str, stage_id: &str) -> Result<BuildStageResult, ApiError> {
+    pub async fn get_build_stage(
+        &self,
+        sn: &str,
+        pipeline_id: &str,
+        stage_id: &str,
+    ) -> Result<BuildStageResult, ApiError> {
         let sn = encode(sn);
         let pipeline_id = encode(pipeline_id);
         let stage_id = encode(stage_id);
-        let url = format!("{}{}/-/build/logs/stage/{sn}/{pipeline_id}/{stage_id}", self.base_url, self.repo);
+        let url = format!(
+            "{}{}/-/build/logs/stage/{sn}/{pipeline_id}/{stage_id}",
+            self.base_url, self.repo
+        );
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
@@ -68,7 +81,10 @@ impl CnbClient {
     /// 下载 Runner 日志
     pub async fn download_build_log(&self, pipeline_id: &str) -> Result<String, ApiError> {
         let pipeline_id = encode(pipeline_id);
-        let url = format!("{}{}/-/build/runner/download/log/{pipeline_id}", self.base_url, self.repo);
+        let url = format!(
+            "{}{}/-/build/runner/download/log/{pipeline_id}",
+            self.base_url, self.repo
+        );
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         let status = resp.status().as_u16();
         if (200..300).contains(&status) {
@@ -89,7 +105,10 @@ impl CnbClient {
     /// 同步定时任务
     pub async fn build_crontab_sync(&self, branch: &str) -> Result<BuildCommonResult, ApiError> {
         let branch = encode(branch);
-        let url = format!("{}{}/-/build/crontab/sync/{branch}", self.base_url, self.repo);
+        let url = format!(
+            "{}{}/-/build/crontab/sync/{branch}",
+            self.base_url, self.repo
+        );
         let resp = self.http.post(&url).send().await?;
         Self::handle_response(resp).await
     }

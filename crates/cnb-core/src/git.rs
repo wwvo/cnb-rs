@@ -92,7 +92,11 @@ pub fn parse_git_url(url: &str) -> Result<GitInfo> {
             host_part.to_string()
         };
 
-        return Ok(GitInfo { scheme, domain, repo });
+        return Ok(GitInfo {
+            scheme,
+            domain,
+            repo,
+        });
     }
 
     // 尝试 SSH 格式
@@ -147,7 +151,11 @@ pub fn get_commits() -> Result<Vec<String>> {
         .context("获取提交记录失败")?;
 
     let stdout = String::from_utf8_lossy(&output.stdout);
-    Ok(stdout.lines().filter(|l| !l.is_empty()).map(String::from).collect())
+    Ok(stdout
+        .lines()
+        .filter(|l| !l.is_empty())
+        .map(String::from)
+        .collect())
 }
 
 /// 获取当前 Git 分支名
@@ -164,9 +172,16 @@ pub fn current_branch() -> Result<String> {
 mod tests {
     use super::*;
 
+    fn parse_ok(url: &str) -> GitInfo {
+        match parse_git_url(url) {
+            Ok(info) => info,
+            Err(err) => panic!("解析 {url} 失败: {err}"),
+        }
+    }
+
     #[test]
     fn parse_https_url() {
-        let info = parse_git_url("https://cnb.cool/looc/git-cnb").unwrap();
+        let info = parse_ok("https://cnb.cool/looc/git-cnb");
         assert_eq!(info.scheme, "https");
         assert_eq!(info.domain, "cnb.cool");
         assert_eq!(info.repo, "looc/git-cnb");
@@ -174,21 +189,21 @@ mod tests {
 
     #[test]
     fn parse_https_url_with_git_suffix() {
-        let info = parse_git_url("https://cnb.cool/looc/git-cnb.git").unwrap();
+        let info = parse_ok("https://cnb.cool/looc/git-cnb.git");
         assert_eq!(info.domain, "cnb.cool");
         assert_eq!(info.repo, "looc/git-cnb");
     }
 
     #[test]
     fn parse_https_url_with_auth() {
-        let info = parse_git_url("https://user:token@cnb.cool/looc/git-cnb.git").unwrap();
+        let info = parse_ok("https://user:token@cnb.cool/looc/git-cnb.git");
         assert_eq!(info.domain, "cnb.cool");
         assert_eq!(info.repo, "looc/git-cnb");
     }
 
     #[test]
     fn parse_http_url() {
-        let info = parse_git_url("http://cnb.cool/group/repo").unwrap();
+        let info = parse_ok("http://cnb.cool/group/repo");
         assert_eq!(info.scheme, "http");
         assert_eq!(info.domain, "cnb.cool");
         assert_eq!(info.repo, "group/repo");
@@ -196,7 +211,7 @@ mod tests {
 
     #[test]
     fn parse_ssh_url() {
-        let info = parse_git_url("git@cnb.cool:looc/git-cnb.git").unwrap();
+        let info = parse_ok("git@cnb.cool:looc/git-cnb.git");
         assert_eq!(info.scheme, "https");
         assert_eq!(info.domain, "cnb.cool");
         assert_eq!(info.repo, "looc/git-cnb");
@@ -204,14 +219,14 @@ mod tests {
 
     #[test]
     fn parse_ssh_url_without_git_suffix() {
-        let info = parse_git_url("git@cnb.cool:looc/git-cnb").unwrap();
+        let info = parse_ok("git@cnb.cool:looc/git-cnb");
         assert_eq!(info.domain, "cnb.cool");
         assert_eq!(info.repo, "looc/git-cnb");
     }
 
     #[test]
     fn parse_nested_group_url() {
-        let info = parse_git_url("https://cnb.cool/org/sub-group/repo").unwrap();
+        let info = parse_ok("https://cnb.cool/org/sub-group/repo");
         assert_eq!(info.repo, "org/sub-group/repo");
     }
 

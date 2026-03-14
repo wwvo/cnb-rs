@@ -60,10 +60,7 @@ pub async fn run(ctx: &AppContext, args: &SettingsArgs) -> Result<()> {
         return Ok(());
     }
 
-    let mut table = Table::new(vec![
-        Column::new("配置项", 24),
-        Column::new("值", 30),
-    ]);
+    let mut table = Table::new(vec![Column::new("配置项", 24), Column::new("值", 30)]);
 
     table.add_row(vec![
         "隐藏成员".to_string(),
@@ -103,9 +100,17 @@ pub async fn run(ctx: &AppContext, args: &SettingsArgs) -> Result<()> {
 }
 
 fn format_switch(value: i32) -> String {
-    if value == 0 { "否".to_string() } else { "是".to_string() }
+    if value == 0 {
+        "否".to_string()
+    } else {
+        "是".to_string()
+    }
 }
 
 fn format_bool(value: bool) -> String {
-    if value { "是".to_string() } else { "否".to_string() }
+    if value {
+        "是".to_string()
+    } else {
+        "否".to_string()
+    }
 }

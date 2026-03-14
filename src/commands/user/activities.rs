@@ -23,7 +23,9 @@ pub async fn run(ctx: &AppContext, args: &ActivitiesArgs) -> Result<()> {
         None => client.me().await?.username,
     };
 
-    let result = client.get_activities(&username, args.date.as_deref()).await?;
+    let result = client
+        .get_activities(&username, args.date.as_deref())
+        .await?;
 
     if ctx.json() {
         println!("{}", serde_json::to_string_pretty(&result)?);

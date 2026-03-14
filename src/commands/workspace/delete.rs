@@ -1,6 +1,6 @@
 //! cnb workspace delete 子命令 - 删除工作区
 
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use clap::Parser;
 use cnb_core::context::AppContext;
 use cnb_tui::success;

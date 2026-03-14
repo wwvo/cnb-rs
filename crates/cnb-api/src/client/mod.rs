@@ -7,10 +7,10 @@ mod commit;
 mod gpg_key;
 mod group;
 mod issue;
+mod knowledge;
 mod label;
 mod member;
 mod mission;
-mod knowledge;
 mod pull;
 mod registry;
 mod release;
@@ -36,9 +36,17 @@ pub struct CnbClient {
 
 impl CnbClient {
     /// 创建新的 CNB API 客户端
-    pub fn new(base_url: &str, base_web_url: &str, token: &str, repo: &str) -> Result<Self, ApiError> {
+    pub fn new(
+        base_url: &str,
+        base_web_url: &str,
+        token: &str,
+        repo: &str,
+    ) -> Result<Self, ApiError> {
         let mut headers = HeaderMap::new();
-        headers.insert(ACCEPT, HeaderValue::from_static("application/vnd.cnb.api+json"));
+        headers.insert(
+            ACCEPT,
+            HeaderValue::from_static("application/vnd.cnb.api+json"),
+        );
         if !token.is_empty() {
             let auth_value = format!("Bearer {token}");
             headers.insert(
@@ -63,13 +71,23 @@ impl CnbClient {
         })
     }
 
-    pub fn base_url(&self) -> &str { &self.base_url }
-    pub fn base_web_url(&self) -> &str { &self.base_web_url }
-    pub fn repo(&self) -> &str { &self.repo }
-    pub fn token(&self) -> &str { &self.token }
+    pub fn base_url(&self) -> &str {
+        &self.base_url
+    }
+    pub fn base_web_url(&self) -> &str {
+        &self.base_web_url
+    }
+    pub fn repo(&self) -> &str {
+        &self.repo
+    }
+    pub fn token(&self) -> &str {
+        &self.token
+    }
 
     /// 获取无默认认证头的 HTTP 客户端引用（用于外部模块复用连接池）
-    pub fn http_client(&self) -> &reqwest::Client { &self.http_plain }
+    pub fn http_client(&self) -> &reqwest::Client {
+        &self.http_plain
+    }
 
     /// 获取当前用户信息
     pub async fn me(&self) -> Result<User, ApiError> {
@@ -89,7 +107,10 @@ impl CnbClient {
     pub async fn get_content(&self, path: &str, git_ref: &str) -> Result<Content, ApiError> {
         let path = Self::encode_path(path);
         let git_ref = encode(git_ref);
-        let url = format!("{}{}/-/git/contents/{path}?ref={git_ref}", self.base_url, self.repo);
+        let url = format!(
+            "{}{}/-/git/contents/{path}?ref={git_ref}",
+            self.base_url, self.repo
+        );
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
@@ -111,7 +132,10 @@ impl CnbClient {
 
         for attempt in 0..=MAX_RETRIES {
             if attempt > 0 {
-                let delay = DELAYS_MS.get((attempt - 1) as usize).copied().unwrap_or(1000);
+                let delay = DELAYS_MS
+                    .get((attempt - 1) as usize)
+                    .copied()
+                    .unwrap_or(1000);
                 tracing::warn!("请求失败，{delay}ms 后第 {attempt} 次重试...");
                 tokio::time::sleep(std::time::Duration::from_millis(delay)).await;
             }
@@ -140,7 +164,10 @@ impl CnbClient {
 
     /// 对含 `/` 的路径做 URL 编码，保留 `/` 分隔符
     pub(crate) fn encode_path(path: &str) -> String {
-        path.split('/').map(|seg| encode(seg)).collect::<Vec<_>>().join("/")
+        path.split('/')
+            .map(|seg| encode(seg))
+            .collect::<Vec<_>>()
+            .join("/")
     }
 
     pub(crate) async fn paginate<T, F, Fut>(&self, fetch: F) -> Result<Vec<T>, ApiError>
@@ -171,7 +198,9 @@ impl CnbClient {
         Err(Self::map_error_status(status, resp).await)
     }
 
-    pub(crate) async fn handle_response<T: serde::de::DeserializeOwned>(resp: reqwest::Response) -> Result<T, ApiError> {
+    pub(crate) async fn handle_response<T: serde::de::DeserializeOwned>(
+        resp: reqwest::Response,
+    ) -> Result<T, ApiError> {
         let status = resp.status().as_u16();
         if (200..300).contains(&status) {
             let data = resp.json::<T>().await?;
@@ -231,7 +260,12 @@ mod tests {
 
     #[test]
     fn new_client_with_token() {
-        let client = CnbClient::new("https://api.cnb.cool/", "https://cnb.cool/", "test_token", "org/repo");
+        let client = CnbClient::new(
+            "https://api.cnb.cool/",
+            "https://cnb.cool/",
+            "test_token",
+            "org/repo",
+        );
         assert!(client.is_ok());
         let client = client.unwrap_or_else(|e| panic!("创建客户端失败：{e}"));
         assert_eq!(client.base_url(), "https://api.cnb.cool/");

@@ -21,11 +21,15 @@ pub struct ViewSortArgs {
 pub async fn run(ctx: &AppContext, args: &ViewSortArgs) -> Result<()> {
     let client = ctx.api_client()?;
 
-    let views: Vec<MissionView> = args.ids.iter().map(|id| MissionView {
-        id: id.clone(),
-        name: String::new(),
-        view_type: serde_json::Value::Null,
-    }).collect();
+    let views: Vec<MissionView> = args
+        .ids
+        .iter()
+        .map(|id| MissionView {
+            id: id.clone(),
+            name: String::new(),
+            view_type: serde_json::Value::Null,
+        })
+        .collect();
 
     client.sort_mission_views(&args.mission, &views).await?;
     success!("视图顺序已更新");
