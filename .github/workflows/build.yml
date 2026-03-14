@@ -36,6 +36,9 @@ jobs:
             target: x86_64-pc-windows-gnu
             archive_ext: zip
             setup_mingw: true
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            archive_ext: zip
           - os: macos-latest
             target: x86_64-apple-darwin
             archive_ext: tar.gz
