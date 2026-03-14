@@ -178,6 +178,12 @@ jobs:
           git fetch --tags --force
           git cliff --latest --strip header -o LATEST_CHANGELOG.md
 
+      - name: Generate SHA-256 checksums
+        run: |
+          set -euo pipefail
+          cd release-artifacts
+          find . -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' \) -printf '%P\n' | sort | xargs sha256sum > sha256sum.txt
+
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -191,7 +197,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          files="$(find release-artifacts -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' \) | sort | paste -sd, -)"
+          files="$(find release-artifacts -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' -o -name 'sha256sum.txt' \) | sort | paste -sd, -)"
           : "${files:?No release artifacts found for CNB upload}"
           echo "files=${files}" >> "$GITHUB_OUTPUT"
 

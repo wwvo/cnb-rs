@@ -62,10 +62,11 @@ GitHub 镜像仓库收到 `v*` tag 后，会触发 `.github/workflows/build.yml`
 
 1. 在 GitHub 原生 runner 上分别构建 Linux、Windows、macOS 产物；当前默认发布矩阵包含 Linux 4 个目标、Windows 4 个目标（GNU 2 个 x86_64 / aarch64 变体，MSVC 2 个 x86_64 / aarch64 变体）和 macOS 2 个目标
 2. 生成与 CNB 一致的 `LATEST_CHANGELOG.md`
-3. 上传附件到 GitHub Release
-4. 先删除 CNB 对应 Release 的旧附件，再回填同一批新文件
+3. 基于最终压缩包生成 `sha256sum.txt`
+4. 上传附件和 `sha256sum.txt` 到 GitHub Release
+5. 先删除 CNB 对应 Release 的旧附件，再回填同一批新文件
 
-回填完成后，GitHub Release 和 CNB Release 会持有同一组二进制产物。
+回填完成后，GitHub Release 和 CNB Release 会持有同一组二进制产物以及对应的 SHA-256 校验文件。
 
 ## 标签规则
 
