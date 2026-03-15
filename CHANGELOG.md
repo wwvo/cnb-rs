@@ -2,6 +2,35 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
+## [0.5.0] - 2026-03-15
+
+### 迁移提示
+
+- 命令入口已从 `cnb ...` 改为 `cnb-rs ...`
+- 发布产物文件名将从 `cnb-*` 改为 `cnb-rs-*`
+- `git-cnb` 二进制入口已移除
+- Scoop / Homebrew 外部分发仓库迁移正在跟进 [#114](https://cnb.cool/wwvo/cnb-cli/cnb/-/issues/114)
+
+### ♻️ 重构
+
+- **(cli)** 移除 git-cnb 二进制入口 ([f030c8a](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/f030c8abe1054731dac5eea38d09aef185e9ebf0))
+
+### ✨ 新功能
+
+- **(cli)** 将命令入口改为 cnb-rs ([9d0e382](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/9d0e382061735a99d95353078b1601b55ca90b3d))
+
+### 👷 CI/CD
+
+- **(github)** 恢复 Windows ARM64 gnullvm 实验目标 ([490cff5](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/490cff5918f688248a7756fb8832ab002b513740))
+- **(github)** 收缩默认发布矩阵并清理 Node 24 告警 ([06b25b2](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/06b25b23fd37d380deb2e6df5391c6ac55bf8e20))
+- **(release)** 新增 issue 收口清单按钮 ([f4282ce](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/f4282ceed2438991d63590a337e856ab4012a4f0))
+- **(release)** 过滤附件插件旧式输出 ([aa3633c](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/aa3633cbb49d93ebfd79addf03bd49a139e3abb3))
+
+### 📝 文档
+
+- **(migration)** 补充 cnb-rs 迁移与发版说明 ([cbfba90](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/cbfba90841313c79bdd845e05ed50e9a7d86e933))
+- 删除过时的 workflow 设计说明 ([67a8385](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/67a838564ce7610ab8ba84afd6ad1a554edb2a1e))
+
 ## [0.4.6] - 2026-03-15
 
 ### 👷 CI/CD
@@ -542,4 +571,3 @@
 
 - 更新 .gitignore 忽略 IDE 和工具目录 ([641663b](https://cnb.cool/prevailna/cnb/-/commit/641663b003dad21c841e678a430229616651e7d1))
 - **(license)** 添加 Apache-2.0 许可证文件 ([88c6ef7](https://cnb.cool/prevailna/cnb/-/commit/88c6ef7012d7c9b6fc2284b3ee81828c59e325ab))
-
