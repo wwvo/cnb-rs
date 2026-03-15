@@ -66,7 +66,7 @@ fi
 git checkout -B "${release_branch}" "origin/${base_branch}"
 
 set_workspace_version "${next_version}"
-git cliff -o CHANGELOG.md
+git cliff --unreleased --tag "v${next_version}" --prepend CHANGELOG.md
 
 git add Cargo.toml CHANGELOG.md
 git diff --cached --quiet && cnb_err "没有检测到需要提交的 release 变更"
