@@ -1,7 +1,7 @@
-# cnb knowledge clean
+# cnb-rs knowledge clean
 
 ```
-cnb knowledge clean
+cnb-rs knowledge clean
 ```
 
 清除当前仓库的知识库。
@@ -18,10 +18,10 @@ cnb knowledge clean
 ## 示例
 
 ```bash
-$ cnb knowledge clean
+$ cnb-rs knowledge clean
 知识库已清除
 ```
 
 ## 另请参阅
 
-- [cnb knowledge](/knowledge/)
+- [cnb-rs knowledge](/knowledge/)

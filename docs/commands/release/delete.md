@@ -1,7 +1,7 @@
-# cnb release delete
+# cnb-rs release delete
 
 ```
-cnb release delete <TAG> [options]
+cnb-rs release delete <TAG> [options]
 ```
 
 删除指定 Release。此操作不可逆，需要交互确认。
@@ -20,10 +20,10 @@ cnb release delete <TAG> [options]
 
 ```bash
 # 删除 Release（需确认）
-$ cnb release delete v1.0.0-beta
+$ cnb-rs release delete v1.0.0-beta
 
 # 跳过确认直接删除
-$ cnb release delete v1.0.0-beta --confirm
+$ cnb-rs release delete v1.0.0-beta --confirm
 ```
 
 ## API
@@ -34,5 +34,5 @@ $ cnb release delete v1.0.0-beta --confirm
 
 ## 另请参阅
 
-- [cnb release](/release/)
-- [cnb release list](/release/list)
+- [cnb-rs release](/release/)
+- [cnb-rs release list](/release/list)

@@ -1,7 +1,7 @@
-# cnb label issue-clear
+# cnb-rs label issue-clear
 
 ```
-cnb label issue-clear <number> [-y]
+cnb-rs label issue-clear <number> [-y]
 ```
 
 清空指定 Issue 的所有标签。
@@ -22,16 +22,16 @@ cnb label issue-clear <number> [-y]
 
 ```bash
 # 清空标签（需确认）
-$ cnb label issue-clear 42
+$ cnb-rs label issue-clear 42
 确认清空 Issue #42 的所有标签？(y/N) y
 ✓ 已清空 Issue #42 的所有标签
 
 # 跳过确认
-$ cnb label issue-clear 42 -y
+$ cnb-rs label issue-clear 42 -y
 ```
 
 ## 另请参阅
 
-- [cnb label](/label/)
-- [cnb label issue-list](/label/issue-list)
-- [cnb label issue-set](/label/issue-set)
+- [cnb-rs label](/label/)
+- [cnb-rs label issue-list](/label/issue-list)
+- [cnb-rs label issue-set](/label/issue-set)

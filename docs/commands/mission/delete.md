@@ -1,7 +1,7 @@
-# cnb mission delete
+# cnb-rs mission delete
 
 ```
-cnb mission delete <mission> [options]
+cnb-rs mission delete <mission> [options]
 ```
 
 删除任务集。
@@ -21,14 +21,14 @@ cnb mission delete <mission> [options]
 
 ```bash
 # 删除任务集（需确认）
-$ cnb mission delete my-org/sprint-2025-q1
+$ cnb-rs mission delete my-org/sprint-2025-q1
 
 # 跳过确认
-$ cnb mission delete my-org/sprint-2025-q1 --yes
+$ cnb-rs mission delete my-org/sprint-2025-q1 --yes
 ```
 
 ## 另请参阅
 
-- [cnb mission](/mission/)
-- [cnb mission list](/mission/list)
-- [cnb mission create](/mission/create)
+- [cnb-rs mission](/mission/)
+- [cnb-rs mission list](/mission/list)
+- [cnb-rs mission create](/mission/create)

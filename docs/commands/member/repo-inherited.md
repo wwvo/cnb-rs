@@ -1,7 +1,7 @@
-# cnb member repo-inherited
+# cnb-rs member repo-inherited
 
 ```
-cnb member repo-inherited [options]
+cnb-rs member repo-inherited [options]
 ```
 
 列出仓库继承成员。
@@ -23,17 +23,17 @@ cnb member repo-inherited [options]
 
 ```bash
 # 列出仓库继承成员
-$ cnb member repo-inherited
+$ cnb-rs member repo-inherited
 
 # 按角色过滤
-$ cnb member repo-inherited --role Master
+$ cnb-rs member repo-inherited --role Master
 
 # JSON 格式输出
-$ cnb member repo-inherited --json
+$ cnb-rs member repo-inherited --json
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member repo-list](/member/repo-list)
-- [cnb member repo-all](/member/repo-all)
+- [cnb-rs member](/member/)
+- [cnb-rs member repo-list](/member/repo-list)
+- [cnb-rs member repo-all](/member/repo-all)

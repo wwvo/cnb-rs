@@ -1,7 +1,7 @@
-# cnb repo events
+# cnb-rs repo events
 
 ```
-cnb repo events [<repo>] [flags]
+cnb-rs repo events [<repo>] [flags]
 ```
 
 获取仓库动态内容，支持按天或按小时查询。
@@ -23,13 +23,13 @@ cnb repo events [<repo>] [flags]
 
 ```bash
 # 查看今天的仓库动态
-$ cnb repo events
+$ cnb-rs repo events
 
 # 查看指定日期
-$ cnb repo events org/repo --date 2025-01-15
+$ cnb-rs repo events org/repo --date 2025-01-15
 
 # 查看指定小时
-$ cnb repo events --date 2025-01-15 --hour 14
+$ cnb-rs repo events --date 2025-01-15 --hour 14
 ```
 
 ## API
@@ -42,5 +42,5 @@ $ cnb repo events --date 2025-01-15 --hour 14
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo view](/repo/view)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo view](/repo/view)

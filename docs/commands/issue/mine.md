@@ -1,7 +1,7 @@
-# cnb issue mine
+# cnb-rs issue mine
 
 ```
-cnb issue mine
+cnb-rs issue mine
 ```
 
 列出与我相关的 Issue。
@@ -27,17 +27,17 @@ cnb issue mine
 
 ```bash
 # 列出与我相关的 Issue
-$ cnb issue mine
+$ cnb-rs issue mine
 NUMBER          TITLE                                                            TYPE
 42              修复登录页面样式问题                                              ->ME
 58              新增导出功能                                                      ME->
 73              重构用户模块                                                      ME->ME
 
 # JSON 格式输出
-$ cnb --json issue mine
+$ cnb-rs --json issue mine
 
 # 没有相关 Issue 时
-$ cnb issue mine
+$ cnb-rs issue mine
 ℹ 没有找到与我相关的 Issue
 ```
 
@@ -52,5 +52,5 @@ $ cnb issue mine
 
 ## 另请参阅
 
-- [cnb issue](/issue/)
-- [cnb issue list](/issue/list)
+- [cnb-rs issue](/issue/)
+- [cnb-rs issue list](/issue/list)

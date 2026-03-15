@@ -1,7 +1,7 @@
-# cnb user activities
+# cnb-rs user activities
 
 ```
-cnb user activities [<username>] [options]
+cnb-rs user activities [<username>] [options]
 ```
 
 查看用户在指定时间段内的活动汇总。
@@ -23,22 +23,22 @@ cnb user activities [<username>] [options]
 
 ```bash
 # 查看当月活动汇总
-$ cnb user activities
+$ cnb-rs user activities
 
 # 查看指定月份
-$ cnb user activities --date 202412
+$ cnb-rs user activities --date 202412
 
 # 查看指定日期
-$ cnb user activities --date 20250115
+$ cnb-rs user activities --date 20250115
 
 # 查看其他用户
-$ cnb user activities zhangsan --date 202501
+$ cnb-rs user activities zhangsan --date 202501
 
 # JSON 格式输出
-$ cnb user activities --json
+$ cnb-rs user activities --json
 ```
 
 ## 另请参阅
 
-- [cnb user](/user/)
-- [cnb user activity-detail](/user/activity-detail)
+- [cnb-rs user](/user/)
+- [cnb-rs user activity-detail](/user/activity-detail)

@@ -1,7 +1,7 @@
-# cnb group transfer
+# cnb-rs group transfer
 
 ```
-cnb group transfer <GROUP> --target <TARGET> [options]
+cnb-rs group transfer <GROUP> --target <TARGET> [options]
 ```
 
 将组织转移到另一个父组织下。**此操作需要交互确认**。
@@ -20,12 +20,12 @@ cnb group transfer <GROUP> --target <TARGET> [options]
 
 ```bash
 # 转移组织（需确认）
-$ cnb group transfer child-org --target parent-org
+$ cnb-rs group transfer child-org --target parent-org
 
 # 跳过确认
-$ cnb group transfer child-org --target parent-org --confirm
+$ cnb-rs group transfer child-org --target parent-org --confirm
 ```
 
 ## 另请参阅
 
-- [cnb group](/group/)
+- [cnb-rs group](/group/)

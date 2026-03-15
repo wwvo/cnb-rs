@@ -1,7 +1,7 @@
-# cnb repo delete
+# cnb-rs repo delete
 
 ```
-cnb repo delete <repo> [flags]
+cnb-rs repo delete <repo> [flags]
 ```
 
 删除指定仓库。
@@ -25,16 +25,16 @@ cnb repo delete <repo> [flags]
 
 ```bash
 # 删除仓库（交互确认）
-$ cnb repo delete org/old-repo
+$ cnb-rs repo delete org/old-repo
 确定删除 org/old-repo ？此操作不可逆 (yes/no): yes
 ✓ 仓库 org/old-repo 已删除
 
 # 跳过确认
-$ cnb repo delete org/old-repo --yes
+$ cnb-rs repo delete org/old-repo --yes
 ✓ 仓库 org/old-repo 已删除
 
 # 取消删除
-$ cnb repo delete org/old-repo
+$ cnb-rs repo delete org/old-repo
 确定删除 org/old-repo ？此操作不可逆 (yes/no): no
 已取消
 ```
@@ -59,5 +59,5 @@ $ cnb repo delete org/old-repo
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo create](/repo/create)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo create](/repo/create)

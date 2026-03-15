@@ -43,19 +43,19 @@
 
 ```bash
 # 登录
-cnb auth login
+cnb-rs auth login
 
 # 查看仓库信息
-cnb info
+cnb-rs info
 
 # 查看 Issue 列表
-cnb issue list
+cnb-rs issue list
 
 # 使用 AI 对话
-cnb chat --do "查看我的仓库列表"
+cnb-rs chat --do "查看我的仓库列表"
 
 # 下载文件
-cnb download --files README.md
+cnb-rs download --files README.md
 ```
 
 ## 项目结构
@@ -83,7 +83,7 @@ cd cnb
 cargo build --release
 ```
 
-产物路径：`target/release/cnb`（Windows 下为 `target/release/cnb.exe`）。
+产物路径：`target/release/cnb-rs`（Windows 下为 `target/release/cnb-rs.exe`）。
 
 ## 文档
 

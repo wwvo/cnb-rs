@@ -1,7 +1,7 @@
-# cnb mission create
+# cnb-rs mission create
 
 ```
-cnb mission create --group <group> --name <name> [options]
+cnb-rs mission create --group <group> --name <name> [options]
 ```
 
 创建任务集。
@@ -24,11 +24,11 @@ cnb mission create --group <group> --name <name> [options]
 
 ```bash
 # 创建基本任务集
-$ cnb mission create --group my-org --name "Sprint 2025-Q2"
+$ cnb-rs mission create --group my-org --name "Sprint 2025-Q2"
 ✓ 任务集已创建
 
 # 创建并关联仓库
-$ cnb mission create --group my-org --name "Bug Tracking" \
+$ cnb-rs mission create --group my-org --name "Bug Tracking" \
     --description "缺陷跟踪" \
     --repos "my-org/repo-a,my-org/repo-b" \
     --visibility public
@@ -36,6 +36,6 @@ $ cnb mission create --group my-org --name "Bug Tracking" \
 
 ## 另请参阅
 
-- [cnb mission](/mission/)
-- [cnb mission list](/mission/list)
-- [cnb mission delete](/mission/delete)
+- [cnb-rs mission](/mission/)
+- [cnb-rs mission list](/mission/list)
+- [cnb-rs mission delete](/mission/delete)

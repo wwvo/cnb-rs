@@ -1,7 +1,7 @@
-# cnb group settings
+# cnb-rs group settings
 
 ```
-cnb group settings <GROUP> [options]
+cnb-rs group settings <GROUP> [options]
 ```
 
 查看或更新组织配置。
@@ -25,19 +25,19 @@ cnb group settings <GROUP> [options]
 
 ```bash
 # 查看组织配置
-$ cnb group settings my-org
+$ cnb-rs group settings my-org
 
 # 隐藏成员列表
-$ cnb group settings my-org --hide-members 1
+$ cnb-rs group settings my-org --hide-members 1
 
 # 开启组织保护
-$ cnb group settings my-org --group-protection 1
+$ cnb-rs group settings my-org --group-protection 1
 
 # JSON 格式输出
-$ cnb group settings my-org --json
+$ cnb-rs group settings my-org --json
 ```
 
 ## 另请参阅
 
-- [cnb group](/group/)
-- [cnb group view](/group/view)
+- [cnb-rs group](/group/)
+- [cnb-rs group view](/group/view)

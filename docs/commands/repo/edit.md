@@ -1,7 +1,7 @@
-# cnb repo edit
+# cnb-rs repo edit
 
 ```
-cnb repo edit [<repo>] [flags]
+cnb-rs repo edit [<repo>] [flags]
 ```
 
 编辑仓库信息。可更新描述、许可证、站点 URL 和主题标签。
@@ -26,15 +26,15 @@ cnb repo edit [<repo>] [flags]
 
 ```bash
 # 更新当前仓库的描述
-$ cnb repo edit --description "新的描述"
+$ cnb-rs repo edit --description "新的描述"
 ✓ 仓库信息已更新 (org/repo)
 
 # 更新指定仓库的许可证和主题
-$ cnb repo edit org/repo --license MIT --topics "cli,rust,tool"
+$ cnb-rs repo edit org/repo --license MIT --topics "cli,rust,tool"
 ✓ 仓库信息已更新 (org/repo)
 
 # 更新站点 URL
-$ cnb repo edit --site "https://example.com"
+$ cnb-rs repo edit --site "https://example.com"
 ```
 
 ## API
@@ -59,5 +59,5 @@ $ cnb repo edit --site "https://example.com"
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo view](/repo/view)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo view](/repo/view)

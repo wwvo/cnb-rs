@@ -1,7 +1,7 @@
-# cnb issue exist
+# cnb-rs issue exist
 
 ```
-cnb issue exist <NUMBER>
+cnb-rs issue exist <NUMBER>
 ```
 
 检查指定编号的 Issue 是否存在。
@@ -22,15 +22,15 @@ cnb issue exist <NUMBER>
 
 ```bash
 # Issue 存在
-$ cnb issue exist 123
+$ cnb-rs issue exist 123
 修复登录页面样式问题
 
 # Issue 不存在
-$ cnb issue exist 99999
+$ cnb-rs issue exist 99999
 false
 
 # 在脚本中使用
-$ if [ "$(cnb issue exist 123)" != "false" ]; then echo "Issue 存在"; fi
+$ if [ "$(cnb-rs issue exist 123)" != "false" ]; then echo "Issue 存在"; fi
 ```
 
 ## API
@@ -43,5 +43,5 @@ $ if [ "$(cnb issue exist 123)" != "false" ]; then echo "Issue 存在"; fi
 
 ## 另请参阅
 
-- [cnb issue](/issue/)
-- [cnb issue view](/issue/view)
+- [cnb-rs issue](/issue/)
+- [cnb-rs issue view](/issue/view)

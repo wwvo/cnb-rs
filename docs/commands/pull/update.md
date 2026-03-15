@@ -1,7 +1,7 @@
-# cnb pull update
+# cnb-rs pull update
 
 ```
-cnb pull update <NUMBER> [flags]
+cnb-rs pull update <NUMBER> [flags]
 ```
 
 更新指定 Pull Request 的标题、描述或状态。
@@ -24,15 +24,15 @@ cnb pull update <NUMBER> [flags]
 
 ```bash
 # 修改标题
-$ cnb pull update 42 --title "新标题"
+$ cnb-rs pull update 42 --title "新标题"
 
 # 关闭 PR
-$ cnb pull update 42 --state closed
+$ cnb-rs pull update 42 --state closed
 
 # 同时修改标题和描述
-$ cnb pull update 42 -t "新标题" -b "新描述"
+$ cnb-rs pull update 42 -t "新标题" -b "新描述"
 ```
 
 ## 另请参阅
 
-- [cnb pull](/pull/)
+- [cnb-rs pull](/pull/)

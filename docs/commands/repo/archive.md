@@ -1,7 +1,7 @@
-# cnb repo archive
+# cnb-rs repo archive
 
 ```
-cnb repo archive <repo> [flags]
+cnb-rs repo archive <repo> [flags]
 ```
 
 归档仓库，使其变为只读状态。
@@ -21,12 +21,12 @@ cnb repo archive <repo> [flags]
 
 ```bash
 # 归档仓库（交互确认）
-$ cnb repo archive org/old-project
+$ cnb-rs repo archive org/old-project
 确定归档 org/old-project ？归档后仓库将变为只读 (yes/no): yes
 ✓ 仓库已归档 (org/old-project)
 
 # 跳过确认
-$ cnb repo archive org/old-project --yes
+$ cnb-rs repo archive org/old-project --yes
 ```
 
 ## API
@@ -41,5 +41,5 @@ $ cnb repo archive org/old-project --yes
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo unarchive](/repo/unarchive)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo unarchive](/repo/unarchive)

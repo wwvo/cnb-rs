@@ -1,7 +1,7 @@
-# cnb repo clone
+# cnb-rs repo clone
 
 ```
-cnb repo clone <repo> [flags]
+cnb-rs repo clone <repo> [flags]
 ```
 
 克隆仓库到本地。封装 `git clone`，自动根据配置的 Git 协议构造 CNB 仓库 URL。
@@ -25,7 +25,7 @@ cnb repo clone <repo> [flags]
 | `https` | `https://{domain}/{repo}.git`（默认） |
 | `ssh`   | `git@{domain}:{repo}.git`             |
 
-可通过 `cnb config set git_protocol ssh` 切换协议。
+可通过 `cnb-rs config set git_protocol ssh` 切换协议。
 
 > **注意**：CNB 暂不支持 SSH 克隆，当前仅 HTTPS 协议可用。
 
@@ -33,17 +33,17 @@ cnb repo clone <repo> [flags]
 
 ```bash
 # 克隆仓库
-$ cnb repo clone org/my-project
+$ cnb-rs repo clone org/my-project
 ✓ 仓库已克隆到 ./my-project
 
 # 浅克隆
-$ cnb repo clone org/my-project --depth 1
+$ cnb-rs repo clone org/my-project --depth 1
 
 # 克隆到指定目录
-$ cnb repo clone org/my-project --dir ~/projects/my-project
+$ cnb-rs repo clone org/my-project --dir ~/projects/my-project
 ```
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb config](/config/)
+- [cnb-rs repo](/repo/)
+- [cnb-rs config](/config/)

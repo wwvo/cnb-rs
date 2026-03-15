@@ -1,7 +1,7 @@
-# cnb mission set-visibility
+# cnb-rs mission set-visibility
 
 ```
-cnb mission set-visibility <mission> <visibility>
+cnb-rs mission set-visibility <mission> <visibility>
 ```
 
 设置任务集可见性。
@@ -19,14 +19,14 @@ cnb mission set-visibility <mission> <visibility>
 
 ```bash
 # 设为私有
-$ cnb mission set-visibility my-org/sprint-2025-q1 private
+$ cnb-rs mission set-visibility my-org/sprint-2025-q1 private
 ✓ 可见性已更新为 private
 
 # 设为公开
-$ cnb mission set-visibility my-org/sprint-2025-q1 public
+$ cnb-rs mission set-visibility my-org/sprint-2025-q1 public
 ```
 
 ## 另请参阅
 
-- [cnb mission](/mission/)
-- [cnb mission list](/mission/list)
+- [cnb-rs mission](/mission/)
+- [cnb-rs mission list](/mission/list)

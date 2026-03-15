@@ -1,7 +1,7 @@
-# cnb build stop
+# cnb-rs build stop
 
 ```
-cnb build stop <sn>
+cnb-rs build stop <sn>
 ```
 
 停止指定构建。
@@ -18,12 +18,12 @@ cnb build stop <sn>
 ## 示例
 
 ```bash
-$ cnb build stop cnb-1qa-1i3f5ecau
+$ cnb-rs build stop cnb-1qa-1i3f5ecau
 ✓ 构建 cnb-1qa-1i3f5ecau 已停止
 ```
 
 ## 另请参阅
 
-- [cnb build](/build/)
-- [cnb build start](/build/start)
-- [cnb build status](/build/status)
+- [cnb-rs build](/build/)
+- [cnb-rs build start](/build/start)
+- [cnb-rs build status](/build/status)

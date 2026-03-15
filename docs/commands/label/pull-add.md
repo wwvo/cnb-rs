@@ -1,7 +1,7 @@
-# cnb label pull-add
+# cnb-rs label pull-add
 
 ```
-cnb label pull-add <number> -l <labels>
+cnb-rs label pull-add <number> -l <labels>
 ```
 
 为指定 Pull Request 添加标签。
@@ -19,12 +19,12 @@ cnb label pull-add <number> -l <labels>
 ## 示例
 
 ```bash
-$ cnb label pull-add 10 -l "approved" -l "ready-to-merge"
+$ cnb-rs label pull-add 10 -l "approved" -l "ready-to-merge"
 ✓ 已为 Pull #10 添加标签: approved, ready-to-merge
 ```
 
 ## 另请参阅
 
-- [cnb label](/label/)
-- [cnb label pull-list](/label/pull-list)
-- [cnb label pull-remove](/label/pull-remove)
+- [cnb-rs label](/label/)
+- [cnb-rs label pull-list](/label/pull-list)
+- [cnb-rs label pull-remove](/label/pull-remove)

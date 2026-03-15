@@ -1,7 +1,7 @@
-# cnb repo security
+# cnb-rs repo security
 
 ```
-cnb repo security [<repo>] [flags]
+cnb-rs repo security [<repo>] [flags]
 ```
 
 查看仓库的安全模块概览数据，包括代码敏感信息扫描、代码漏洞扫描和源码问题扫描的风险统计。
@@ -23,16 +23,16 @@ cnb repo security [<repo>] [flags]
 
 ```bash
 # 查看当前仓库安全概览
-$ cnb repo security
+$ cnb-rs repo security
 
 # 查看指定仓库
-$ cnb repo security org/repo
+$ cnb-rs repo security org/repo
 
 # 仅查看漏洞扫描的开启中问题
-$ cnb repo security --types code_vulnerability --tab open
+$ cnb-rs repo security --types code_vulnerability --tab open
 
 # JSON 输出
-$ cnb repo security --json
+$ cnb-rs repo security --json
 ```
 
 ## API
@@ -47,5 +47,5 @@ $ cnb repo security --json
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo view](/repo/view)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo view](/repo/view)

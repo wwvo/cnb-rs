@@ -1,7 +1,7 @@
-# cnb commit asset-clean
+# cnb-rs commit asset-clean
 
 ```
-cnb commit asset-clean [flags]
+cnb-rs commit asset-clean [flags]
 ```
 
 按策略批量清理 Commit 附件。
@@ -23,15 +23,15 @@ cnb commit asset-clean [flags]
 
 ```bash
 # 删除 90 天前的 Commit 附件
-$ cnb commit asset-clean --keep-days 90
+$ cnb-rs commit asset-clean --keep-days 90
 
 # 保留最近 10 个有附件的 Commit
-$ cnb commit asset-clean --keep-num 10
+$ cnb-rs commit asset-clean --keep-num 10
 
 # 跳过确认
-$ cnb commit asset-clean --keep-days 30 -y
+$ cnb-rs commit asset-clean --keep-days 30 -y
 ```
 
 ## 另请参阅
 
-- [cnb commit](/commit/)
+- [cnb-rs commit](/commit/)

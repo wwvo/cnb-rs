@@ -1,7 +1,7 @@
-# cnb issue list
+# cnb-rs issue list
 
 ```
-cnb issue list [flags]
+cnb-rs issue list [flags]
 ```
 
 列出仓库的 Issue。
@@ -31,31 +31,31 @@ cnb issue list [flags]
 
 ```bash
 # 列出所有 open 状态的 Issue
-$ cnb issue list
+$ cnb-rs issue list
 
 # 列出已关闭的 Issue
-$ cnb issue list -s closed
+$ cnb-rs issue list -s closed
 
 # 搜索包含关键词的 Issue
-$ cnb issue list -k "登录"
+$ cnb-rs issue list -k "登录"
 
 # 过滤 P0 优先级
-$ cnb issue list -p P0
+$ cnb-rs issue list -p P0
 
 # 过滤标签
-$ cnb issue list -l "bug,urgent"
+$ cnb-rs issue list -l "bug,urgent"
 
 # 过滤未分配的 Issue
-$ cnb issue list -a -
+$ cnb-rs issue list -a -
 
 # 按创建时间倒序，取前 10 条
-$ cnb issue list --sort -created_at -L 10
+$ cnb-rs issue list --sort -created_at -L 10
 
 # 显示超过 30 天没有活动的 Issue
-$ cnb issue list -d 30
+$ cnb-rs issue list -d 30
 
 # JSON 格式输出
-$ cnb --json issue list
+$ cnb-rs --json issue list
 ```
 
 ## API
@@ -68,6 +68,6 @@ $ cnb --json issue list
 
 ## 另请参阅
 
-- [cnb issue](/issue/)
-- [cnb issue mine](/issue/mine)
-- [cnb issue view](/issue/view)
+- [cnb-rs issue](/issue/)
+- [cnb-rs issue mine](/issue/mine)
+- [cnb-rs issue view](/issue/view)

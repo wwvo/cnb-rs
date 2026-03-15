@@ -1,7 +1,7 @@
-# cnb download
+# cnb-rs download
 
 ```
-cnb download [flags]
+cnb-rs download [flags]
 ```
 
 从仓库下载原始文件，支持 glob 模式匹配和并发下载。
@@ -24,18 +24,18 @@ cnb download [flags]
 
 ```bash
 # 下载指定文件
-$ cnb download --files README.md,LICENSE
+$ cnb-rs download --files README.md,LICENSE
 
 # 下载到指定目录
-$ cnb download --files src/ --local-dir ./output
+$ cnb-rs download --files src/ --local-dir ./output
 
 # 使用 glob 模式过滤
-$ cnb download --include "*.rs" --exclude "test_*"
+$ cnb-rs download --include "*.rs" --exclude "test_*"
 
 # 从指定分支下载
-$ cnb download --files docs/ --ref develop
+$ cnb-rs download --files docs/ --ref develop
 ```
 
 ## 另请参阅
 
-- [cnb](/guide/cnb)
+- [cnb-rs](/guide/cnb)

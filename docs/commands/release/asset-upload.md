@@ -1,7 +1,7 @@
-# cnb release asset-upload
+# cnb-rs release asset-upload
 
 ```
-cnb release asset-upload [flags]
+cnb-rs release asset-upload [flags]
 ```
 
 上传本地文件到指定 Release 作为附件。
@@ -22,13 +22,13 @@ cnb release asset-upload [flags]
 
 ```bash
 # 上传文件到指定 Release
-$ cnb release asset-upload --tag-name v1.0.0 --file dist/app.zip
+$ cnb-rs release asset-upload --tag-name v1.0.0 --file dist/app.zip
 文件 app.zip 已上传到 Release v1.0.0
 
 # 简写
-$ cnb release asset-upload -t v1.0.0 -f ./build/output.tar.gz
+$ cnb-rs release asset-upload -t v1.0.0 -f ./build/output.tar.gz
 ```
 
 ## 另请参阅
 
-- [cnb release](/release/)
+- [cnb-rs release](/release/)

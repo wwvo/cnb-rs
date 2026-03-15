@@ -1,7 +1,7 @@
-# cnb issue label
+# cnb-rs issue label
 
 ```
-cnb issue label <subcommand>
+cnb-rs issue label <subcommand>
 ```
 
 Issue 标签管理，支持列出、添加、替换、删除和清空标签。
@@ -13,7 +13,7 @@ Issue 标签管理，支持列出、添加、替换、删除和清空标签。
 ### label list
 
 ```
-cnb issue label list <NUMBER>
+cnb-rs issue label list <NUMBER>
 ```
 
 列出指定 Issue 的所有标签。
@@ -23,7 +23,7 @@ cnb issue label list <NUMBER>
 ### label add
 
 ```
-cnb issue label add <NUMBER> <LABELS>
+cnb-rs issue label add <NUMBER> <LABELS>
 ```
 
 为指定 Issue 添加标签。不影响已有标签，自动去重去空。
@@ -34,7 +34,7 @@ cnb issue label add <NUMBER> <LABELS>
 ### label set
 
 ```
-cnb issue label set <NUMBER> <LABELS>
+cnb-rs issue label set <NUMBER> <LABELS>
 ```
 
 替换指定 Issue 的所有标签。会移除所有现有标签，设置为新的标签列表。
@@ -45,7 +45,7 @@ cnb issue label set <NUMBER> <LABELS>
 ### label remove
 
 ```
-cnb issue label remove <NUMBER> <NAME>
+cnb-rs issue label remove <NUMBER> <NAME>
 ```
 
 删除指定 Issue 的某个标签。
@@ -56,7 +56,7 @@ cnb issue label remove <NUMBER> <NAME>
 ### label clear
 
 ```
-cnb issue label clear <NUMBER>
+cnb-rs issue label clear <NUMBER>
 ```
 
 清空指定 Issue 的所有标签。
@@ -73,26 +73,26 @@ cnb issue label clear <NUMBER>
 
 ```bash
 # 列出标签
-$ cnb issue label list 42
+$ cnb-rs issue label list 42
 
 # 添加标签
-$ cnb issue label add 42 "bug,enhancement,P0"
+$ cnb-rs issue label add 42 "bug,enhancement,P0"
 ✓ Issue #42 标签已添加
 
 # 替换所有标签
-$ cnb issue label set 42 "bug,P1"
+$ cnb-rs issue label set 42 "bug,P1"
 ✓ Issue #42 标签已替换
 
 # 删除指定标签
-$ cnb issue label remove 42 bug
+$ cnb-rs issue label remove 42 bug
 ✓ Issue #42 标签 'bug' 已删除
 
 # 清空所有标签
-$ cnb issue label clear 42
+$ cnb-rs issue label clear 42
 ✓ Issue #42 所有标签已清空
 ```
 
 ## 另请参阅
 
-- [cnb issue](/issue/)
-- [cnb label](/label/)
+- [cnb-rs issue](/issue/)
+- [cnb-rs label](/label/)

@@ -1,7 +1,7 @@
-# cnb issue view
+# cnb-rs issue view
 
 ```
-cnb issue view <NUMBER> [flags]
+cnb-rs issue view <NUMBER> [flags]
 ```
 
 查看 Issue 详情。
@@ -26,7 +26,7 @@ cnb issue view <NUMBER> [flags]
 
 ```bash
 # 查看 Issue 详情
-$ cnb issue view 42
+$ cnb-rs issue view 42
 字段          值
 编号          #42
 标题          修复登录页面样式问题
@@ -41,11 +41,11 @@ $ cnb issue view 42
 页面样式在移动端显示异常...
 
 # 在浏览器中打开
-$ cnb issue view 42 --web
+$ cnb-rs issue view 42 --web
 ℹ 正在打开 https://cnb.cool/org/repo/-/issues/42
 
 # JSON 格式
-$ cnb --json issue view 42
+$ cnb-rs --json issue view 42
 ```
 
 ## API
@@ -56,6 +56,6 @@ $ cnb --json issue view 42
 
 ## 另请参阅
 
-- [cnb issue](/issue/)
-- [cnb issue edit](/issue/edit)
-- [cnb issue list](/issue/list)
+- [cnb-rs issue](/issue/)
+- [cnb-rs issue edit](/issue/edit)
+- [cnb-rs issue list](/issue/list)

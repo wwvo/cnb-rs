@@ -1,7 +1,7 @@
-# cnb label pull-list
+# cnb-rs label pull-list
 
 ```
-cnb label pull-list <number>
+cnb-rs label pull-list <number>
 ```
 
 列出指定 Pull Request 的所有标签。
@@ -19,16 +19,16 @@ cnb label pull-list <number>
 ## 示例
 
 ```bash
-$ cnb label pull-list 10
+$ cnb-rs label pull-list 10
 feature
 review-needed
 
 # JSON 格式输出
-$ cnb label pull-list 10 --json
+$ cnb-rs label pull-list 10 --json
 ```
 
 ## 另请参阅
 
-- [cnb label](/label/)
-- [cnb label pull-add](/label/pull-add)
-- [cnb label pull-remove](/label/pull-remove)
+- [cnb-rs label](/label/)
+- [cnb-rs label pull-add](/label/pull-add)
+- [cnb-rs label pull-remove](/label/pull-remove)

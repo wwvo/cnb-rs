@@ -1,7 +1,7 @@
-# cnb group view
+# cnb-rs group view
 
 ```
-cnb group view <GROUP> [options]
+cnb-rs group view <GROUP> [options]
 ```
 
 查看指定组织的详细信息。
@@ -20,16 +20,16 @@ cnb group view <GROUP> [options]
 
 ```bash
 # 查看组织详情
-$ cnb group view my-org
+$ cnb-rs group view my-org
 
 # 在浏览器中打开
-$ cnb group view my-org --web
+$ cnb-rs group view my-org --web
 
 # JSON 格式输出
-$ cnb group view my-org --json
+$ cnb-rs group view my-org --json
 ```
 
 ## 另请参阅
 
-- [cnb group](/group/)
-- [cnb group list](/group/list)
+- [cnb-rs group](/group/)
+- [cnb-rs group list](/group/list)

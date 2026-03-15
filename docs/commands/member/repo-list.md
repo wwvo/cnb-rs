@@ -1,7 +1,7 @@
-# cnb member repo-list
+# cnb-rs member repo-list
 
 ```
-cnb member repo-list [options]
+cnb-rs member repo-list [options]
 ```
 
 列出仓库直接成员。
@@ -23,20 +23,20 @@ cnb member repo-list [options]
 
 ```bash
 # 列出仓库直接成员
-$ cnb member repo-list
+$ cnb-rs member repo-list
 
 # 按角色过滤
-$ cnb member repo-list --role Developer
+$ cnb-rs member repo-list --role Developer
 
 # 搜索成员
-$ cnb member repo-list --search zhang
+$ cnb-rs member repo-list --search zhang
 
 # JSON 格式输出
-$ cnb member repo-list --json
+$ cnb-rs member repo-list --json
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member repo-add](/member/repo-add)
-- [cnb member repo-all](/member/repo-all)
+- [cnb-rs member](/member/)
+- [cnb-rs member repo-add](/member/repo-add)
+- [cnb-rs member repo-all](/member/repo-all)

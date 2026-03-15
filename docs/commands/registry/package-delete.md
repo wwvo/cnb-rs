@@ -1,7 +1,7 @@
-# cnb registry package delete
+# cnb-rs registry package delete
 
 ```
-cnb registry package delete <type> <name> --registry <registry> [options]
+cnb-rs registry package delete <type> <name> --registry <registry> [options]
 ```
 
 删除制品。
@@ -23,13 +23,13 @@ cnb registry package delete <type> <name> --registry <registry> [options]
 
 ```bash
 # 删除制品（需确认）
-$ cnb registry package delete docker my-app --registry my-org/my-registry
+$ cnb-rs registry package delete docker my-app --registry my-org/my-registry
 
 # 跳过确认
-$ cnb registry package delete docker my-app --registry my-org/my-registry --yes
+$ cnb-rs registry package delete docker my-app --registry my-org/my-registry --yes
 ```
 
 ## 另请参阅
 
-- [cnb registry](/registry/)
-- [cnb registry package list](/registry/package-list)
+- [cnb-rs registry](/registry/)
+- [cnb-rs registry package list](/registry/package-list)

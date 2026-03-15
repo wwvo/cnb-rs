@@ -1,7 +1,7 @@
-# cnb member collaborator-remove
+# cnb-rs member collaborator-remove
 
 ```
-cnb member collaborator-remove <username> --group <group> [options]
+cnb-rs member collaborator-remove <username> --group <group> [options]
 ```
 
 移除外部贡献者。
@@ -22,13 +22,13 @@ cnb member collaborator-remove <username> --group <group> [options]
 
 ```bash
 # 移除外部贡献者（需确认）
-$ cnb member collaborator-remove zhangsan --group myorg
+$ cnb-rs member collaborator-remove zhangsan --group myorg
 
 # 跳过确认
-$ cnb member collaborator-remove zhangsan --group myorg --yes
+$ cnb-rs member collaborator-remove zhangsan --group myorg --yes
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member collaborator-list](/member/collaborator-list)
+- [cnb-rs member](/member/)
+- [cnb-rs member collaborator-list](/member/collaborator-list)

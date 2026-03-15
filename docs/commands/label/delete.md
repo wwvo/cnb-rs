@@ -1,7 +1,7 @@
-# cnb label delete
+# cnb-rs label delete
 
 ```
-cnb label delete <name> [-y]
+cnb-rs label delete <name> [-y]
 ```
 
 删除仓库标签。
@@ -22,16 +22,16 @@ cnb label delete <name> [-y]
 
 ```bash
 # 删除标签（需确认）
-$ cnb label delete "bug"
+$ cnb-rs label delete "bug"
 确认删除标签 bug？(y/N) y
 ✓ 标签 bug 已删除
 
 # 跳过确认
-$ cnb label delete "bug" -y
+$ cnb-rs label delete "bug" -y
 ```
 
 ## 另请参阅
 
-- [cnb label](/label/)
-- [cnb label list](/label/list)
-- [cnb label create](/label/create)
+- [cnb-rs label](/label/)
+- [cnb-rs label list](/label/list)
+- [cnb-rs label create](/label/create)

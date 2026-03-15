@@ -1,7 +1,7 @@
-# cnb repo transfer
+# cnb-rs repo transfer
 
 ```
-cnb repo transfer <repo> --target <group> [flags]
+cnb-rs repo transfer <repo> --target <group> [flags]
 ```
 
 将仓库转移到另一个组织。
@@ -26,12 +26,12 @@ cnb repo transfer <repo> --target <group> [flags]
 
 ```bash
 # 转移仓库（交互确认）
-$ cnb repo transfer org-a/my-repo --target org-b
+$ cnb-rs repo transfer org-a/my-repo --target org-b
 确定将 org-a/my-repo 转移到 org-b ？ (yes/no): yes
 ✓ 仓库已转移到 org-b/my-repo
 
 # 跳过确认
-$ cnb repo transfer org-a/my-repo --target org-b --yes
+$ cnb-rs repo transfer org-a/my-repo --target org-b --yes
 ```
 
 ## API
@@ -54,5 +54,5 @@ $ cnb repo transfer org-a/my-repo --target org-b --yes
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo delete](/repo/delete)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo delete](/repo/delete)

@@ -1,7 +1,7 @@
-# cnb user following
+# cnb-rs user following
 
 ```
-cnb user following [<username>] [options]
+cnb-rs user following [<username>] [options]
 ```
 
 查看指定用户的关注列表，不指定则查看当前认证用户。
@@ -22,16 +22,16 @@ cnb user following [<username>] [options]
 
 ```bash
 # 查看当前用户的关注列表
-$ cnb user following
+$ cnb-rs user following
 
 # 查看指定用户的关注列表
-$ cnb user following zhangsan
+$ cnb-rs user following zhangsan
 
 # JSON 格式输出
-$ cnb user following --json
+$ cnb-rs user following --json
 ```
 
 ## 另请参阅
 
-- [cnb user](/user/)
-- [cnb user followers](/user/followers)
+- [cnb-rs user](/user/)
+- [cnb-rs user followers](/user/followers)

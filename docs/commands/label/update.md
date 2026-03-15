@@ -1,7 +1,7 @@
-# cnb label update
+# cnb-rs label update
 
 ```
-cnb label update <name> [--new-name <name>] [-c <color>] [-d <description>]
+cnb-rs label update <name> [--new-name <name>] [-c <color>] [-d <description>]
 ```
 
 更新仓库标签的名称、颜色或描述。
@@ -21,15 +21,15 @@ cnb label update <name> [--new-name <name>] [-c <color>] [-d <description>]
 ## 示例
 
 ```bash
-$ cnb label update "bug" --color "ff0000" -d "严重 Bug"
+$ cnb-rs label update "bug" --color "ff0000" -d "严重 Bug"
 ✓ 标签 bug 已更新
 
-$ cnb label update "bug" --new-name "critical-bug"
+$ cnb-rs label update "bug" --new-name "critical-bug"
 ✓ 标签 bug 已重命名为 critical-bug
 ```
 
 ## 另请参阅
 
-- [cnb label](/label/)
-- [cnb label list](/label/list)
-- [cnb label delete](/label/delete)
+- [cnb-rs label](/label/)
+- [cnb-rs label list](/label/list)
+- [cnb-rs label delete](/label/delete)

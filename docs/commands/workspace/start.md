@@ -1,7 +1,7 @@
-# cnb workspace start
+# cnb-rs workspace start
 
 ```
-cnb workspace start [options]
+cnb-rs workspace start [options]
 ```
 
 启动云原生开发环境。
@@ -24,23 +24,23 @@ cnb workspace start [options]
 
 ```bash
 # 启动当前仓库的开发环境
-$ cnb workspace start
+$ cnb-rs workspace start
 
 # 指定分支
-$ cnb workspace start -b feature/new-ui
+$ cnb-rs workspace start -b feature/new-ui
 
 # 指定 Tag
-$ cnb workspace start -t v1.0.0
+$ cnb-rs workspace start -t v1.0.0
 
 # 启动并自动打开浏览器
-$ cnb workspace start --open
+$ cnb-rs workspace start --open
 
 # JSON 格式输出
-$ cnb workspace start --json
+$ cnb-rs workspace start --json
 ```
 
 ## 另请参阅
 
-- [cnb workspace](/workspace/)
-- [cnb workspace stop](/workspace/stop)
-- [cnb workspace detail](/workspace/detail)
+- [cnb-rs workspace](/workspace/)
+- [cnb-rs workspace stop](/workspace/stop)
+- [cnb-rs workspace detail](/workspace/detail)

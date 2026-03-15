@@ -1,7 +1,7 @@
-# cnb release update
+# cnb-rs release update
 
 ```
-cnb release update <TAG> [options]
+cnb-rs release update <TAG> [options]
 ```
 
 更新 Release 信息。至少需要指定一项修改内容。
@@ -24,16 +24,16 @@ cnb release update <TAG> [options]
 
 ```bash
 # 更新描述
-$ cnb release update v1.2.0 -b "新的发布说明"
+$ cnb-rs release update v1.2.0 -b "新的发布说明"
 
 # 修改名称
-$ cnb release update v1.2.0 -n "v1.2.0 正式版"
+$ cnb-rs release update v1.2.0 -n "v1.2.0 正式版"
 
 # 标记为预发布
-$ cnb release update v1.2.0 --prerelease
+$ cnb-rs release update v1.2.0 --prerelease
 
 # 设置为最新版本
-$ cnb release update v1.2.0 --make-latest true
+$ cnb-rs release update v1.2.0 --make-latest true
 ```
 
 ## API
@@ -44,5 +44,5 @@ $ cnb release update v1.2.0 --make-latest true
 
 ## 另请参阅
 
-- [cnb release](/release/)
-- [cnb release view](/release/view)
+- [cnb-rs release](/release/)
+- [cnb-rs release view](/release/view)

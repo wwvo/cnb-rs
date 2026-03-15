@@ -1,7 +1,7 @@
-# cnb auth logout
+# cnb-rs auth logout
 
 ```
-cnb auth logout
+cnb-rs auth logout
 ```
 
 退出登录，移除当前域名的认证配置。
@@ -28,35 +28,35 @@ cnb auth logout
 
 ```bash
 # 正常退出（Token 来自配置文件）
-$ cnb auth logout
+$ cnb-rs auth logout
 ✓ 已退出 (cnb.cool)
 
 # 指定域名退出
-$ cnb --domain example.com auth logout
+$ cnb-rs --domain example.com auth logout
 ✓ 已退出 (example.com)
 
 # Token 来自环境变量时（Unix）
-$ CNB_TOKEN=xxx cnb auth logout
+$ CNB_TOKEN=xxx cnb-rs auth logout
 Token 来自环境变量 CNB_TOKEN，无法通过 CLI 移除
 请手动执行：unset CNB_TOKEN
 
 # Token 来自环境变量时（Windows PowerShell）
-PS> $env:CNB_TOKEN="xxx"; cnb auth logout
+PS> $env:CNB_TOKEN="xxx"; cnb-rs auth logout
 Token 来自环境变量 CNB_TOKEN，无法通过 CLI 移除
 请手动执行：$env:CNB_TOKEN=""
 
 # Token 来自域名特定环境变量时
-$ CNB_TOKEN_cnbcool=xxx cnb auth logout
+$ CNB_TOKEN_cnbcool=xxx cnb-rs auth logout
 Token 来自环境变量 CNB_TOKEN_cnbcool，无法通过 CLI 移除
 请手动执行：unset CNB_TOKEN_cnbcool
 
 # 未登录时
-$ cnb auth logout
+$ cnb-rs auth logout
 未登录 (cnb.cool)
 ```
 
 ## 另请参阅
 
-- [cnb auth](/auth/)
-- [cnb auth login](/auth/login)
-- [cnb auth status](/auth/status)
+- [cnb-rs auth](/auth/)
+- [cnb-rs auth login](/auth/login)
+- [cnb-rs auth status](/auth/status)

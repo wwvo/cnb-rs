@@ -1,7 +1,7 @@
-# cnb registry package list
+# cnb-rs registry package list
 
 ```
-cnb registry package list <type> --registry <registry> [options]
+cnb-rs registry package list <type> --registry <registry> [options]
 ```
 
 列出制品。
@@ -24,17 +24,17 @@ cnb registry package list <type> --registry <registry> [options]
 
 ```bash
 # 列出 Docker 制品
-$ cnb registry package list docker --registry my-org/my-registry
+$ cnb-rs registry package list docker --registry my-org/my-registry
 
 # 搜索 npm 制品
-$ cnb registry package list npm --registry my-org/npm-registry --name my-lib
+$ cnb-rs registry package list npm --registry my-org/npm-registry --name my-lib
 
 # JSON 格式输出
-$ cnb registry package list docker --registry my-org/my-registry --json
+$ cnb-rs registry package list docker --registry my-org/my-registry --json
 ```
 
 ## 另请参阅
 
-- [cnb registry](/registry/)
-- [cnb registry package detail](/registry/package-detail)
-- [cnb registry package delete](/registry/package-delete)
+- [cnb-rs registry](/registry/)
+- [cnb-rs registry package detail](/registry/package-detail)
+- [cnb-rs registry package delete](/registry/package-delete)

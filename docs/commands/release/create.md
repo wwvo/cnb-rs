@@ -1,7 +1,7 @@
-# cnb release create
+# cnb-rs release create
 
 ```
-cnb release create [flags]
+cnb-rs release create [flags]
 ```
 
 创建 Release。
@@ -25,15 +25,15 @@ cnb release create [flags]
 
 ```bash
 # 创建 Release
-$ cnb release create --tag v1.0.0 --name v1.0.0
+$ cnb-rs release create --tag v1.0.0 --name v1.0.0
 
 # 创建预发布版本
-$ cnb release create -t v2.0.0-beta -n "v2.0.0 Beta" --prerelease
+$ cnb-rs release create -t v2.0.0-beta -n "v2.0.0 Beta" --prerelease
 
 # 标记为最新版本并添加描述
-$ cnb release create -t v1.0.0 -n v1.0.0 --make-latest true -b "首个正式版本"
+$ cnb-rs release create -t v1.0.0 -n v1.0.0 --make-latest true -b "首个正式版本"
 ```
 
 ## 另请参阅
 
-- [cnb release](/release/)
+- [cnb-rs release](/release/)

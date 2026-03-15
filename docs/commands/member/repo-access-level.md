@@ -1,7 +1,7 @@
-# cnb member repo-access-level
+# cnb-rs member repo-access-level
 
 ```
-cnb member repo-access-level [options]
+cnb-rs member repo-access-level [options]
 ```
 
 查看自己在仓库的权限。
@@ -22,16 +22,16 @@ cnb member repo-access-level [options]
 
 ```bash
 # 查看自己在仓库的权限
-$ cnb member repo-access-level
+$ cnb-rs member repo-access-level
 
 # 包含继承权限
-$ cnb member repo-access-level --include-inherit
+$ cnb-rs member repo-access-level --include-inherit
 
 # JSON 格式输出
-$ cnb member repo-access-level --json
+$ cnb-rs member repo-access-level --json
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member repo-user-access](/member/repo-user-access)
+- [cnb-rs member](/member/)
+- [cnb-rs member repo-user-access](/member/repo-user-access)

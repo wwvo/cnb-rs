@@ -1,7 +1,7 @@
-# cnb completion
+# cnb-rs completion
 
 ```
-cnb completion <shell>
+cnb-rs completion <shell>
 ```
 
 生成指定 Shell 的命令行补全脚本并输出到 stdout。
@@ -13,23 +13,23 @@ cnb completion <shell>
 ::: code-group
 
 ```bash [Bash]
-$ cnb completion bash >> ~/.bashrc
+$ cnb-rs completion bash >> ~/.bashrc
 ```
 
 ```bash [Zsh]
-$ cnb completion zsh >> ~/.zshrc
+$ cnb-rs completion zsh >> ~/.zshrc
 ```
 
 ```bash [Fish]
-$ cnb completion fish > ~/.config/fish/completions/cnb.fish
+$ cnb-rs completion fish > ~/.config/fish/completions/cnb-rs.fish
 ```
 
 ```powershell [PowerShell]
-$ cnb completion powershell >> $PROFILE
+$ cnb-rs completion powershell >> $PROFILE
 ```
 
 :::
 
 ## 另请参阅
 
-- [cnb](/guide/cnb)
+- [cnb-rs](/guide/cnb)

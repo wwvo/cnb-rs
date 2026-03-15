@@ -1,7 +1,7 @@
-# cnb registry delete
+# cnb-rs registry delete
 
 ```
-cnb registry delete <registry> [options]
+cnb-rs registry delete <registry> [options]
 ```
 
 删除制品库。
@@ -21,13 +21,13 @@ cnb registry delete <registry> [options]
 
 ```bash
 # 删除制品库（需确认）
-$ cnb registry delete my-org/my-registry
+$ cnb-rs registry delete my-org/my-registry
 
 # 跳过确认
-$ cnb registry delete my-org/my-registry --yes
+$ cnb-rs registry delete my-org/my-registry --yes
 ```
 
 ## 另请参阅
 
-- [cnb registry](/registry/)
-- [cnb registry list](/registry/list)
+- [cnb-rs registry](/registry/)
+- [cnb-rs registry list](/registry/list)

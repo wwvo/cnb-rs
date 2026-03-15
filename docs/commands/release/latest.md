@@ -1,7 +1,7 @@
-# cnb release latest
+# cnb-rs release latest
 
 ```
-cnb release latest
+cnb-rs release latest
 ```
 
 查看仓库最新的 Release 版本，显示基本信息和附件摘要。
@@ -27,10 +27,10 @@ v1.2.0 — v1.2.0  [Latest]
 
 ```bash
 # 查看最新 Release
-$ cnb release latest
+$ cnb-rs release latest
 
 # JSON 输出
-$ cnb release latest --json
+$ cnb-rs release latest --json
 ```
 
 ## API
@@ -41,5 +41,5 @@ $ cnb release latest --json
 
 ## 另请参阅
 
-- [cnb release](/release/)
-- [cnb release view](/release/view)
+- [cnb-rs release](/release/)
+- [cnb-rs release view](/release/view)

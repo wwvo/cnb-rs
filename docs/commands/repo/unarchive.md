@@ -1,7 +1,7 @@
-# cnb repo unarchive
+# cnb-rs repo unarchive
 
 ```
-cnb repo unarchive <repo>
+cnb-rs repo unarchive <repo>
 ```
 
 解除仓库归档，恢复可写状态。
@@ -17,7 +17,7 @@ cnb repo unarchive <repo>
 ## 示例
 
 ```bash
-$ cnb repo unarchive org/old-project
+$ cnb-rs repo unarchive org/old-project
 ✓ 仓库已解除归档 (org/old-project)
 ```
 
@@ -33,5 +33,5 @@ $ cnb repo unarchive org/old-project
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo archive](/repo/archive)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo archive](/repo/archive)

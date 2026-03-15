@@ -1,7 +1,7 @@
-# cnb workspace closed-clean
+# cnb-rs workspace closed-clean
 
 ```
-cnb workspace closed-clean
+cnb-rs workspace closed-clean
 ```
 
 清理所有已关闭的云原生工作区。
@@ -15,7 +15,7 @@ cnb workspace closed-clean
 ## 示例
 
 ```bash
-$ cnb workspace closed-clean
+$ cnb-rs workspace closed-clean
 共找到 3 个已关闭的工作区
 
 [INFO] 开始清理工作区 slug=my-org/my-repo pipelineId=abc123
@@ -24,5 +24,5 @@ $ cnb workspace closed-clean
 
 ## 另请参阅
 
-- [cnb workspace](/workspace/)
-- [cnb workspace delete](/workspace/delete)
+- [cnb-rs workspace](/workspace/)
+- [cnb-rs workspace delete](/workspace/delete)

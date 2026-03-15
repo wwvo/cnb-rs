@@ -1,7 +1,7 @@
-# cnb mission view get
+# cnb-rs mission view get
 
 ```
-cnb mission view get <mission> --id <view_id>
+cnb-rs mission view get <mission> --id <view_id>
 ```
 
 获取视图配置详情。
@@ -21,14 +21,14 @@ cnb mission view get <mission> --id <view_id>
 ## 示例
 
 ```bash
-$ cnb mission view get my-org/sprint-2025-q1 --id view-001
+$ cnb-rs mission view get my-org/sprint-2025-q1 --id view-001
 
 # JSON 格式输出
-$ cnb mission view get my-org/sprint-2025-q1 --id view-001 --json
+$ cnb-rs mission view get my-org/sprint-2025-q1 --id view-001 --json
 ```
 
 ## 另请参阅
 
-- [cnb mission](/mission/)
-- [cnb mission view list](/mission/view-list)
-- [cnb mission view set](/mission/view-set)
+- [cnb-rs mission](/mission/)
+- [cnb-rs mission view list](/mission/view-list)
+- [cnb-rs mission view set](/mission/view-set)

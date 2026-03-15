@@ -1,7 +1,7 @@
-# cnb mission view list
+# cnb-rs mission view list
 
 ```
-cnb mission view list <mission>
+cnb-rs mission view list <mission>
 ```
 
 列出任务集的视图。
@@ -20,14 +20,14 @@ cnb mission view list <mission>
 ## 示例
 
 ```bash
-$ cnb mission view list my-org/sprint-2025-q1
+$ cnb-rs mission view list my-org/sprint-2025-q1
 
 # JSON 格式输出
-$ cnb mission view list my-org/sprint-2025-q1 --json
+$ cnb-rs mission view list my-org/sprint-2025-q1 --json
 ```
 
 ## 另请参阅
 
-- [cnb mission](/mission/)
-- [cnb mission view get](/mission/view-get)
-- [cnb mission view add](/mission/view-add)
+- [cnb-rs mission](/mission/)
+- [cnb-rs mission view get](/mission/view-get)
+- [cnb-rs mission view add](/mission/view-add)

@@ -1,7 +1,7 @@
-# cnb build status
+# cnb-rs build status
 
 ```
-cnb build status <sn>
+cnb-rs build status <sn>
 ```
 
 查询指定构建的状态和流水线状态。
@@ -19,7 +19,7 @@ cnb build status <sn>
 ## 示例
 
 ```bash
-$ cnb build status cnb-1qa-1i3f5ecau
+$ cnb-rs build status cnb-1qa-1i3f5ecau
 构建号:   cnb-1qa-1i3f5ecau
 状态:     success
 流水线状态:
@@ -27,11 +27,11 @@ $ cnb build status cnb-1qa-1i3f5ecau
   pipeline-2: success
 
 # JSON 格式输出
-$ cnb build status cnb-1qa-1i3f5ecau --json
+$ cnb-rs build status cnb-1qa-1i3f5ecau --json
 ```
 
 ## 另请参阅
 
-- [cnb build](/build/)
-- [cnb build list](/build/list)
-- [cnb build stage](/build/stage)
+- [cnb-rs build](/build/)
+- [cnb-rs build list](/build/list)
+- [cnb-rs build stage](/build/stage)

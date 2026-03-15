@@ -1,7 +1,7 @@
-# cnb issue download
+# cnb-rs issue download
 
 ```
-cnb issue download [NUMBER] [flags]
+cnb-rs issue download [NUMBER] [flags]
 ```
 
 下载 Issue 为 Markdown 文件，保存到当前目录的 `.issues/` 子目录。
@@ -45,12 +45,12 @@ Issue 描述正文...
 
 ```bash
 # 下载单个 Issue
-$ cnb issue download 123
+$ cnb-rs issue download 123
 ℹ 已下载 Issue #123: 修复登录问题
 ℹ 下载完成，共下载了 1 个 Issue
 
 # 下载所有 Issue
-$ cnb issue download --all
+$ cnb-rs issue download --all
 ℹ 已下载 Issue #1: 初始化项目
 ℹ 已下载 Issue #2: 添加 CI/CD
 ℹ 已下载 Issue #3: 修复构建问题
@@ -67,5 +67,5 @@ $ cnb issue download --all
 
 ## 另请参阅
 
-- [cnb issue](/issue/)
-- [cnb issue view](/issue/view)
+- [cnb-rs issue](/issue/)
+- [cnb-rs issue view](/issue/view)

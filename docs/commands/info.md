@@ -1,7 +1,7 @@
-# cnb info
+# cnb-rs info
 
 ```
-cnb info
+cnb-rs info
 ```
 
 显示当前用户和仓库的详细信息。
@@ -28,10 +28,10 @@ cnb info
 
 ```bash
 # 显示当前仓库信息
-$ cnb info
+$ cnb-rs info
 
 # 指定仓库
-$ cnb --repo wwvo/cnb-cli/cnb info
+$ cnb-rs --repo wwvo/cnb-cli/cnb info
 ```
 
 ## 输出示例
@@ -51,4 +51,4 @@ $ cnb --repo wwvo/cnb-cli/cnb info
 
 ## 另请参阅
 
-- [cnb](/guide/cnb)
+- [cnb-rs](/guide/cnb)

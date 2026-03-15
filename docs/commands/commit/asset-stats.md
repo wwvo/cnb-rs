@@ -1,7 +1,7 @@
-# cnb commit asset-stats
+# cnb-rs commit asset-stats
 
 ```
-cnb commit asset-stats
+cnb-rs commit asset-stats
 ```
 
 统计仓库所有 Commit 的附件总大小。
@@ -23,4 +23,4 @@ Total Size: 15728640 (15.0 MB)
 
 ## 另请参阅
 
-- [cnb commit](/commit/)
+- [cnb-rs commit](/commit/)

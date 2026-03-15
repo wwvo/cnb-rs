@@ -1,7 +1,7 @@
-# cnb pull list
+# cnb-rs pull list
 
 ```
-cnb pull list
+cnb-rs pull list
 ```
 
 列出与当前用户相关的所有 `open` 状态 Pull Request。
@@ -24,7 +24,7 @@ cnb pull list
 ## 示例
 
 ```bash
-$ cnb pull list
+$ cnb-rs pull list
 ```
 
 ## 输出示例
@@ -37,4 +37,4 @@ NUMBER          TITLE                                                   BLOCKEDO
 
 ## 另请参阅
 
-- [cnb pull](/pull/)
+- [cnb-rs pull](/pull/)

@@ -7,23 +7,23 @@
 ## 登录
 
 ```bash
-cnb auth login
+cnb-rs auth login
 # 或直接指定 Token
-cnb auth login --token <YOUR_TOKEN>
+cnb-rs auth login --token <YOUR_TOKEN>
 ```
 
 ## 基本使用
 
 ```bash
 # 查看当前认证状态
-cnb auth status
+cnb-rs auth status
 
 # 查看仓库信息
-cnb info
+cnb-rs info
 
 # 查看 Issue 列表
-cnb issue list
+cnb-rs issue list
 
 # 使用 AI 对话
-cnb chat --do "查看我的 Issue 列表"
+cnb-rs chat --do "查看我的 Issue 列表"
 ```

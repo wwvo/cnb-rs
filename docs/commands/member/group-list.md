@@ -1,7 +1,7 @@
-# cnb member group-list
+# cnb-rs member group-list
 
 ```
-cnb member group-list --group <group> [options]
+cnb-rs member group-list --group <group> [options]
 ```
 
 列出组织直接成员。
@@ -23,17 +23,17 @@ cnb member group-list --group <group> [options]
 
 ```bash
 # 列出组织直接成员
-$ cnb member group-list --group myorg
+$ cnb-rs member group-list --group myorg
 
 # 按角色过滤
-$ cnb member group-list --group myorg --role Owner
+$ cnb-rs member group-list --group myorg --role Owner
 
 # JSON 格式输出
-$ cnb member group-list --group myorg --json
+$ cnb-rs member group-list --group myorg --json
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member group-add](/member/group-add)
-- [cnb member group-inherited](/member/group-inherited)
+- [cnb-rs member](/member/)
+- [cnb-rs member group-add](/member/group-add)
+- [cnb-rs member group-inherited](/member/group-inherited)

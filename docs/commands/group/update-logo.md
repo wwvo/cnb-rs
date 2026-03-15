@@ -1,7 +1,7 @@
-# cnb group update-logo
+# cnb-rs group update-logo
 
 ```
-cnb group update-logo [flags]
+cnb-rs group update-logo [flags]
 ```
 
 更新指定组织的 Logo。
@@ -20,11 +20,11 @@ cnb group update-logo [flags]
 ## 示例
 
 ```bash
-$ cnb group update-logo --group my-org --logo-path ./logo.png
+$ cnb-rs group update-logo --group my-org --logo-path ./logo.png
 组织 Logo 更新成功
 ```
 
 ## 另请参阅
 
-- [cnb group](/group/)
-- [cnb group update](/group/update)
+- [cnb-rs group](/group/)
+- [cnb-rs group update](/group/update)

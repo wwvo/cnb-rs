@@ -1,7 +1,7 @@
-# cnb group member
+# cnb-rs group member
 
 ```
-cnb group member <subcommand>
+cnb-rs group member <subcommand>
 ```
 
 组织成员管理。
@@ -13,7 +13,7 @@ cnb group member <subcommand>
 ### member list
 
 ```
-cnb group member list <GROUP> [options]
+cnb-rs group member list <GROUP> [options]
 ```
 
 列出组织的直接成员。
@@ -26,7 +26,7 @@ cnb group member list <GROUP> [options]
 ### member add
 
 ```
-cnb group member add <GROUP> <USERNAME> [options]
+cnb-rs group member add <GROUP> <USERNAME> [options]
 ```
 
 添加组织成员。
@@ -38,7 +38,7 @@ cnb group member add <GROUP> <USERNAME> [options]
 ### member update
 
 ```
-cnb group member update <GROUP> <USERNAME> --role <ROLE>
+cnb-rs group member update <GROUP> <USERNAME> --role <ROLE>
 ```
 
 更新成员权限。
@@ -50,7 +50,7 @@ cnb group member update <GROUP> <USERNAME> --role <ROLE>
 ### member remove
 
 ```
-cnb group member remove <GROUP> <USERNAME> [options]
+cnb-rs group member remove <GROUP> <USERNAME> [options]
 ```
 
 移除组织成员。需要交互确认。
@@ -62,7 +62,7 @@ cnb group member remove <GROUP> <USERNAME> [options]
 ### member access-level
 
 ```
-cnb group member access-level <GROUP> [USERNAME]
+cnb-rs group member access-level <GROUP> [USERNAME]
 ```
 
 查看成员权限级别。不指定用户名则查看当前用户权限。
@@ -79,34 +79,34 @@ cnb group member access-level <GROUP> [USERNAME]
 
 ```bash
 # 列出成员
-$ cnb group member list my-org
+$ cnb-rs group member list my-org
 
 # 按角色过滤
-$ cnb group member list my-org --role Owner
+$ cnb-rs group member list my-org --role Owner
 
 # 列出继承成员
-$ cnb group member list my-org/sub-team --inherited
+$ cnb-rs group member list my-org/sub-team --inherited
 
 # 添加成员
-$ cnb group member add my-org alice --role Developer
+$ cnb-rs group member add my-org alice --role Developer
 
 # 更新权限
-$ cnb group member update my-org alice --role Master
+$ cnb-rs group member update my-org alice --role Master
 
 # 移除成员
-$ cnb group member remove my-org alice
+$ cnb-rs group member remove my-org alice
 
 # 查看我的权限
-$ cnb group member access-level my-org
+$ cnb-rs group member access-level my-org
 
 # 查看指定用户权限
-$ cnb group member access-level my-org alice
+$ cnb-rs group member access-level my-org alice
 
 # JSON 格式输出
-$ cnb group member list my-org --json
+$ cnb-rs group member list my-org --json
 ```
 
 ## 另请参阅
 
-- [cnb group](/group/)
-- [cnb member](/member/)
+- [cnb-rs group](/group/)
+- [cnb-rs member](/member/)

@@ -1,7 +1,7 @@
-# cnb gpg-key list
+# cnb-rs gpg-key list
 
 ```
-cnb gpg-key list [--keyword <text>]
+cnb-rs gpg-key list [--keyword <text>]
 ```
 
 列出当前用户的 GPG 密钥。
@@ -18,19 +18,19 @@ cnb gpg-key list [--keyword <text>]
 ## 示例
 
 ```bash
-$ cnb gpg-key list
+$ cnb-rs gpg-key list
 KEY ID              NAME              EMAILS                     EXPIRES     SUBKEYS
 ABCD1234EF567890    My GPG Key        user@example.com (✓)       2026-01-01  2
 1234567890ABCDEF    Work Key          work@company.com (✓)       never       1
 
 # 搜索密钥
-$ cnb gpg-key list -k "Work"
+$ cnb-rs gpg-key list -k "Work"
 
 # JSON 格式输出
-$ cnb gpg-key list --json
+$ cnb-rs gpg-key list --json
 ```
 
 ## 另请参阅
 
-- [cnb gpg-key](/gpg-key/)
-- [cnb auth](/auth/)
+- [cnb-rs gpg-key](/gpg-key/)
+- [cnb-rs auth](/auth/)

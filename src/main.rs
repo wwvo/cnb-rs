@@ -1,6 +1,6 @@
 //! CNB CLI - 一个非官方的 CNB 命令行工具
 //!
-//! 通过 `cnb` 命令使用。
+//! 通过 `cnb-rs` 命令使用。
 
 use clap::Parser;
 use cnb_core::context::AppContext;
@@ -10,7 +10,7 @@ mod commands;
 /// CNB CLI - 一个非官方的 CNB 命令行工具
 #[derive(Debug, Parser)]
 #[clap(
-    name = "cnb",
+    name = "cnb-rs",
     version = concat!(env!("CARGO_PKG_VERSION"), " (", env!("GIT_HASH"), " ", env!("GIT_DATE"), ")"),
     about = "一个非官方的 CNB 命令行工具",
 )]

@@ -1,7 +1,7 @@
-# cnb commit asset-upload
+# cnb-rs commit asset-upload
 
 ```
-cnb commit asset-upload [flags]
+cnb-rs commit asset-upload [flags]
 ```
 
 上传本地文件到指定 Commit 作为附件。
@@ -22,13 +22,13 @@ cnb commit asset-upload [flags]
 
 ```bash
 # 上传文件到指定 Commit
-$ cnb commit asset-upload --sha1 abc123def456 --file dist/app.zip
+$ cnb-rs commit asset-upload --sha1 abc123def456 --file dist/app.zip
 文件 app.zip 已上传到 Commit abc123def456
 
 # 简写
-$ cnb commit asset-upload -s abc123def456 -f ./build/output.tar.gz
+$ cnb-rs commit asset-upload -s abc123def456 -f ./build/output.tar.gz
 ```
 
 ## 另请参阅
 
-- [cnb commit](/commit/)
+- [cnb-rs commit](/commit/)

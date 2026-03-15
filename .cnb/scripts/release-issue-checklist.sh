@@ -79,16 +79,16 @@ cat <<EOF
 
 推荐命令：
 - 首次使用前创建版本标签：
-  cnb --repo ${repo} label create -n "${target_label}" -c "1d76db" -d "计划在 ${release_tag} 交付"
-  cnb --repo ${repo} label create -n "${released_label}" -c "2da44e" -d "已随 ${release_tag} 发布"
+  cnb-rs --repo ${repo} label create -n "${target_label}" -c "1d76db" -d "计划在 ${release_tag} 交付"
+  cnb-rs --repo ${repo} label create -n "${released_label}" -c "2da44e" -d "已随 ${release_tag} 发布"
 - 添加已发布标签：
-  cnb --repo ${repo} label issue-add <NUMBER> -l "${released_label}"
+  cnb-rs --repo ${repo} label issue-add <NUMBER> -l "${released_label}"
 - 移除当前目标标签：
-  cnb --repo ${repo} label issue-remove <NUMBER> "${target_label}"
+  cnb-rs --repo ${repo} label issue-remove <NUMBER> "${target_label}"
 - 添加关闭评论：
-  cnb --repo ${repo} issue comment <NUMBER> -c '已随 `${release_tag}` 正式发布，关闭。'
+  cnb-rs --repo ${repo} issue comment <NUMBER> -c '已随 `${release_tag}` 正式发布，关闭。'
 - 关闭 issue：
-  cnb --repo ${repo} issue close <NUMBER> -r completed
+  cnb-rs --repo ${repo} issue close <NUMBER> -r completed
 
 EOF
 
@@ -96,13 +96,13 @@ if [[ -n "${next_target_tag}" ]]; then
   cat <<EOF
 未赶上当前版本时，推荐迁移命令：
 - 添加下一个目标标签：
-  cnb --repo ${repo} label issue-add <NUMBER> -l "target:${next_target_tag}"
+  cnb-rs --repo ${repo} label issue-add <NUMBER> -l "target:${next_target_tag}"
 
 EOF
 else
   cat <<EOF
 未赶上当前版本时，请先移除 ${target_label}，再人工补上下一个目标版本标签，例如：
-- cnb --repo ${repo} label issue-add <NUMBER> -l "target:v0.4.7"
+- cnb-rs --repo ${repo} label issue-add <NUMBER> -l "target:v0.4.7"
 
 EOF
 fi

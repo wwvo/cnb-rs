@@ -1,7 +1,7 @@
-# cnb repo view
+# cnb-rs repo view
 
 ```
-cnb repo view [<repo>] [flags]
+cnb-rs repo view [<repo>] [flags]
 ```
 
 查看仓库详情。
@@ -25,16 +25,16 @@ cnb repo view [<repo>] [flags]
 
 ```bash
 # 查看当前仓库
-$ cnb repo view
+$ cnb-rs repo view
 
 # 查看指定仓库
-$ cnb repo view org/repo
+$ cnb-rs repo view org/repo
 
 # 在浏览器中打开
-$ cnb repo view --web
+$ cnb-rs repo view --web
 
 # JSON 输出
-$ cnb repo view --json
+$ cnb-rs repo view --json
 ```
 
 ## API
@@ -49,6 +49,6 @@ $ cnb repo view --json
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo list](/repo/list)
-- [cnb info](/info)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo list](/repo/list)
+- [cnb-rs info](/info)

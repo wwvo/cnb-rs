@@ -1,7 +1,7 @@
-# cnb stars
+# cnb-rs stars
 
 ```
-cnb stars
+cnb-rs stars
 ```
 
 显示仓库的 Star 累积趋势折线图（TUI 界面）。
@@ -13,10 +13,10 @@ cnb stars
 ## 示例
 
 ```bash
-$ cnb stars
-$ cnb --repo wwvo/cnb-cli/cnb stars
+$ cnb-rs stars
+$ cnb-rs --repo wwvo/cnb-cli/cnb stars
 ```
 
 ## 另请参阅
 
-- [cnb](/guide/cnb)
+- [cnb-rs](/guide/cnb)

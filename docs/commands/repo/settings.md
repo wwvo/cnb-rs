@@ -1,7 +1,7 @@
-# cnb repo settings
+# cnb-rs repo settings
 
 ```
-cnb repo settings <subcommand>
+cnb-rs repo settings <subcommand>
 ```
 
 管理仓库的 Git 行为设置，包括分支保护规则、合并请求设置、推送限制和流水线构建设置。
@@ -18,7 +18,7 @@ cnb repo settings <subcommand>
 ## branch-protection
 
 ```
-cnb repo settings branch-protection <list|get|create|update|delete>
+cnb-rs repo settings branch-protection <list|get|create|update|delete>
 ```
 
 管理仓库分支保护规则。
@@ -27,26 +27,26 @@ cnb repo settings branch-protection <list|get|create|update|delete>
 
 ```bash
 # 列出分支保护规则
-$ cnb repo settings branch-protection list
-$ cnb repo settings branch-protection list org/repo
+$ cnb-rs repo settings branch-protection list
+$ cnb-rs repo settings branch-protection list org/repo
 
 # JSON 输出
-$ cnb repo settings branch-protection list --json
+$ cnb-rs repo settings branch-protection list --json
 ```
 
 ### `get <id>`
 
 ```bash
 # 查看规则详情
-$ cnb repo settings branch-protection get bp-001
-$ cnb repo settings branch-protection get bp-001 --repo org/repo
+$ cnb-rs repo settings branch-protection get bp-001
+$ cnb-rs repo settings branch-protection get bp-001 --repo org/repo
 ```
 
 ### `create`
 
 ```bash
 # 创建 main 分支保护：管理员推送、需 2 人评审、需状态检查
-$ cnb repo settings branch-protection create \
+$ cnb-rs repo settings branch-protection create \
     --rule "main" \
     --allow-master-pushes \
     --require-pr \
@@ -55,7 +55,7 @@ $ cnb repo settings branch-protection create \
     --require-status-checks
 
 # 创建通配符规则
-$ cnb repo settings branch-protection create \
+$ cnb-rs repo settings branch-protection create \
     --rule "release/*" \
     --require-pr \
     --require-review --review-count 1
@@ -79,7 +79,7 @@ $ cnb repo settings branch-protection create \
 ### `update <id>`
 
 ```bash
-$ cnb repo settings branch-protection update bp-001 \
+$ cnb-rs repo settings branch-protection update bp-001 \
     --review-count 3 --review-ratio 100
 ```
 
@@ -88,8 +88,8 @@ $ cnb repo settings branch-protection update bp-001 \
 ### `delete <id>`
 
 ```bash
-$ cnb repo settings branch-protection delete bp-003
-$ cnb repo settings branch-protection delete bp-003 --yes
+$ cnb-rs repo settings branch-protection delete bp-003
+$ cnb-rs repo settings branch-protection delete bp-003 --yes
 ```
 
 **选项：** `--yes`, `-y` 跳过确认提示
@@ -99,7 +99,7 @@ $ cnb repo settings branch-protection delete bp-003 --yes
 ## pull-request
 
 ```
-cnb repo settings pull-request <get|set>
+cnb-rs repo settings pull-request <get|set>
 ```
 
 管理合并请求（PR）设置。
@@ -107,15 +107,15 @@ cnb repo settings pull-request <get|set>
 ### `get`
 
 ```bash
-$ cnb repo settings pull-request get
-$ cnb repo settings pull-request get --json
+$ cnb-rs repo settings pull-request get
+$ cnb-rs repo settings pull-request get --json
 ```
 
 ### `set`
 
 ```bash
 # 仅允许压缩合并，使用 PR 标题作为提交信息
-$ cnb repo settings pull-request set \
+$ cnb-rs repo settings pull-request set \
     --allow-merge-commit=false \
     --allow-rebase=false \
     --allow-squash \
@@ -138,7 +138,7 @@ $ cnb repo settings pull-request set \
 ## push-limit
 
 ```
-cnb repo settings push-limit <get|set>
+cnb-rs repo settings push-limit <get|set>
 ```
 
 管理推送限制设置。
@@ -146,21 +146,21 @@ cnb repo settings push-limit <get|set>
 ### `get`
 
 ```bash
-$ cnb repo settings push-limit get
-$ cnb repo settings push-limit get --json
+$ cnb-rs repo settings push-limit get
+$ cnb-rs repo settings push-limit get --json
 ```
 
 ### `set`
 
 ```bash
 # 限制单次推送最多 20 个分支，提交者必须是推送者本人
-$ cnb repo settings push-limit set \
+$ cnb-rs repo settings push-limit set \
     --check-push-number \
     --max-push-number 20 \
     --commit-must-be pusher
 
 # 仅管理员可管理标签
-$ cnb repo settings push-limit set --master-only-tag
+$ cnb-rs repo settings push-limit set --master-only-tag
 ```
 
 **选项：**
@@ -175,7 +175,7 @@ $ cnb repo settings push-limit set --master-only-tag
 ## pipeline
 
 ```
-cnb repo settings pipeline <get|set>
+cnb-rs repo settings pipeline <get|set>
 ```
 
 管理流水线（云原生构建）设置。
@@ -183,15 +183,15 @@ cnb repo settings pipeline <get|set>
 ### `get`
 
 ```bash
-$ cnb repo settings pipeline get
-$ cnb repo settings pipeline get --json
+$ cnb-rs repo settings pipeline get
+$ cnb-rs repo settings pipeline get --json
 ```
 
 ### `set`
 
 ```bash
 # 开启自动构建，但禁止 Fork 仓库自动触发
-$ cnb repo settings pipeline set \
+$ cnb-rs repo settings pipeline set \
     --auto-trigger \
     --fork-auto-trigger=false
 ```
@@ -221,5 +221,5 @@ $ cnb repo settings pipeline set \
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo edit](/repo/edit)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo edit](/repo/edit)

@@ -12,7 +12,7 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
 
     let Some((token, source)) = get_token_with_source(domain, config) else {
         info!("未登录 ({domain})");
-        info!("使用 `cnb auth login` 登录，或设置环境变量 CNB_TOKEN");
+        info!("使用 `cnb-rs auth login` 登录，或设置环境变量 CNB_TOKEN");
         return Ok(());
     };
 

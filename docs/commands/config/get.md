@@ -1,7 +1,7 @@
-# cnb config get
+# cnb-rs config get
 
 ```
-cnb config get <key>
+cnb-rs config get <key>
 ```
 
 获取指定配置项的当前值。
@@ -16,15 +16,15 @@ cnb config get <key>
 
 ```bash
 # 获取域名配置
-$ cnb config get domain
+$ cnb-rs config get domain
 cnb.cool
 
 # 获取 Git 协议配置
-$ cnb config get git_protocol
+$ cnb-rs config get git_protocol
 https (default)
 ```
 
 ## 另请参阅
 
-- [cnb config](/config/)
-- [cnb config set](/config/set)
+- [cnb-rs config](/config/)
+- [cnb-rs config set](/config/set)

@@ -1,7 +1,7 @@
-# cnb release asset-delete
+# cnb-rs release asset-delete
 
 ```
-cnb release asset-delete <TAG> --asset <NAME> [options]
+cnb-rs release asset-delete <TAG> --asset <NAME> [options]
 ```
 
 删除 Release 中的指定附件。需要交互确认。
@@ -21,10 +21,10 @@ cnb release asset-delete <TAG> --asset <NAME> [options]
 
 ```bash
 # 删除指定附件（需确认）
-$ cnb release asset-delete v1.2.0 --asset old-binary.tar.gz
+$ cnb-rs release asset-delete v1.2.0 --asset old-binary.tar.gz
 
 # 跳过确认
-$ cnb release asset-delete v1.2.0 --asset old-binary.tar.gz --confirm
+$ cnb-rs release asset-delete v1.2.0 --asset old-binary.tar.gz --confirm
 ```
 
 ## API
@@ -35,6 +35,6 @@ $ cnb release asset-delete v1.2.0 --asset old-binary.tar.gz --confirm
 
 ## 另请参阅
 
-- [cnb release](/release/)
-- [cnb release asset-clean](/release/asset-clean)
-- [cnb release view](/release/view)
+- [cnb-rs release](/release/)
+- [cnb-rs release asset-clean](/release/asset-clean)
+- [cnb-rs release view](/release/view)

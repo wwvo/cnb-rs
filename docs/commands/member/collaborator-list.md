@@ -1,7 +1,7 @@
-# cnb member collaborator-list
+# cnb-rs member collaborator-list
 
 ```
-cnb member collaborator-list --group <group> [options]
+cnb-rs member collaborator-list --group <group> [options]
 ```
 
 列出组织外部贡献者。
@@ -23,14 +23,14 @@ cnb member collaborator-list --group <group> [options]
 
 ```bash
 # 列出组织外部贡献者
-$ cnb member collaborator-list --group myorg
+$ cnb-rs member collaborator-list --group myorg
 
 # JSON 格式输出
-$ cnb member collaborator-list --group myorg --json
+$ cnb-rs member collaborator-list --group myorg --json
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member collaborator-update](/member/collaborator-update)
-- [cnb member collaborator-remove](/member/collaborator-remove)
+- [cnb-rs member](/member/)
+- [cnb-rs member collaborator-update](/member/collaborator-update)
+- [cnb-rs member collaborator-remove](/member/collaborator-remove)

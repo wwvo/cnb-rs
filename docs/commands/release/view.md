@@ -1,7 +1,7 @@
-# cnb release view
+# cnb-rs release view
 
 ```
-cnb release view <TAG> [options]
+cnb-rs release view <TAG> [options]
 ```
 
 查看指定 Release 的详细信息，包括基本信息、描述内容和附件列表。
@@ -40,16 +40,16 @@ checksums.txt                 256 B       45
 
 ```bash
 # 查看 Release 详情
-$ cnb release view v1.2.0
+$ cnb-rs release view v1.2.0
 
 # 在浏览器中打开
-$ cnb release view v1.2.0 --web
+$ cnb-rs release view v1.2.0 --web
 
 # JSON 输出
-$ cnb release view v1.2.0 --json
+$ cnb-rs release view v1.2.0 --json
 ```
 
 ## 另请参阅
 
-- [cnb release](/release/)
-- [cnb release latest](/release/latest)
+- [cnb-rs release](/release/)
+- [cnb-rs release latest](/release/latest)

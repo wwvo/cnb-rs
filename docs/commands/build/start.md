@@ -1,7 +1,7 @@
-# cnb build start
+# cnb-rs build start
 
 ```
-cnb build start [options]
+cnb-rs build start [options]
 ```
 
 触发构建。默认触发主分支构建。
@@ -28,23 +28,23 @@ cnb build start [options]
 
 ```bash
 # 触发默认分支构建
-$ cnb build start
+$ cnb-rs build start
 
 # 指定分支和事件
-$ cnb build start -b develop -e "api_trigger_deploy"
+$ cnb-rs build start -b develop -e "api_trigger_deploy"
 
 # 指定 tag 构建
-$ cnb build start -t v1.0.0
+$ cnb-rs build start -t v1.0.0
 
 # 传入环境变量
-$ cnb build start --env "DEPLOY_ENV=production" --env "VERSION=1.0.0"
+$ cnb-rs build start --env "DEPLOY_ENV=production" --env "VERSION=1.0.0"
 
 # 同步等待触发
-$ cnb build start --sync
+$ cnb-rs build start --sync
 ```
 
 ## 另请参阅
 
-- [cnb build](/build/)
-- [cnb build stop](/build/stop)
-- [cnb build status](/build/status)
+- [cnb-rs build](/build/)
+- [cnb-rs build stop](/build/stop)
+- [cnb-rs build status](/build/status)

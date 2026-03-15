@@ -1,7 +1,7 @@
-# cnb mission view add
+# cnb-rs mission view add
 
 ```
-cnb mission view add <mission> --name <name> --type <type> [--id <id>]
+cnb-rs mission view add <mission> --name <name> --type <type> [--id <id>]
 ```
 
 添加或修改任务集视图。
@@ -23,14 +23,14 @@ cnb mission view add <mission> --name <name> --type <type> [--id <id>]
 
 ```bash
 # 添加新视图
-$ cnb mission view add my-org/sprint-2025-q1 --name "看板视图" --type kanban
+$ cnb-rs mission view add my-org/sprint-2025-q1 --name "看板视图" --type kanban
 
 # 修改已有视图
-$ cnb mission view add my-org/sprint-2025-q1 --id view-001 --name "重命名看板" --type kanban
+$ cnb-rs mission view add my-org/sprint-2025-q1 --id view-001 --name "重命名看板" --type kanban
 ```
 
 ## 另请参阅
 
-- [cnb mission](/mission/)
-- [cnb mission view list](/mission/view-list)
-- [cnb mission view get](/mission/view-get)
+- [cnb-rs mission](/mission/)
+- [cnb-rs mission view list](/mission/view-list)
+- [cnb-rs mission view get](/mission/view-get)

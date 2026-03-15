@@ -1,7 +1,7 @@
-# cnb issue reopen
+# cnb-rs issue reopen
 
 ```
-cnb issue reopen <NUMBER>
+cnb-rs issue reopen <NUMBER>
 ```
 
 重新打开已关闭的 Issue。
@@ -21,11 +21,11 @@ cnb issue reopen <NUMBER>
 
 ```bash
 # 重新打开 Issue
-$ cnb issue reopen 42
+$ cnb-rs issue reopen 42
 ✓ Issue #42 已重新打开
 
 # 指定仓库
-$ cnb --repo org/repo issue reopen 42
+$ cnb-rs --repo org/repo issue reopen 42
 ✓ Issue #42 已重新打开
 ```
 
@@ -46,6 +46,6 @@ $ cnb --repo org/repo issue reopen 42
 
 ## 另请参阅
 
-- [cnb issue](/issue/)
-- [cnb issue close](/issue/close)
-- [cnb issue view](/issue/view)
+- [cnb-rs issue](/issue/)
+- [cnb-rs issue close](/issue/close)
+- [cnb-rs issue view](/issue/view)

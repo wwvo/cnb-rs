@@ -1,8 +1,8 @@
-# cnb mission view set
+# cnb-rs mission view set
 
 ```
-cnb mission view set <mission> --file <path>
-cnb mission view set <mission> --stdin
+cnb-rs mission view set <mission> --file <path>
+cnb-rs mission view set <mission> --stdin
 ```
 
 通过 JSON 文件或标准输入设置视图配置。
@@ -23,14 +23,14 @@ cnb mission view set <mission> --stdin
 
 ```bash
 # 从文件读取配置
-$ cnb mission view set my-org/sprint-2025-q1 --file view-config.json
+$ cnb-rs mission view set my-org/sprint-2025-q1 --file view-config.json
 
 # 从标准输入读取
-$ cat view-config.json | cnb mission view set my-org/sprint-2025-q1 --stdin
+$ cat view-config.json | cnb-rs mission view set my-org/sprint-2025-q1 --stdin
 ```
 
 ## 另请参阅
 
-- [cnb mission](/mission/)
-- [cnb mission view get](/mission/view-get)
-- [cnb mission view add](/mission/view-add)
+- [cnb-rs mission](/mission/)
+- [cnb-rs mission view get](/mission/view-get)
+- [cnb-rs mission view add](/mission/view-add)

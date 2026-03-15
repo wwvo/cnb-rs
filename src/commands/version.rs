@@ -9,7 +9,7 @@ pub fn run() {
     let target = env!("TARGET");
     let profile = env!("BUILD_PROFILE");
 
-    println!("cnb {version} ({git_hash} {git_date})");
+    println!("cnb-rs {version} ({git_hash} {git_date})");
     println!("{rustc_version}");
     println!("target: {target}");
     println!("profile: {profile}");

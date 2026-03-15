@@ -1,7 +1,7 @@
-# cnb badge list
+# cnb-rs badge list
 
 ```
-cnb badge list
+cnb-rs badge list
 ```
 
 列出仓库所有徽章。
@@ -21,17 +21,17 @@ cnb badge list
 ## 示例
 
 ```bash
-$ cnb badge list
+$ cnb-rs badge list
 NAME                       TYPE      STATUS    URL
 ci/status/push             ci        passing   https://cnb.cool/.../badge/...
 ci/status/pull_request     ci        passing   https://cnb.cool/.../badge/...
 
 # JSON 格式输出
-$ cnb badge list --json
+$ cnb-rs badge list --json
 ```
 
 ## 另请参阅
 
-- [cnb badge](/badge/)
-- [cnb badge get](/badge/get)
-- [cnb badge upload](/badge/upload)
+- [cnb-rs badge](/badge/)
+- [cnb-rs badge get](/badge/get)
+- [cnb-rs badge upload](/badge/upload)

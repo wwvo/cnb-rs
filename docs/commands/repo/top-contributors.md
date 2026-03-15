@@ -1,7 +1,7 @@
-# cnb repo top-contributors
+# cnb-rs repo top-contributors
 
 ```
-cnb repo top-contributors [<repo>] [flags]
+cnb-rs repo top-contributors [<repo>] [flags]
 ```
 
 查看仓库活跃用户排名（综合活动排名，区别于 `contributor` 的提交趋势统计）。
@@ -22,16 +22,16 @@ cnb repo top-contributors [<repo>] [flags]
 
 ```bash
 # 查看当前仓库 Top 10 活跃用户
-$ cnb repo top-contributors
+$ cnb-rs repo top-contributors
 
 # 指定数量
-$ cnb repo top-contributors --top 5
+$ cnb-rs repo top-contributors --top 5
 
 # 查看指定仓库
-$ cnb repo top-contributors org/repo
+$ cnb-rs repo top-contributors org/repo
 
 # JSON 输出
-$ cnb repo top-contributors --json
+$ cnb-rs repo top-contributors --json
 ```
 
 ## API
@@ -46,5 +46,5 @@ $ cnb repo top-contributors --json
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo contributor](/repo/contributor)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo contributor](/repo/contributor)

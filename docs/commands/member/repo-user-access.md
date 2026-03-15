@@ -1,7 +1,7 @@
-# cnb member repo-user-access
+# cnb-rs member repo-user-access
 
 ```
-cnb member repo-user-access <username>
+cnb-rs member repo-user-access <username>
 ```
 
 查看指定成员在仓库的权限层级（含继承链）。
@@ -21,13 +21,13 @@ cnb member repo-user-access <username>
 ## 示例
 
 ```bash
-$ cnb member repo-user-access zhangsan
+$ cnb-rs member repo-user-access zhangsan
 
 # JSON 格式输出
-$ cnb member repo-user-access zhangsan --json
+$ cnb-rs member repo-user-access zhangsan --json
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member repo-access-level](/member/repo-access-level)
+- [cnb-rs member](/member/)
+- [cnb-rs member repo-access-level](/member/repo-access-level)

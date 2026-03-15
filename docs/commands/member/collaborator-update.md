@@ -1,7 +1,7 @@
-# cnb member collaborator-update
+# cnb-rs member collaborator-update
 
 ```
-cnb member collaborator-update <username> --group <group> --role <role>
+cnb-rs member collaborator-update <username> --group <group> --role <role>
 ```
 
 更新外部贡献者权限。
@@ -19,12 +19,12 @@ cnb member collaborator-update <username> --group <group> --role <role>
 ## 示例
 
 ```bash
-$ cnb member collaborator-update zhangsan --group myorg --role Developer
+$ cnb-rs member collaborator-update zhangsan --group myorg --role Developer
 ✓ 已更新外部贡献者 zhangsan 权限为 Developer
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member collaborator-list](/member/collaborator-list)
-- [cnb member collaborator-remove](/member/collaborator-remove)
+- [cnb-rs member](/member/)
+- [cnb-rs member collaborator-list](/member/collaborator-list)
+- [cnb-rs member collaborator-remove](/member/collaborator-remove)

@@ -1,7 +1,7 @@
-# cnb user followers
+# cnb-rs user followers
 
 ```
-cnb user followers [<username>] [options]
+cnb-rs user followers [<username>] [options]
 ```
 
 查看指定用户的粉丝列表，不指定则查看当前认证用户。
@@ -22,19 +22,19 @@ cnb user followers [<username>] [options]
 
 ```bash
 # 查看当前用户的粉丝
-$ cnb user followers
+$ cnb-rs user followers
 
 # 查看指定用户的粉丝
-$ cnb user followers zhangsan
+$ cnb-rs user followers zhangsan
 
 # 限制返回数量
-$ cnb user followers --limit 20
+$ cnb-rs user followers --limit 20
 
 # JSON 格式输出
-$ cnb user followers --json
+$ cnb-rs user followers --json
 ```
 
 ## 另请参阅
 
-- [cnb user](/user/)
-- [cnb user following](/user/following)
+- [cnb-rs user](/user/)
+- [cnb-rs user following](/user/following)

@@ -1,7 +1,7 @@
-# cnb stats
+# cnb-rs stats
 
 ```
-cnb stats
+cnb-rs stats
 ```
 
 显示仓库的提交统计仪表盘（TUI 界面）。
@@ -16,9 +16,9 @@ cnb stats
 ## 示例
 
 ```bash
-$ cnb stats
+$ cnb-rs stats
 ```
 
 ## 另请参阅
 
-- [cnb](/guide/cnb)
+- [cnb-rs](/guide/cnb)

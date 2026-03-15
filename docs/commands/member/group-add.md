@@ -1,7 +1,7 @@
-# cnb member group-add
+# cnb-rs member group-add
 
 ```
-cnb member group-add <username> --group <group> --role <role>
+cnb-rs member group-add <username> --group <group> --role <role>
 ```
 
 添加组织成员。
@@ -21,12 +21,12 @@ cnb member group-add <username> --group <group> --role <role>
 ## 示例
 
 ```bash
-$ cnb member group-add zhangsan --group myorg --role Developer
+$ cnb-rs member group-add zhangsan --group myorg --role Developer
 ✓ 已添加成员 zhangsan
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member group-list](/member/group-list)
-- [cnb member group-update](/member/group-update)
+- [cnb-rs member](/member/)
+- [cnb-rs member group-list](/member/group-list)
+- [cnb-rs member group-update](/member/group-update)

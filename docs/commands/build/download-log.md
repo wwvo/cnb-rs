@@ -1,7 +1,7 @@
-# cnb build download-log
+# cnb-rs build download-log
 
 ```
-cnb build download-log <pipeline_id> [-o <path>]
+cnb-rs build download-log <pipeline_id> [-o <path>]
 ```
 
 下载指定流水线的 Runner 日志。
@@ -22,15 +22,15 @@ cnb build download-log <pipeline_id> [-o <path>]
 
 ```bash
 # 输出到终端
-$ cnb build download-log pipeline-1
+$ cnb-rs build download-log pipeline-1
 
 # 保存到文件
-$ cnb build download-log pipeline-1 -o ./build.log
+$ cnb-rs build download-log pipeline-1 -o ./build.log
 ✓ 日志已保存到 ./build.log
 ```
 
 ## 另请参阅
 
-- [cnb build](/build/)
-- [cnb build stage](/build/stage)
-- [cnb build delete-log](/build/delete-log)
+- [cnb-rs build](/build/)
+- [cnb-rs build stage](/build/stage)
+- [cnb-rs build delete-log](/build/delete-log)

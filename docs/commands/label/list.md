@@ -1,7 +1,7 @@
-# cnb label list
+# cnb-rs label list
 
 ```
-cnb label list [--keyword <text>]
+cnb-rs label list [--keyword <text>]
 ```
 
 列出仓库所有标签，支持关键字搜索。
@@ -20,16 +20,16 @@ cnb label list [--keyword <text>]
 
 ```bash
 # 列出所有标签
-$ cnb label list
+$ cnb-rs label list
 
 # 搜索标签
-$ cnb label list -k "bug"
+$ cnb-rs label list -k "bug"
 
 # JSON 格式输出
-$ cnb label list --json
+$ cnb-rs label list --json
 ```
 
 ## 另请参阅
 
-- [cnb label](/label/)
-- [cnb label create](/label/create)
+- [cnb-rs label](/label/)
+- [cnb-rs label create](/label/create)

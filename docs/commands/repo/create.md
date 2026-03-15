@@ -1,7 +1,7 @@
-# cnb repo create
+# cnb-rs repo create
 
 ```
-cnb repo create <name> [flags]
+cnb-rs repo create <name> [flags]
 ```
 
 在指定组织下创建新仓库。
@@ -26,18 +26,18 @@ cnb repo create <name> [flags]
 
 ```bash
 # 在组织下创建公开仓库
-$ cnb repo create my-project --group my-org
+$ cnb-rs repo create my-project --group my-org
 ✓ 仓库已创建：https://cnb.cool/my-org/my-project
 
 # 创建私有仓库并添加描述
-$ cnb repo create my-lib --group my-org --private --description "内部库"
+$ cnb-rs repo create my-lib --group my-org --private --description "内部库"
 ✓ 仓库已创建：https://cnb.cool/my-org/my-lib
 
 # 创建加密仓库
-$ cnb repo create my-secret --group my-org --secret
+$ cnb-rs repo create my-secret --group my-org --secret
 
 # 创建到个人空间
-$ cnb repo create my-app
+$ cnb-rs repo create my-app
 ✓ 仓库已创建：https://cnb.cool/octocat/my-app
 ```
 
@@ -63,6 +63,6 @@ $ cnb repo create my-app
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo view](/repo/view)
-- [cnb repo delete](/repo/delete)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo view](/repo/view)
+- [cnb-rs repo delete](/repo/delete)

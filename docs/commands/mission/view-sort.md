@@ -1,7 +1,7 @@
-# cnb mission view sort
+# cnb-rs mission view sort
 
 ```
-cnb mission view sort <mission> --ids <id1,id2,id3>
+cnb-rs mission view sort <mission> --ids <id1,id2,id3>
 ```
 
 排序任务集视图。
@@ -20,11 +20,11 @@ cnb mission view sort <mission> --ids <id1,id2,id3>
 ## 示例
 
 ```bash
-$ cnb mission view sort my-org/sprint-2025-q1 --ids "view-002,view-001,view-003"
+$ cnb-rs mission view sort my-org/sprint-2025-q1 --ids "view-002,view-001,view-003"
 ✓ 视图排序已更新
 ```
 
 ## 另请参阅
 
-- [cnb mission](/mission/)
-- [cnb mission view list](/mission/view-list)
+- [cnb-rs mission](/mission/)
+- [cnb-rs mission view list](/mission/view-list)

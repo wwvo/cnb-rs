@@ -1,7 +1,7 @@
-# cnb workspace list
+# cnb-rs workspace list
 
 ```
-cnb workspace list [options]
+cnb-rs workspace list [options]
 ```
 
 列出当前用户的云原生工作区。
@@ -21,19 +21,19 @@ cnb workspace list [options]
 
 ```bash
 # 列出所有工作区
-$ cnb workspace list
+$ cnb-rs workspace list
 
 # 仅列出运行中的工作区
-$ cnb workspace list -s running
+$ cnb-rs workspace list -s running
 
 # 按仓库过滤
-$ cnb workspace list -r my-org/repo1
+$ cnb-rs workspace list -r my-org/repo1
 
 # JSON 格式输出
-$ cnb workspace list --json
+$ cnb-rs workspace list --json
 ```
 
 ## 另请参阅
 
-- [cnb workspace](/workspace/)
-- [cnb workspace start](/workspace/start)
+- [cnb-rs workspace](/workspace/)
+- [cnb-rs workspace start](/workspace/start)

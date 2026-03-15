@@ -1,7 +1,7 @@
-# cnb workspace stop
+# cnb-rs workspace stop
 
 ```
-cnb workspace stop [options]
+cnb-rs workspace stop [options]
 ```
 
 停止/关闭正在运行的云原生开发环境。
@@ -22,16 +22,16 @@ cnb workspace stop [options]
 
 ```bash
 # 按 pipeline ID 停止
-$ cnb workspace stop -p abc123
+$ cnb-rs workspace stop -p abc123
 
 # 按 SN 停止
-$ cnb workspace stop --sn 20250115-001
+$ cnb-rs workspace stop --sn 20250115-001
 
 # JSON 格式输出
-$ cnb workspace stop -p abc123 --json
+$ cnb-rs workspace stop -p abc123 --json
 ```
 
 ## 另请参阅
 
-- [cnb workspace](/workspace/)
-- [cnb workspace start](/workspace/start)
+- [cnb-rs workspace](/workspace/)
+- [cnb-rs workspace start](/workspace/start)

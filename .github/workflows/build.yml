@@ -115,13 +115,13 @@ jobs:
           set -euo pipefail
 
           release_tag="${GITHUB_REF_NAME}"
-          asset_base="cnb-${release_tag}-${{ matrix.target }}"
+          asset_base="cnb-rs-${release_tag}-${{ matrix.target }}"
           asset_dir="${asset_base}"
 
           if [[ "${{ matrix.target }}" == *-windows-* ]]; then
-            binary_name="cnb.exe"
+            binary_name="cnb-rs.exe"
           else
-            binary_name="cnb"
+            binary_name="cnb-rs"
           fi
 
           mkdir -p "${asset_dir}"

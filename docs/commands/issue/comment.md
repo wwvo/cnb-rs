@@ -1,7 +1,7 @@
-# cnb issue comment
+# cnb-rs issue comment
 
 ```
-cnb issue comment <NUMBER> [flags]
+cnb-rs issue comment <NUMBER> [flags]
 ```
 
 为指定 Issue 创建评论。
@@ -22,11 +22,11 @@ cnb issue comment <NUMBER> [flags]
 
 ```bash
 # 创建评论
-$ cnb issue comment 123 -c "已确认问题，正在修复"
+$ cnb-rs issue comment 123 -c "已确认问题，正在修复"
 ✓ Issue #123 评论已创建
 
 # 使用 Markdown 格式
-$ cnb issue comment 42 -c "## 分析结果\n- 原因：配置错误\n- 影响范围：登录模块"
+$ cnb-rs issue comment 42 -c "## 分析结果\n- 原因：配置错误\n- 影响范围：登录模块"
 ```
 
 ## API
@@ -45,5 +45,5 @@ $ cnb issue comment 42 -c "## 分析结果\n- 原因：配置错误\n- 影响范
 
 ## 另请参阅
 
-- [cnb issue](/issue/)
-- [cnb issue view](/issue/view)
+- [cnb-rs issue](/issue/)
+- [cnb-rs issue view](/issue/view)

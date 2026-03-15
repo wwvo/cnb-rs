@@ -1,7 +1,7 @@
-# cnb registry tag detail
+# cnb-rs registry tag detail
 
 ```
-cnb registry tag detail <type> <name> <tag> --registry <registry> [options]
+cnb-rs registry tag detail <type> <name> <tag> --registry <registry> [options]
 ```
 
 查看制品标签详情。
@@ -25,17 +25,17 @@ cnb registry tag detail <type> <name> <tag> --registry <registry> [options]
 
 ```bash
 # Docker 制品指定架构
-$ cnb registry tag detail docker my-app latest --registry my-org/my-registry --arch linux/amd64
+$ cnb-rs registry tag detail docker my-app latest --registry my-org/my-registry --arch linux/amd64
 
 # Helm Chart
-$ cnb registry tag detail helm my-chart 1.0.0 --registry my-org/helm-charts
+$ cnb-rs registry tag detail helm my-chart 1.0.0 --registry my-org/helm-charts
 
 # npm 包
-$ cnb registry tag detail npm my-lib 1.2.3 --registry my-org/npm-registry
+$ cnb-rs registry tag detail npm my-lib 1.2.3 --registry my-org/npm-registry
 ```
 
 ## 另请参阅
 
-- [cnb registry](/registry/)
-- [cnb registry tag list](/registry/tag-list)
-- [cnb registry tag delete](/registry/tag-delete)
+- [cnb-rs registry](/registry/)
+- [cnb-rs registry tag list](/registry/tag-list)
+- [cnb-rs registry tag delete](/registry/tag-delete)

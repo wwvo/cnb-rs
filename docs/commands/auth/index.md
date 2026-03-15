@@ -1,21 +1,21 @@
-# cnb auth
+# cnb-rs auth
 
 ```
-cnb auth <subcommand>
+cnb-rs auth <subcommand>
 ```
 
 认证管理，管理 CNB 平台的登录凭证。
 
-CNB CLI 使用 Personal Access Token（PAT）进行认证。Token 通过 `cnb auth login` 登录后
+CNB CLI 使用 Personal Access Token（PAT）进行认证。Token 通过 `cnb-rs auth login` 登录后
 存储在本地配置文件 `~/.cnb/config.toml` 中。
 
 也可以通过环境变量提供 Token，适合 CI/CD 等自动化场景。详见 [环境变量](#环境变量) 章节。
 
 ## 可用命令
 
-- [cnb auth login](/auth/login) — 登录 CNB 平台
-- [cnb auth status](/auth/status) — 查看当前认证状态
-- [cnb auth logout](/auth/logout) — 退出登录
+- [cnb-rs auth login](/auth/login) — 登录 CNB 平台
+- [cnb-rs auth status](/auth/status) — 查看当前认证状态
+- [cnb-rs auth logout](/auth/logout) — 退出登录
 
 ## 环境变量
 
@@ -31,12 +31,12 @@ CNB CLI 按以下优先级查找认证 Token：
 
 ```bash [Unix / Linux / macOS]
 export CNB_TOKEN=cnb_xxxxxxxxxxxx
-cnb issue list
+cnb-rs issue list
 ```
 
 ```powershell [Windows PowerShell]
 $env:CNB_TOKEN="cnb_xxxxxxxxxxxx"
-cnb issue list
+cnb-rs issue list
 ```
 
 ```yaml [CNB 流水线]
@@ -86,5 +86,5 @@ username = "alice"
 
 ## 另请参阅
 
-- [cnb](/guide/cnb)
-- [cnb config](/config/)
+- [cnb-rs](/guide/cnb)
+- [cnb-rs config](/config/)

@@ -1,7 +1,7 @@
-# cnb release asset-clean
+# cnb-rs release asset-clean
 
 ```
-cnb release asset-clean [flags]
+cnb-rs release asset-clean [flags]
 ```
 
 按策略批量清理 Release 附件。
@@ -25,15 +25,15 @@ cnb release asset-clean [flags]
 
 ```bash
 # 删除 Tag 以 "nightly-" 开头的附件
-$ cnb release asset-clean --tag-name-prefix "nightly-"
+$ cnb-rs release asset-clean --tag-name-prefix "nightly-"
 
 # 保留最近 5 个有附件的 Release
-$ cnb release asset-clean --keep-num 5
+$ cnb-rs release asset-clean --keep-num 5
 
 # 删除 30 天前的附件，跳过确认
-$ cnb release asset-clean --keep-days 30 -y
+$ cnb-rs release asset-clean --keep-days 30 -y
 ```
 
 ## 另请参阅
 
-- [cnb release](/release/)
+- [cnb-rs release](/release/)

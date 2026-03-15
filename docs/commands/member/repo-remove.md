@@ -1,7 +1,7 @@
-# cnb member repo-remove
+# cnb-rs member repo-remove
 
 ```
-cnb member repo-remove <username> [options]
+cnb-rs member repo-remove <username> [options]
 ```
 
 移除仓库成员。
@@ -22,16 +22,16 @@ cnb member repo-remove <username> [options]
 
 ```bash
 # 移除仓库成员（需确认）
-$ cnb member repo-remove zhangsan
+$ cnb-rs member repo-remove zhangsan
 确认移除成员 zhangsan？(y/N) y
 ✓ 已移除成员 zhangsan
 
 # 跳过确认
-$ cnb member repo-remove zhangsan --yes
+$ cnb-rs member repo-remove zhangsan --yes
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member repo-list](/member/repo-list)
-- [cnb member repo-add](/member/repo-add)
+- [cnb-rs member](/member/)
+- [cnb-rs member repo-list](/member/repo-list)
+- [cnb-rs member repo-add](/member/repo-add)

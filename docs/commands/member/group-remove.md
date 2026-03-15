@@ -1,7 +1,7 @@
-# cnb member group-remove
+# cnb-rs member group-remove
 
 ```
-cnb member group-remove <username> --group <group> [options]
+cnb-rs member group-remove <username> --group <group> [options]
 ```
 
 移除组织成员。
@@ -22,14 +22,14 @@ cnb member group-remove <username> --group <group> [options]
 
 ```bash
 # 移除组织成员（需确认）
-$ cnb member group-remove zhangsan --group myorg
+$ cnb-rs member group-remove zhangsan --group myorg
 
 # 跳过确认
-$ cnb member group-remove zhangsan --group myorg --yes
+$ cnb-rs member group-remove zhangsan --group myorg --yes
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member group-list](/member/group-list)
-- [cnb member group-add](/member/group-add)
+- [cnb-rs member](/member/)
+- [cnb-rs member group-list](/member/group-list)
+- [cnb-rs member group-add](/member/group-add)

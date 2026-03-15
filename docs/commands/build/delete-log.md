@@ -1,7 +1,7 @@
-# cnb build delete-log
+# cnb-rs build delete-log
 
 ```
-cnb build delete-log <sn> [-y]
+cnb-rs build delete-log <sn> [-y]
 ```
 
 删除指定构建的日志。
@@ -22,16 +22,16 @@ cnb build delete-log <sn> [-y]
 
 ```bash
 # 删除构建日志（需确认）
-$ cnb build delete-log cnb-1qa-1i3f5ecau
+$ cnb-rs build delete-log cnb-1qa-1i3f5ecau
 确认删除构建 cnb-1qa-1i3f5ecau 的日志？(y/N) y
 ✓ 构建日志已删除
 
 # 跳过确认
-$ cnb build delete-log cnb-1qa-1i3f5ecau -y
+$ cnb-rs build delete-log cnb-1qa-1i3f5ecau -y
 ```
 
 ## 另请参阅
 
-- [cnb build](/build/)
-- [cnb build list](/build/list)
-- [cnb build download-log](/build/download-log)
+- [cnb-rs build](/build/)
+- [cnb-rs build list](/build/list)
+- [cnb-rs build download-log](/build/download-log)

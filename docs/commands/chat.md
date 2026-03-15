@@ -1,7 +1,7 @@
-# cnb chat
+# cnb-rs chat
 
 ```
-cnb chat [flags]
+cnb-rs chat [flags]
 ```
 
 使用自然语言与 CNB OpenAPI 交互。
@@ -35,16 +35,16 @@ cnb chat [flags]
 
 ```bash
 # 交互式模式
-$ cnb chat
+$ cnb-rs chat
 
 # 一次性模式
-$ cnb chat --do "查看我的 Issue 列表"
+$ cnb-rs chat --do "查看我的 Issue 列表"
 
 # 禁用流式输出
-$ cnb chat --do "查看仓库信息" --no-stream
+$ cnb-rs chat --do "查看仓库信息" --no-stream
 ```
 
 ## 另请参阅
 
-- [cnb auth](/auth/) — 登录后才能使用 chat
-- [cnb config](/config/) — 配置域名等信息
+- [cnb-rs auth](/auth/) — 登录后才能使用 chat
+- [cnb-rs config](/config/) — 配置域名等信息

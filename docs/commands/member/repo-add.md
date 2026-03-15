@@ -1,7 +1,7 @@
-# cnb member repo-add
+# cnb-rs member repo-add
 
 ```
-cnb member repo-add <username> --role <role> [options]
+cnb-rs member repo-add <username> --role <role> [options]
 ```
 
 添加仓库成员。
@@ -23,15 +23,15 @@ cnb member repo-add <username> --role <role> [options]
 
 ```bash
 # 添加仓库成员
-$ cnb member repo-add zhangsan --role Developer
+$ cnb-rs member repo-add zhangsan --role Developer
 ✓ 已添加成员 zhangsan
 
 # 添加为外部贡献者
-$ cnb member repo-add lisi --role Reporter --outside-collaborator
+$ cnb-rs member repo-add lisi --role Reporter --outside-collaborator
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member repo-list](/member/repo-list)
-- [cnb member repo-update](/member/repo-update)
+- [cnb-rs member](/member/)
+- [cnb-rs member repo-list](/member/repo-list)
+- [cnb-rs member repo-update](/member/repo-update)

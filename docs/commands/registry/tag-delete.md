@@ -1,7 +1,7 @@
-# cnb registry tag delete
+# cnb-rs registry tag delete
 
 ```
-cnb registry tag delete <type> <name> <tag> --registry <registry> [options]
+cnb-rs registry tag delete <type> <name> <tag> --registry <registry> [options]
 ```
 
 删除制品标签。
@@ -24,13 +24,13 @@ cnb registry tag delete <type> <name> <tag> --registry <registry> [options]
 
 ```bash
 # 删除制品标签（需确认）
-$ cnb registry tag delete docker my-app v1.0.0 --registry my-org/my-registry
+$ cnb-rs registry tag delete docker my-app v1.0.0 --registry my-org/my-registry
 
 # 跳过确认
-$ cnb registry tag delete docker my-app v1.0.0 --registry my-org/my-registry --yes
+$ cnb-rs registry tag delete docker my-app v1.0.0 --registry my-org/my-registry --yes
 ```
 
 ## 另请参阅
 
-- [cnb registry](/registry/)
-- [cnb registry tag list](/registry/tag-list)
+- [cnb-rs registry](/registry/)
+- [cnb-rs registry tag list](/registry/tag-list)

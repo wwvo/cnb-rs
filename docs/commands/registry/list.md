@@ -1,7 +1,7 @@
-# cnb registry list
+# cnb-rs registry list
 
 ```
-cnb registry list --group <group> [options]
+cnb-rs registry list --group <group> [options]
 ```
 
 列出组织下的制品库。
@@ -25,16 +25,16 @@ cnb registry list --group <group> [options]
 
 ```bash
 # 列出组织下的制品库
-$ cnb registry list --group my-org
+$ cnb-rs registry list --group my-org
 
 # 按类型过滤
-$ cnb registry list --group my-org --type docker
+$ cnb-rs registry list --group my-org --type docker
 
 # JSON 格式输出
-$ cnb registry list --group my-org --json
+$ cnb-rs registry list --group my-org --json
 ```
 
 ## 另请参阅
 
-- [cnb registry](/registry/)
-- [cnb registry package list](/registry/package-list)
+- [cnb-rs registry](/registry/)
+- [cnb-rs registry package list](/registry/package-list)

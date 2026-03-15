@@ -1,7 +1,7 @@
-# cnb build
+# cnb-rs build
 
 ```
-cnb build <subcommand>
+cnb-rs build <subcommand>
 ```
 
 管理仓库的 CI/CD 构建流水线。
@@ -11,32 +11,32 @@ cnb build <subcommand>
 
 ## 可用命令
 
-- [cnb build start](/build/start) — 触发构建
-- [cnb build stop](/build/stop) — 停止构建
-- [cnb build status](/build/status) — 查询构建状态
-- [cnb build list](/build/list) — 列出构建记录
-- [cnb build stage](/build/stage) — 查看 Stage 详情
-- [cnb build download-log](/build/download-log) — 下载 Runner 日志
-- [cnb build delete-log](/build/delete-log) — 删除构建日志
-- [cnb build crontab-sync](/build/crontab-sync) — 同步定时任务
+- [cnb-rs build start](/build/start) — 触发构建
+- [cnb-rs build stop](/build/stop) — 停止构建
+- [cnb-rs build status](/build/status) — 查询构建状态
+- [cnb-rs build list](/build/list) — 列出构建记录
+- [cnb-rs build stage](/build/stage) — 查看 Stage 详情
+- [cnb-rs build download-log](/build/download-log) — 下载 Runner 日志
+- [cnb-rs build delete-log](/build/delete-log) — 删除构建日志
+- [cnb-rs build crontab-sync](/build/crontab-sync) — 同步定时任务
 
 ## 示例
 
 ```bash
 # 触发默认分支构建
-$ cnb build start
+$ cnb-rs build start
 
 # 查看构建列表
-$ cnb build list
+$ cnb-rs build list
 
 # 查询构建状态
-$ cnb build status cnb-1qa-1i3f5ecau
+$ cnb-rs build status cnb-1qa-1i3f5ecau
 
 # 停止构建
-$ cnb build stop cnb-1qa-1i3f5ecau
+$ cnb-rs build stop cnb-1qa-1i3f5ecau
 ```
 
 ## 另请参阅
 
-- [cnb](/guide/cnb)
-- [cnb repo](/repo/)
+- [cnb-rs](/guide/cnb)
+- [cnb-rs repo](/repo/)

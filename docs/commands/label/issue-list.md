@@ -1,7 +1,7 @@
-# cnb label issue-list
+# cnb-rs label issue-list
 
 ```
-cnb label issue-list <number>
+cnb-rs label issue-list <number>
 ```
 
 列出指定 Issue 的所有标签。
@@ -19,16 +19,16 @@ cnb label issue-list <number>
 ## 示例
 
 ```bash
-$ cnb label issue-list 42
+$ cnb-rs label issue-list 42
 bug
 enhancement
 
 # JSON 格式输出
-$ cnb label issue-list 42 --json
+$ cnb-rs label issue-list 42 --json
 ```
 
 ## 另请参阅
 
-- [cnb label](/label/)
-- [cnb label issue-add](/label/issue-add)
-- [cnb label issue-remove](/label/issue-remove)
+- [cnb-rs label](/label/)
+- [cnb-rs label issue-add](/label/issue-add)
+- [cnb-rs label issue-remove](/label/issue-remove)

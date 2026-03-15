@@ -1,7 +1,7 @@
-# cnb issue close
+# cnb-rs issue close
 
 ```
-cnb issue close <NUMBER> [flags]
+cnb-rs issue close <NUMBER> [flags]
 ```
 
 关闭指定编号的 Issue。
@@ -22,11 +22,11 @@ cnb issue close <NUMBER> [flags]
 
 ```bash
 # 关闭 Issue（默认原因：已完成）
-$ cnb issue close 123
+$ cnb-rs issue close 123
 ✓ Issue #123 已关闭（原因: completed）
 
 # 以"不计划处理"关闭
-$ cnb issue close 123 -r not-planned
+$ cnb-rs issue close 123 -r not-planned
 ✓ Issue #123 已关闭（原因: not_planned）
 ```
 
@@ -47,5 +47,5 @@ $ cnb issue close 123 -r not-planned
 
 ## 另请参阅
 
-- [cnb issue](/issue/)
-- [cnb issue reopen](/issue/reopen)
+- [cnb-rs issue](/issue/)
+- [cnb-rs issue reopen](/issue/reopen)

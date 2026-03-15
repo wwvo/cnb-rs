@@ -1,7 +1,7 @@
-# cnb member repo-all
+# cnb-rs member repo-all
 
 ```
-cnb member repo-all [options]
+cnb-rs member repo-all [options]
 ```
 
 列出仓库所有有效成员（含继承）。
@@ -26,20 +26,20 @@ cnb member repo-all [options]
 
 ```bash
 # 列出所有有效成员
-$ cnb member repo-all
+$ cnb-rs member repo-all
 
 # 按角色过滤并降序
-$ cnb member repo-all --role Developer --desc
+$ cnb-rs member repo-all --role Developer --desc
 
 # 精准匹配用户名
-$ cnb member repo-all --names "zhangsan,lisi"
+$ cnb-rs member repo-all --names "zhangsan,lisi"
 
 # JSON 格式输出
-$ cnb member repo-all --json
+$ cnb-rs member repo-all --json
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member repo-list](/member/repo-list)
-- [cnb member repo-inherited](/member/repo-inherited)
+- [cnb-rs member](/member/)
+- [cnb-rs member repo-list](/member/repo-list)
+- [cnb-rs member repo-inherited](/member/repo-inherited)

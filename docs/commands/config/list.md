@@ -1,7 +1,7 @@
-# cnb config list
+# cnb-rs config list
 
 ```
-cnb config list
+cnb-rs config list
 ```
 
 列出所有配置项及当前值。
@@ -31,4 +31,4 @@ git_protocol = ssh
 
 ## 另请参阅
 
-- [cnb config](/config/)
+- [cnb-rs config](/config/)

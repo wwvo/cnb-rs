@@ -1,7 +1,7 @@
-# cnb issue edit
+# cnb-rs issue edit
 
 ```
-cnb issue edit <NUMBER> [flags]
+cnb-rs issue edit <NUMBER> [flags]
 ```
 
 编辑 Issue 信息。
@@ -31,19 +31,19 @@ cnb issue edit <NUMBER> [flags]
 
 ```bash
 # 修改标题
-$ cnb issue edit 42 -t "新标题"
+$ cnb-rs issue edit 42 -t "新标题"
 ✓ Issue #42 已更新
 
 # 修改优先级
-$ cnb issue edit 42 -p P0
+$ cnb-rs issue edit 42 -p P0
 ✓ Issue #42 已更新
 
 # 同时修改多个字段
-$ cnb issue edit 42 -t "紧急修复" -p P0 -b "需要立即处理的问题"
+$ cnb-rs issue edit 42 -t "紧急修复" -p P0 -b "需要立即处理的问题"
 ✓ Issue #42 已更新
 
 # 设置日期范围
-$ cnb issue edit 42 --start-date 2025-02-01 --end-date 2025-02-15
+$ cnb-rs issue edit 42 --start-date 2025-02-01 --end-date 2025-02-15
 ✓ Issue #42 已更新
 ```
 
@@ -75,6 +75,6 @@ $ cnb issue edit 42 --start-date 2025-02-01 --end-date 2025-02-15
 
 ## 另请参阅
 
-- [cnb issue](/issue/)
-- [cnb issue view](/issue/view)
-- [cnb issue create](/issue/create)
+- [cnb-rs issue](/issue/)
+- [cnb-rs issue view](/issue/view)
+- [cnb-rs issue create](/issue/create)

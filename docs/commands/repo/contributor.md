@@ -1,7 +1,7 @@
-# cnb repo contributor
+# cnb-rs repo contributor
 
 ```
-cnb repo contributor [<repo>] [flags]
+cnb-rs repo contributor [<repo>] [flags]
 ```
 
 查看仓库贡献者排行及趋势数据，包括每位贡献者的提交数、新增行数和删除行数。
@@ -23,16 +23,16 @@ cnb repo contributor [<repo>] [flags]
 
 ```bash
 # 查看当前仓库贡献者 Top 10
-$ cnb repo contributor --limit 10
+$ cnb-rs repo contributor --limit 10
 
 # 查看指定仓库
-$ cnb repo contributor org/repo
+$ cnb-rs repo contributor org/repo
 
 # 排除外部用户
-$ cnb repo contributor --exclude-external
+$ cnb-rs repo contributor --exclude-external
 
 # JSON 输出
-$ cnb repo contributor --json
+$ cnb-rs repo contributor --json
 ```
 
 ## API
@@ -47,6 +47,6 @@ $ cnb repo contributor --json
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo top-contributors](/repo/top-contributors)
-- [cnb stats](/stats)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo top-contributors](/repo/top-contributors)
+- [cnb-rs stats](/stats)

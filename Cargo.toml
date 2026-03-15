@@ -95,7 +95,7 @@ wildcard_imports = "allow"
 unsafe_code = "warn"
 
 [[bin]]
-name = "cnb"
+name = "cnb-rs"
 path = "src/main.rs"
 
 [dependencies]

@@ -1,7 +1,7 @@
-# cnb mission list
+# cnb-rs mission list
 
 ```
-cnb mission list --group <group> [options]
+cnb-rs mission list --group <group> [options]
 ```
 
 列出组织下的任务集。
@@ -24,19 +24,19 @@ cnb mission list --group <group> [options]
 
 ```bash
 # 列出组织下的任务集
-$ cnb mission list --group my-org
+$ cnb-rs mission list --group my-org
 
 # 搜索任务集
-$ cnb mission list --group my-org --search sprint
+$ cnb-rs mission list --group my-org --search sprint
 
 # 按创建时间降序
-$ cnb mission list --group my-org --order-by created_at --desc
+$ cnb-rs mission list --group my-org --order-by created_at --desc
 
 # JSON 格式输出
-$ cnb mission list --group my-org --json
+$ cnb-rs mission list --group my-org --json
 ```
 
 ## 另请参阅
 
-- [cnb mission](/mission/)
-- [cnb mission create](/mission/create)
+- [cnb-rs mission](/mission/)
+- [cnb-rs mission create](/mission/create)

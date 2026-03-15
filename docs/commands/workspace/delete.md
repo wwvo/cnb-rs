@@ -1,7 +1,7 @@
-# cnb workspace delete
+# cnb-rs workspace delete
 
 ```
-cnb workspace delete [options]
+cnb-rs workspace delete [options]
 ```
 
 删除指定的云原生开发环境。
@@ -18,10 +18,10 @@ cnb workspace delete [options]
 
 ```bash
 # 删除指定工作区
-$ cnb workspace delete -p abc123
+$ cnb-rs workspace delete -p abc123
 ```
 
 ## 另请参阅
 
-- [cnb workspace](/workspace/)
-- [cnb workspace closed-clean](/workspace/closed-clean)
+- [cnb-rs workspace](/workspace/)
+- [cnb-rs workspace closed-clean](/workspace/closed-clean)

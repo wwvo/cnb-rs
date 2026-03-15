@@ -1,7 +1,7 @@
-# cnb build list
+# cnb-rs build list
 
 ```
-cnb build list [options]
+cnb-rs build list [options]
 ```
 
 列出仓库构建记录，支持多种过滤条件。
@@ -26,20 +26,20 @@ cnb build list [options]
 
 ```bash
 # 列出最近构建
-$ cnb build list
+$ cnb-rs build list
 
 # 过滤失败的构建
-$ cnb build list --status error
+$ cnb-rs build list --status error
 
 # 按分支和日期过滤
-$ cnb build list --branch main --since 2025-01-01
+$ cnb-rs build list --branch main --since 2025-01-01
 
 # JSON 格式输出
-$ cnb build list --json
+$ cnb-rs build list --json
 ```
 
 ## 另请参阅
 
-- [cnb build](/build/)
-- [cnb build status](/build/status)
-- [cnb build start](/build/start)
+- [cnb-rs build](/build/)
+- [cnb-rs build status](/build/status)
+- [cnb-rs build start](/build/start)

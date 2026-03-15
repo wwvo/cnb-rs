@@ -1,7 +1,7 @@
-# cnb member group-update
+# cnb-rs member group-update
 
 ```
-cnb member group-update <username> --group <group> --role <role>
+cnb-rs member group-update <username> --group <group> --role <role>
 ```
 
 更新组织成员权限。
@@ -19,12 +19,12 @@ cnb member group-update <username> --group <group> --role <role>
 ## 示例
 
 ```bash
-$ cnb member group-update zhangsan --group myorg --role Master
+$ cnb-rs member group-update zhangsan --group myorg --role Master
 ✓ 已更新成员 zhangsan 权限为 Master
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member group-list](/member/group-list)
-- [cnb member group-remove](/member/group-remove)
+- [cnb-rs member](/member/)
+- [cnb-rs member group-list](/member/group-list)
+- [cnb-rs member group-remove](/member/group-remove)

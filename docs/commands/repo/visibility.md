@@ -1,7 +1,7 @@
-# cnb repo visibility
+# cnb-rs repo visibility
 
 ```
-cnb repo visibility <repo> <visibility> [flags]
+cnb-rs repo visibility <repo> <visibility> [flags]
 ```
 
 修改仓库的可见性级别。
@@ -22,12 +22,12 @@ cnb repo visibility <repo> <visibility> [flags]
 
 ```bash
 # 设为公开
-$ cnb repo visibility org/repo public
+$ cnb-rs repo visibility org/repo public
 确定将 org/repo 的可见性修改为 public ？ (yes/no): yes
 ✓ 仓库可见性已修改为 public (org/repo)
 
 # 设为私有（跳过确认）
-$ cnb repo visibility org/repo private --yes
+$ cnb-rs repo visibility org/repo private --yes
 ✓ 仓库可见性已修改为 private (org/repo)
 ```
 
@@ -43,5 +43,5 @@ $ cnb repo visibility org/repo private --yes
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo edit](/repo/edit)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo edit](/repo/edit)

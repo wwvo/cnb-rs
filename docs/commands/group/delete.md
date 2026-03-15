@@ -1,7 +1,7 @@
-# cnb group delete
+# cnb-rs group delete
 
 ```
-cnb group delete <GROUP> [options]
+cnb-rs group delete <GROUP> [options]
 ```
 
 删除指定组织。**此操作不可逆**，需要交互确认。
@@ -19,13 +19,13 @@ cnb group delete <GROUP> [options]
 
 ```bash
 # 删除组织（需确认）
-$ cnb group delete my-org
+$ cnb-rs group delete my-org
 
 # 跳过确认直接删除
-$ cnb group delete my-org --confirm
+$ cnb-rs group delete my-org --confirm
 ```
 
 ## 另请参阅
 
-- [cnb group](/group/)
-- [cnb group create](/group/create)
+- [cnb-rs group](/group/)
+- [cnb-rs group create](/group/create)

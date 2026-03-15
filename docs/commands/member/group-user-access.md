@@ -1,7 +1,7 @@
-# cnb member group-user-access
+# cnb-rs member group-user-access
 
 ```
-cnb member group-user-access <username> --group <group>
+cnb-rs member group-user-access <username> --group <group>
 ```
 
 查看指定成员在组织的权限层级。
@@ -21,13 +21,13 @@ cnb member group-user-access <username> --group <group>
 ## 示例
 
 ```bash
-$ cnb member group-user-access zhangsan --group myorg
+$ cnb-rs member group-user-access zhangsan --group myorg
 
 # JSON 格式输出
-$ cnb member group-user-access zhangsan --group myorg --json
+$ cnb-rs member group-user-access zhangsan --group myorg --json
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member group-access-level](/member/group-access-level)
+- [cnb-rs member](/member/)
+- [cnb-rs member group-access-level](/member/group-access-level)

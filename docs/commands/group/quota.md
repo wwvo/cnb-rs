@@ -1,7 +1,7 @@
-# cnb group quota
+# cnb-rs group quota
 
 ```
-cnb group quota <GROUP>
+cnb-rs group quota <GROUP>
 ```
 
 查看组织的特权额度信息，包括算力、存储等资源配额。
@@ -19,13 +19,13 @@ cnb group quota <GROUP>
 
 ```bash
 # 查看额度
-$ cnb group quota my-org
+$ cnb-rs group quota my-org
 
 # JSON 格式输出
-$ cnb group quota my-org --json
+$ cnb-rs group quota my-org --json
 ```
 
 ## 另请参阅
 
-- [cnb group](/group/)
-- [cnb group view](/group/view)
+- [cnb-rs group](/group/)
+- [cnb-rs group view](/group/view)

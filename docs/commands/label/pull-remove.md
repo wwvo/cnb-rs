@@ -1,7 +1,7 @@
-# cnb label pull-remove
+# cnb-rs label pull-remove
 
 ```
-cnb label pull-remove <number> <name>
+cnb-rs label pull-remove <number> <name>
 ```
 
 移除指定 Pull Request 的单个标签。
@@ -19,12 +19,12 @@ cnb label pull-remove <number> <name>
 ## 示例
 
 ```bash
-$ cnb label pull-remove 10 "wip"
+$ cnb-rs label pull-remove 10 "wip"
 ✓ 已从 Pull #10 移除标签: wip
 ```
 
 ## 另请参阅
 
-- [cnb label](/label/)
-- [cnb label pull-list](/label/pull-list)
-- [cnb label pull-clear](/label/pull-clear)
+- [cnb-rs label](/label/)
+- [cnb-rs label pull-list](/label/pull-list)
+- [cnb-rs label pull-clear](/label/pull-clear)

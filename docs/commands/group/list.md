@@ -1,7 +1,7 @@
-# cnb group list
+# cnb-rs group list
 
 ```
-cnb group list [options]
+cnb-rs group list [options]
 ```
 
 列出当前用户有权限的组织。
@@ -23,22 +23,22 @@ cnb group list [options]
 
 ```bash
 # 列出顶层组织
-$ cnb group list
+$ cnb-rs group list
 
 # 按关键字搜索
-$ cnb group list --search my-org
+$ cnb-rs group list --search my-org
 
 # 列出指定组织下的子组织
-$ cnb group list --group my-org
+$ cnb-rs group list --group my-org
 
 # 按角色过滤
-$ cnb group list --role Owner
+$ cnb-rs group list --role Owner
 
 # JSON 格式输出
-$ cnb group list --json
+$ cnb-rs group list --json
 ```
 
 ## 另请参阅
 
-- [cnb group](/group/)
-- [cnb group view](/group/view)
+- [cnb-rs group](/group/)
+- [cnb-rs group view](/group/view)

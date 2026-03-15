@@ -1,7 +1,7 @@
-# cnb user activity-detail
+# cnb-rs user activity-detail
 
 ```
-cnb user activity-detail [<username>] --type <type> --repo <repo> --date <date>
+cnb-rs user activity-detail [<username>] --type <type> --repo <repo> --date <date>
 ```
 
 查看用户在指定仓库中某类活动的详细记录。
@@ -25,16 +25,16 @@ PR 类型会列出每个 Pull Request 的编号和标题等。
 
 ```bash
 # 查看当前用户在指定仓库的提交详情
-$ cnb user activity-detail --type commit --repo org/repo --date 202501
+$ cnb-rs user activity-detail --type commit --repo org/repo --date 202501
 
 # 查看指定用户的 PR 活动
-$ cnb user activity-detail zhangsan --type pr --repo org/repo --date 20250115
+$ cnb-rs user activity-detail zhangsan --type pr --repo org/repo --date 20250115
 
 # JSON 输出
-$ cnb user activity-detail --type review --repo org/repo --date 202501 --json
+$ cnb-rs user activity-detail --type review --repo org/repo --date 202501 --json
 ```
 
 ## 另请参阅
 
-- [cnb user](/user/)
-- [cnb user activities](/user/activities)
+- [cnb-rs user](/user/)
+- [cnb-rs user activities](/user/activities)

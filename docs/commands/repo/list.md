@@ -1,7 +1,7 @@
-# cnb repo list
+# cnb-rs repo list
 
 ```
-cnb repo list [<owner>] [flags]
+cnb-rs repo list [<owner>] [flags]
 ```
 
 列出用户或组织的仓库。
@@ -34,22 +34,22 @@ cnb repo list [<owner>] [flags]
 
 ```bash
 # 列出当前用户的仓库
-$ cnb repo list
+$ cnb-rs repo list
 
 # 列出组织的仓库
-$ cnb repo list my-org
+$ cnb-rs repo list my-org
 
 # 按更新时间倒序，限制 10 条
-$ cnb repo list --sort last_updated_at --desc --limit 10
+$ cnb-rs repo list --sort last_updated_at --desc --limit 10
 
 # 搜索仓库
-$ cnb repo list --search "cli"
+$ cnb-rs repo list --search "cli"
 
 # 仅列出私有仓库
-$ cnb repo list --visibility private
+$ cnb-rs repo list --visibility private
 
 # JSON 输出
-$ cnb repo list --json
+$ cnb-rs repo list --json
 ```
 
 ## API
@@ -70,5 +70,5 @@ $ cnb repo list --json
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo view](/repo/view)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo view](/repo/view)

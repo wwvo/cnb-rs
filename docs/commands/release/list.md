@@ -1,7 +1,7 @@
-# cnb release list
+# cnb-rs release list
 
 ```
-cnb release list
+cnb-rs release list
 ```
 
 列出仓库的 Release（最多 100 条）。
@@ -26,4 +26,4 @@ v1.1.0-beta     v1.1.0-beta     Pre release     2024-01-10 08:00:00
 
 ## 另请参阅
 
-- [cnb release](/release/)
+- [cnb-rs release](/release/)

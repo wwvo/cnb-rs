@@ -1,7 +1,7 @@
-# cnb workspace detail
+# cnb-rs workspace detail
 
 ```
-cnb workspace detail --sn <SN> [options]
+cnb-rs workspace detail --sn <SN> [options]
 ```
 
 查看工作区详情，获取各种 IDE 的访问地址。
@@ -22,13 +22,13 @@ cnb workspace detail --sn <SN> [options]
 
 ```bash
 # 查看工作区详情
-$ cnb workspace detail --sn 20250115-001
+$ cnb-rs workspace detail --sn 20250115-001
 
 # JSON 格式输出
-$ cnb workspace detail --sn 20250115-001 --json
+$ cnb-rs workspace detail --sn 20250115-001 --json
 ```
 
 ## 另请参阅
 
-- [cnb workspace](/workspace/)
-- [cnb workspace start](/workspace/start)
+- [cnb-rs workspace](/workspace/)
+- [cnb-rs workspace start](/workspace/start)

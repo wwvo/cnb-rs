@@ -1,7 +1,7 @@
-# cnb release asset-stats
+# cnb-rs release asset-stats
 
 ```
-cnb release asset-stats
+cnb-rs release asset-stats
 ```
 
 统计所有 Release 的附件大小。
@@ -26,4 +26,4 @@ Total Size: 29456384 (28.1 MB)
 
 ## 另请参阅
 
-- [cnb release](/release/)
+- [cnb-rs release](/release/)

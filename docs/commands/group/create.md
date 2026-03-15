@@ -1,7 +1,7 @@
-# cnb group create
+# cnb-rs group create
 
 ```
-cnb group create <PATH> [options]
+cnb-rs group create <PATH> [options]
 ```
 
 创建新组织。
@@ -21,16 +21,16 @@ cnb group create <PATH> [options]
 
 ```bash
 # 创建基本组织
-$ cnb group create my-org
+$ cnb-rs group create my-org
 
 # 带描述和备注
-$ cnb group create my-org --description "我的组织" --remark "测试用"
+$ cnb-rs group create my-org --description "我的组织" --remark "测试用"
 
 # 绑定域名
-$ cnb group create my-org --bind-domain example.com
+$ cnb-rs group create my-org --bind-domain example.com
 ```
 
 ## 另请参阅
 
-- [cnb group](/group/)
-- [cnb group view](/group/view)
+- [cnb-rs group](/group/)
+- [cnb-rs group view](/group/view)

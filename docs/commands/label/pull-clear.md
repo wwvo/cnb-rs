@@ -1,7 +1,7 @@
-# cnb label pull-clear
+# cnb-rs label pull-clear
 
 ```
-cnb label pull-clear <number> [-y]
+cnb-rs label pull-clear <number> [-y]
 ```
 
 清空指定 Pull Request 的所有标签。
@@ -22,16 +22,16 @@ cnb label pull-clear <number> [-y]
 
 ```bash
 # 清空标签（需确认）
-$ cnb label pull-clear 10
+$ cnb-rs label pull-clear 10
 确认清空 Pull #10 的所有标签？(y/N) y
 ✓ 已清空 Pull #10 的所有标签
 
 # 跳过确认
-$ cnb label pull-clear 10 -y
+$ cnb-rs label pull-clear 10 -y
 ```
 
 ## 另请参阅
 
-- [cnb label](/label/)
-- [cnb label pull-list](/label/pull-list)
-- [cnb label pull-set](/label/pull-set)
+- [cnb-rs label](/label/)
+- [cnb-rs label pull-list](/label/pull-list)
+- [cnb-rs label pull-set](/label/pull-set)

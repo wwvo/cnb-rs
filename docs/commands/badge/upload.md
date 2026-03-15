@@ -1,13 +1,13 @@
-# cnb badge upload
+# cnb-rs badge upload
 
 ```
-cnb badge upload --key <key> --sha <sha> --message <msg> [options]
+cnb-rs badge upload --key <key> --sha <sha> --message <msg> [options]
 ```
 
 上传自定义徽章数据。
 
 自定义徽章用于在 CI/CD 流水线中上报代码质量、安全扫描等自定义指标。
-上传后可通过 `cnb badge get` 获取对应的 SVG 或 JSON 数据。
+上传后可通过 `cnb-rs badge get` 获取对应的 SVG 或 JSON 数据。
 
 ## 选项
 
@@ -26,7 +26,7 @@ cnb badge upload --key <key> --sha <sha> --message <msg> [options]
 ## 示例
 
 ```bash
-$ cnb badge upload --key security/tca --sha abc12345 \
+$ cnb-rs badge upload --key security/tca --sha abc12345 \
     --message "A+" --value 95 \
     --link "https://example.com/report" \
     --latest
@@ -37,6 +37,6 @@ $ cnb badge upload --key security/tca --sha abc12345 \
 
 ## 另请参阅
 
-- [cnb badge](/badge/)
-- [cnb badge get](/badge/get)
-- [cnb badge list](/badge/list)
+- [cnb-rs badge](/badge/)
+- [cnb-rs badge get](/badge/get)
+- [cnb-rs badge list](/badge/list)

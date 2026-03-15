@@ -1,7 +1,7 @@
-# cnb repo asset
+# cnb-rs repo asset
 
 ```
-cnb repo asset <list|delete> [flags]
+cnb-rs repo asset <list|delete> [flags]
 ```
 
 管理仓库资产记录，包括 release 附件、commit 附件、issue/PR 文件等。
@@ -11,7 +11,7 @@ cnb repo asset <list|delete> [flags]
 ### asset list
 
 ```
-cnb repo asset list [<repo>] [flags]
+cnb-rs repo asset list [<repo>] [flags]
 ```
 
 列出仓库的资产记录。
@@ -22,7 +22,7 @@ cnb repo asset list [<repo>] [flags]
 ### asset delete
 
 ```
-cnb repo asset delete <id> [flags]
+cnb-rs repo asset delete <id> [flags]
 ```
 
 删除指定的仓库资产。仅 `slug_img` 和 `slug_file` 类型可删除。
@@ -40,24 +40,24 @@ cnb repo asset delete <id> [flags]
 
 ```bash
 # 列出仓库资产
-$ cnb repo asset list
+$ cnb-rs repo asset list
 ID          TYPE          SIZE       PATH
 ast-001     slug_img      1.2 MB     /images/logo.png
 ast-002     repo_release  5.4 MB     /releases/v1.0/app.zip
 
 # 限制数量
-$ cnb repo asset list --limit 10
+$ cnb-rs repo asset list --limit 10
 
 # 删除指定资产
-$ cnb repo asset delete ast-001
+$ cnb-rs repo asset delete ast-001
 确认删除资产 ast-001 ？ (yes/no): yes
 ✓ 资产已删除 (ast-001)
 
 # 跳过确认
-$ cnb repo asset delete ast-001 --yes
+$ cnb-rs repo asset delete ast-001 --yes
 
 # JSON 输出
-$ cnb repo asset list --json
+$ cnb-rs repo asset list --json
 ```
 
 ## API
@@ -74,5 +74,5 @@ $ cnb repo asset list --json
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb release asset-stats](/release/asset-stats)
+- [cnb-rs repo](/repo/)
+- [cnb-rs release asset-stats](/release/asset-stats)

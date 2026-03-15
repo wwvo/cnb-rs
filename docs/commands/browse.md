@@ -1,7 +1,7 @@
-# cnb browse
+# cnb-rs browse
 
 ```
-cnb browse [path]
+cnb-rs browse [path]
 ```
 
 在浏览器中打开当前仓库的页面。
@@ -22,19 +22,19 @@ cnb browse [path]
 
 ```bash
 # 打开仓库首页
-$ cnb browse
+$ cnb-rs browse
 
 # 打开 Issues 页面
-$ cnb browse -/issues
+$ cnb-rs browse -/issues
 
 # 打开 Pull Requests 页面
-$ cnb browse -/pulls
+$ cnb-rs browse -/pulls
 
 # 打开仓库设置页面
-$ cnb browse -/settings
+$ cnb-rs browse -/settings
 ```
 
 ## 另请参阅
 
-- [cnb](/guide/cnb)
-- [cnb info](/info)
+- [cnb-rs](/guide/cnb)
+- [cnb-rs info](/info)

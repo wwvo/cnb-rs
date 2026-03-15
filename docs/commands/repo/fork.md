@@ -1,7 +1,7 @@
-# cnb repo fork
+# cnb-rs repo fork
 
 ```
-cnb repo fork [<repo>] [flags]
+cnb-rs repo fork [<repo>] [flags]
 ```
 
 查看仓库的 Fork 列表。
@@ -26,16 +26,16 @@ cnb repo fork [<repo>] [flags]
 
 ```bash
 # 查看当前仓库的 Fork 列表
-$ cnb repo fork
+$ cnb-rs repo fork
 
 # 查看指定仓库的 Fork
-$ cnb repo fork org/repo
+$ cnb-rs repo fork org/repo
 
 # 限制数量
-$ cnb repo fork org/repo --limit 10
+$ cnb-rs repo fork org/repo --limit 10
 
 # JSON 输出
-$ cnb repo fork --json
+$ cnb-rs repo fork --json
 ```
 
 ## API
@@ -50,5 +50,5 @@ $ cnb repo fork --json
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo view](/repo/view)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo view](/repo/view)

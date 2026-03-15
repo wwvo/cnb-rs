@@ -1,7 +1,7 @@
-# cnb member group-inherited
+# cnb-rs member group-inherited
 
 ```
-cnb member group-inherited --group <group> [options]
+cnb-rs member group-inherited --group <group> [options]
 ```
 
 列出组织继承成员。
@@ -23,16 +23,16 @@ cnb member group-inherited --group <group> [options]
 
 ```bash
 # 列出组织继承成员
-$ cnb member group-inherited --group myorg
+$ cnb-rs member group-inherited --group myorg
 
 # 按角色过滤
-$ cnb member group-inherited --group myorg --role Master
+$ cnb-rs member group-inherited --group myorg --role Master
 
 # JSON 格式输出
-$ cnb member group-inherited --group myorg --json
+$ cnb-rs member group-inherited --group myorg --json
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member group-list](/member/group-list)
+- [cnb-rs member](/member/)
+- [cnb-rs member group-list](/member/group-list)

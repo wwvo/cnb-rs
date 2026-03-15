@@ -1,7 +1,7 @@
-# cnb knowledge info
+# cnb-rs knowledge info
 
 ```
-cnb knowledge info
+cnb-rs knowledge info
 ```
 
 获取当前仓库的知识库信息。
@@ -35,4 +35,4 @@ Exclude              test/*
 
 ## 另请参阅
 
-- [cnb knowledge](/knowledge/)
+- [cnb-rs knowledge](/knowledge/)

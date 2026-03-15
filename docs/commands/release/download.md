@@ -1,7 +1,7 @@
-# cnb release download
+# cnb-rs release download
 
 ```
-cnb release download <TAG> <FILENAME> [options]
+cnb-rs release download <TAG> <FILENAME> [options]
 ```
 
 下载 Release 附件到本地，或生成分享下载链接。
@@ -22,16 +22,16 @@ cnb release download <TAG> <FILENAME> [options]
 
 ```bash
 # 下载附件到当前目录
-$ cnb release download v1.2.0 app-linux-amd64.tar.gz
+$ cnb-rs release download v1.2.0 app-linux-amd64.tar.gz
 
 # 保存到指定目录
-$ cnb release download v1.2.0 app-linux-amd64.tar.gz -o ./downloads/
+$ cnb-rs release download v1.2.0 app-linux-amd64.tar.gz -o ./downloads/
 
 # 保存为指定文件名
-$ cnb release download v1.2.0 app-linux-amd64.tar.gz -o ./app.tar.gz
+$ cnb-rs release download v1.2.0 app-linux-amd64.tar.gz -o ./app.tar.gz
 
 # 获取分享下载链接
-$ cnb release download v1.2.0 app-linux-amd64.tar.gz --share
+$ cnb-rs release download v1.2.0 app-linux-amd64.tar.gz --share
 ```
 
 ## API
@@ -42,6 +42,6 @@ $ cnb release download v1.2.0 app-linux-amd64.tar.gz --share
 
 ## 另请参阅
 
-- [cnb release](/release/)
-- [cnb release view](/release/view)
-- [cnb release asset-upload](/release/asset-upload)
+- [cnb-rs release](/release/)
+- [cnb-rs release view](/release/view)
+- [cnb-rs release asset-upload](/release/asset-upload)

@@ -1,7 +1,7 @@
-# cnb repo pin
+# cnb-rs repo pin
 
 ```
-cnb repo pin <list|set> [flags]
+cnb-rs repo pin <list|set> [flags]
 ```
 
 管理仓库墙（置顶仓库）。支持查看用户/组织的仓库墙，以及设置组织的仓库墙。
@@ -11,7 +11,7 @@ cnb repo pin <list|set> [flags]
 ### pin list
 
 ```
-cnb repo pin list [<owner>]
+cnb-rs repo pin list [<owner>]
 ```
 
 列出用户或组织的置顶仓库。不指定 `owner` 时，列出当前认证用户的仓库墙。
@@ -21,7 +21,7 @@ cnb repo pin list [<owner>]
 ### pin set
 
 ```
-cnb repo pin set --group <GROUP> <repos...>
+cnb-rs repo pin set --group <GROUP> <repos...>
 ```
 
 设置组织的仓库墙。传入的仓库路径列表将**替换**现有的仓库墙。
@@ -38,20 +38,20 @@ cnb repo pin set --group <GROUP> <repos...>
 
 ```bash
 # 查看当前用户的仓库墙
-$ cnb repo pin list
+$ cnb-rs repo pin list
 
 # 查看组织的仓库墙
-$ cnb repo pin list my-org
+$ cnb-rs repo pin list my-org
 
 # 查看指定用户的仓库墙
-$ cnb repo pin list octocat
+$ cnb-rs repo pin list octocat
 
 # 设置组织仓库墙
-$ cnb repo pin set --group my-org my-org/repo1 my-org/repo2 my-org/repo3
+$ cnb-rs repo pin set --group my-org my-org/repo1 my-org/repo2 my-org/repo3
 ✓ 已更新 my-org 的仓库墙（共 3 个仓库）
 
 # JSON 输出
-$ cnb repo pin list --json
+$ cnb-rs repo pin list --json
 ```
 
 ## API
@@ -70,5 +70,5 @@ $ cnb repo pin list --json
 
 ## 另请参阅
 
-- [cnb repo](/repo/)
-- [cnb repo list](/repo/list)
+- [cnb-rs repo](/repo/)
+- [cnb-rs repo list](/repo/list)

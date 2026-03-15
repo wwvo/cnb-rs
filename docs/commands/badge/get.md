@@ -1,7 +1,7 @@
-# cnb badge get
+# cnb-rs badge get
 
 ```
-cnb badge get <sha> <badge> [options]
+cnb-rs badge get <sha> <badge> [options]
 ```
 
 获取指定徽章数据。
@@ -26,17 +26,17 @@ cnb badge get <sha> <badge> [options]
 
 ```bash
 # 获取最新 CI 状态徽章 JSON 数据
-$ cnb badge get latest ci/status/push --json
+$ cnb-rs badge get latest ci/status/push --json
 
 # 获取指定 commit 的徽章 SVG
-$ cnb badge get 89d48c07 ci/status/push --svg > badge.svg
+$ cnb-rs badge get 89d48c07 ci/status/push --svg > badge.svg
 
 # 指定分支
-$ cnb badge get latest ci/status/push --branch main --json
+$ cnb-rs badge get latest ci/status/push --branch main --json
 ```
 
 ## 另请参阅
 
-- [cnb badge](/badge/)
-- [cnb badge list](/badge/list)
-- [cnb badge upload](/badge/upload)
+- [cnb-rs badge](/badge/)
+- [cnb-rs badge list](/badge/list)
+- [cnb-rs badge upload](/badge/upload)

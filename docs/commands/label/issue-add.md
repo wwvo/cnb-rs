@@ -1,7 +1,7 @@
-# cnb label issue-add
+# cnb-rs label issue-add
 
 ```
-cnb label issue-add <number> -l <labels>
+cnb-rs label issue-add <number> -l <labels>
 ```
 
 为指定 Issue 添加标签。
@@ -20,15 +20,15 @@ cnb label issue-add <number> -l <labels>
 
 ```bash
 # 多次指定标签
-$ cnb label issue-add 42 -l "bug" -l "urgent"
+$ cnb-rs label issue-add 42 -l "bug" -l "urgent"
 ✓ 已为 Issue #42 添加标签: bug, urgent
 
 # 逗号分隔
-$ cnb label issue-add 42 -l "bug,urgent"
+$ cnb-rs label issue-add 42 -l "bug,urgent"
 ```
 
 ## 另请参阅
 
-- [cnb label](/label/)
-- [cnb label issue-list](/label/issue-list)
-- [cnb label issue-remove](/label/issue-remove)
+- [cnb-rs label](/label/)
+- [cnb-rs label issue-list](/label/issue-list)
+- [cnb-rs label issue-remove](/label/issue-remove)

@@ -1,7 +1,7 @@
-# cnb registry set-visibility
+# cnb-rs registry set-visibility
 
 ```
-cnb registry set-visibility <registry> <visibility>
+cnb-rs registry set-visibility <registry> <visibility>
 ```
 
 设置制品库可见性。
@@ -19,13 +19,13 @@ cnb registry set-visibility <registry> <visibility>
 
 ```bash
 # 设为私有
-$ cnb registry set-visibility my-org/my-registry private
+$ cnb-rs registry set-visibility my-org/my-registry private
 
 # 设为公开
-$ cnb registry set-visibility my-org/my-registry public
+$ cnb-rs registry set-visibility my-org/my-registry public
 ```
 
 ## 另请参阅
 
-- [cnb registry](/registry/)
-- [cnb registry list](/registry/list)
+- [cnb-rs registry](/registry/)
+- [cnb-rs registry list](/registry/list)

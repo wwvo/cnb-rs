@@ -1,7 +1,7 @@
-# cnb member repo-update
+# cnb-rs member repo-update
 
 ```
-cnb member repo-update <username> --role <role>
+cnb-rs member repo-update <username> --role <role>
 ```
 
 更新仓库成员权限。
@@ -19,12 +19,12 @@ cnb member repo-update <username> --role <role>
 ## 示例
 
 ```bash
-$ cnb member repo-update zhangsan --role Master
+$ cnb-rs member repo-update zhangsan --role Master
 ✓ 已更新成员 zhangsan 权限为 Master
 ```
 
 ## 另请参阅
 
-- [cnb member](/member/)
-- [cnb member repo-list](/member/repo-list)
-- [cnb member repo-remove](/member/repo-remove)
+- [cnb-rs member](/member/)
+- [cnb-rs member repo-list](/member/repo-list)
+- [cnb-rs member repo-remove](/member/repo-remove)
