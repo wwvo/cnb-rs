@@ -2,6 +2,15 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
+## [0.4.6] - 2026-03-15
+
+### 👷 CI/CD
+
+- **(release)** 放宽实验性 Windows ARM64 目标 ([32eb863](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/32eb863926895046457359ca3db07b01b34c792a))
+- **(github)** 升级 Node 24 兼容 Actions ([5c3d5d2](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/5c3d5d294983aed9365f309717fe6409b4469e25))
+- **(github)** 更正 Windows ARM64 GNU 目标 ([2176b48](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/2176b48ecaf4b51aabf06676ae3e2ef06762970e))
+- **(image)** 改为下载预编译 git-cliff ([dba5cdf](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/dba5cdf6bc4042d247709f4b21e73babfedd7450))
+
 ## [0.4.5] - 2026-03-15
 
 ### 👷 CI/CD
