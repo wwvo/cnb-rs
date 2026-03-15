@@ -78,7 +78,9 @@ git config user.email "bot@cnb.cool"
 
 git commit \
   -m "${commit_title}" \
-  -m "- 根据 ${current_version} 以来的提交自动推导出下一个版本号\n- 更新 workspace version、同步 Cargo.lock 并重建项目级 CHANGELOG.md\n- 为 main 合并后的自动打 tag 流程准备 release PR" \
+  -m "- 根据 ${current_version} 以来的提交自动推导出下一个版本号" \
+  -m "- 更新 workspace version、同步 Cargo.lock 并重建项目级 CHANGELOG.md" \
+  -m "- 为 main 合并后的自动打 tag 流程准备 release PR" \
   -m "Refs: #48"
 
 git push origin "HEAD:${release_branch}"
