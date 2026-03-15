@@ -44,6 +44,11 @@ jobs:
           - os: windows-latest
             target: aarch64-pc-windows-msvc
             archive_ext: zip
+          - os: ubuntu-latest
+            target: aarch64-pc-windows-gnullvm
+            archive_ext: zip
+            setup_cross_toolchain: true
+            experimental: true
           - os: macos-latest
             target: x86_64-apple-darwin
             archive_ext: tar.gz
@@ -84,12 +89,20 @@ jobs:
         with:
           tool: cross
 
+      - name: Setup Windows ARM64 gnullvm toolchain
+        if: matrix.setup_cross_toolchain
+        uses: taiki-e/setup-cross-toolchain-action@v1
+        with:
+          target: ${{ matrix.target }}
+
       - name: Build binaries
         shell: bash
         run: |
           set -euo pipefail
 
-          if [[ "${{ matrix.use_cross }}" == "true" ]]; then
+          if [[ "${{ matrix.setup_cross_toolchain }}" == "true" ]]; then
+            cargo build --release --locked --target "${{ matrix.target }}"
+          elif [[ "${{ matrix.use_cross }}" == "true" ]]; then
             cross build --release --locked --target "${{ matrix.target }}"
           else
             cargo build --release --locked --target "${{ matrix.target }}"
