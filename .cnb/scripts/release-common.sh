@@ -33,7 +33,7 @@ repo_slug() {
     sed -E 's#^https?://[^/]+/##; s#\.git$##'
 }
 
-workspace_version() {
+extract_workspace_version() {
   awk '
     /^\[workspace\.package\]/ { in_section=1; next }
     /^\[/ { in_section=0 }
@@ -44,7 +44,18 @@ workspace_version() {
       print line
       exit
     }
-  ' Cargo.toml
+  ' "$@"
+}
+
+workspace_version() {
+  extract_workspace_version Cargo.toml
+}
+
+workspace_version_at_ref() {
+  local ref="$1"
+
+  git cat-file -e "${ref}:Cargo.toml" 2>/dev/null || return 1
+  git show "${ref}:Cargo.toml" | extract_workspace_version
 }
 
 set_workspace_version() {
