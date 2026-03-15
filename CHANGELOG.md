@@ -2,6 +2,25 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
+## [0.4.3] - 2026-03-15
+
+### 👷 CI/CD
+
+- **(release)** 修复 release PR changelog 版本标题 ([b96202e](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/b96202e8c14d39a6e1b4f6f16513c73e2472d45a))
+- **(tag)** 收紧自动打 tag 的版本校验 ([b5bce23](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/b5bce230cb775d88148a812151eee84d8220aab1))
+- **(release)** 为 release 添加 SHA-256 校验文件 ([1685582](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/1685582c3af4a9d3f50f1844c53bb76229a4df8b))
+- **(github)** 恢复 Windows ARM64 GNU 发布附件 ([97204f1](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/97204f10baffc269881ce7cfc01f5cebc845f09f))
+- **(github)** 恢复 Windows ARM64 MSVC 发布附件 ([8d25a42](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/8d25a424b2ad4d98e28cc7a6a3628b6624d0379b))
+- **(github)** 恢复 Windows MSVC 发布附件 ([b3925fe](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/b3925feeb401722a817a7b661eaad7a5031e5be9))
+- **(workflow)** 切换 CNB 流水线消费 rust-ci 镜像 ([a258ee7](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/a258ee7b89cf86cece5b5f7cb10190998b7347ae))
+- **(sync)** 拆分 GitHub main 与 tag 同步 ([2a13c15](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/2a13c15c97144581c7b196e7545a468c321f018a))
+- **(image)** 收缩并更名 Rust CI 镜像 ([5b6f79b](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/5b6f79b62a3def25bcf443f6176fede3652c7548))
+- **(github)** 兼容空附件删除 ([012e916](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/012e916427d5b549a2e945c98d2d2b054208f066))
+
+### 🔧 杂项
+
+- **(deps)** 升级 clap 依赖 ([0c1e6e5](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/0c1e6e5b20a40539c594498ab78fa23dbcb5bd78))
+
 ## [0.4.2] - 2026-03-15
 
 ### ♻️ 重构
