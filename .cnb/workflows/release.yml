@@ -2,16 +2,11 @@ x-release-job: &release-job
   - name: create-release-and-sync-github
     runner:
       cpus: 2
-    imports:
-      - https://cnb.cool/prevailna/secrets/-/blob/main/github-sync/cnb-cli-rs.yml
     stages:
       - name: 等待发版前检查
         type: cnb:await
         options:
           key: pre-release-check-ready
-      - name: 检查 GitHub 镜像同步配置
-        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-ci
-        script: bash .cnb/scripts/check-github-sync-env.sh
       - name: 生成 CHANGELOG
         image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-ci
         script: bash .cnb/scripts/generate-changelog.sh
@@ -24,6 +19,8 @@ x-release-job: &release-job
           overlying: true
       - name: 同步当前 tag 到 GitHub
         image: tencentcom/git-sync
+        imports:
+          - https://cnb.cool/prevailna/secrets/-/blob/main/github-sync/cnb-rs.yml
         settings:
           target_url: ${GITHUB_SYNC_TARGET_URL}
           auth_type: https

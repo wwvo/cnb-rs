@@ -2,7 +2,7 @@
 
 ## 安装
 
-从 [Release 页面](https://cnb.cool/wwvo/cnb-cli/cnb/-/releases) 下载适合你平台的二进制文件。
+从 [Release 页面](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/releases) 下载适合你平台的二进制文件。
 
 > [!WARNING]
 > 从改名版本开始，原来的 `cnb ...` 已改为 `cnb-rs ...`。

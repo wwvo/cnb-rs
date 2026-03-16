@@ -37,7 +37,7 @@
 
 ## 安装
 
-从 [Release 页面](https://cnb.cool/wwvo/cnb-cli/cnb/-/releases) 下载适合你平台的二进制文件。
+从 [Release 页面](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/releases) 下载适合你平台的二进制文件。
 
 > [!WARNING]
 > 从本项目的改名版本开始，原来的 `cnb ...` 已改为 `cnb-rs ...`。
@@ -82,8 +82,8 @@ cnb/
 **前置条件：** [Rust](https://www.rust-lang.org/tools/install)（edition 2024）
 
 ```bash
-git clone https://cnb.cool/wwvo/cnb-cli/cnb.git
-cd cnb
+git clone https://cnb.cool/wwvo/cnb-rs/cnb-rs.git
+cd cnb-rs
 cargo build --release
 ```
 

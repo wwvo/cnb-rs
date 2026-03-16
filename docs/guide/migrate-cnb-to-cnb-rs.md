@@ -2,7 +2,7 @@
 
 `cnb` 已在本项目中正式改名为 `cnb-rs`。
 
-这次改名的目标是和官方 CLI 明确区分。仓库 slug、CNB 仓库路径和 GitHub 镜像仓库名没有变化，但用户本地执行的命令名、发布产物名和补全文件名已经改变。
+这次改名的目标是和官方 CLI 明确区分。当前用户本地执行的命令名、发布产物名、CNB 仓库路径和 GitHub 仓库名都已经对齐到 `cnb-rs`。
 
 ## 你需要改什么
 
@@ -50,12 +50,17 @@ Set-Alias cnb cnb-rs
 - 文档与 release notes 仍然会统一使用 `cnb-rs`
 - 问题排查时，也优先按 `cnb-rs` 的实际可执行文件名检查 PATH 和安装状态
 
-## 不会变化的部分
+## 当前仓库标识
 
-以下内容保持不变：
+当前仓库入口已经更新为：
 
-- 仓库地址：`https://cnb.cool/wwvo/cnb-cli/cnb.git`
-- 仓库 slug：`wwvo/cnb-cli/cnb`
+- 仓库地址：`https://cnb.cool/wwvo/cnb-rs/cnb-rs.git`
+- 仓库 slug：`wwvo/cnb-rs/cnb-rs`
+
+## 仍保持兼容的部分
+
+以下内容不因命令改名而改变：
+
 - 配置目录：`~/.cnb/`
 - 现有 token 环境变量名，例如 `CNB_TOKEN`
 

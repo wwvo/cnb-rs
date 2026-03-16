@@ -191,7 +191,7 @@ cnb-rs --repo wwvo/cnb-rs/cnb-rs label issue-remove <NUMBER> "target:v0.4.6"
 ## 必需配置
 
 - CNB 侧默认通过 key repo `imports` 引入以下变量：
-  - `https://cnb.cool/prevailna/secrets/-/blob/main/github-sync/cnb-cli-rs.yml`
+  - `https://cnb.cool/prevailna/secrets/-/blob/main/github-sync/cnb-rs.yml`
   - `GITHUB_SYNC_TARGET_URL`
   - `GITHUB_SYNC_USERNAME`
   - `GITHUB_SYNC_TOKEN`
