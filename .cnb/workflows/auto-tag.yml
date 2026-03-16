@@ -11,7 +11,7 @@ x-auto-tag-job: &auto-tag-job
         options:
           key: github-main-sync-ready
       - name: 自动创建版本标签
-        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-ci
+        image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
         script: bash .cnb/scripts/auto-create-tag.sh
 
 main:

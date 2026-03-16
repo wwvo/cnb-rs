@@ -8,7 +8,7 @@ x-release-job: &release-job
         options:
           key: pre-release-check-ready
       - name: 生成 CHANGELOG
-        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-ci
+        image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
         script: bash .cnb/scripts/generate-changelog.sh
       - name: 创建 CNB Release
         type: git:release

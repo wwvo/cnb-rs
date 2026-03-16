@@ -4,7 +4,7 @@ x-release-prepare-job: &release-prepare-job
       cpus: 4
     stages:
       - name: 生成 release PR
-        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-ci
+        image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
         script: bash .cnb/scripts/prepare-release.sh
 
 main:

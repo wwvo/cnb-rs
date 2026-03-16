@@ -4,7 +4,7 @@ x-pre-release-check-job: &pre-release-check-job
       cpus: 4
     stages:
       - name: 发版前检查
-        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-ci
+        image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
         script: bash .cnb/scripts/pre-release-check.sh
       - name: 发版前检查通过
         type: cnb:resolve

@@ -4,16 +4,16 @@ x-ci-check-job: &ci-check-job
       cpus: 4
     stages:
       - name: cargo fmt
-        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-ci
+        image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
         script: bash .cnb/scripts/ci-check.sh fmt
       - name: cargo check
-        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-ci
+        image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
         script: bash .cnb/scripts/ci-check.sh check
       - name: cargo clippy
-        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-ci
+        image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
         script: bash .cnb/scripts/ci-check.sh clippy
       - name: cargo test
-        image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-ci
+        image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
         script: bash .cnb/scripts/ci-check.sh test
       - name: 代码检查通过
         type: cnb:resolve
