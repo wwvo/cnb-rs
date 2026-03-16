@@ -2,6 +2,28 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
+## [0.6.0] - 2026-03-16
+
+### ✨ 新功能
+
+- 添加 cnb-rs-docs skill 用于生成 CLI 文档 ([db258b5](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/db258b5fa23b9782c24b7459b261eff66673c629))
+
+### 🐛 Bug 修复
+
+- **(ci)** 对齐 .cnb rust-ci 镜像命名空间 ([4d2bf8d](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/4d2bf8de05d041268fd35b7c39e7e4bbfbc93d70))
+- **(migration)** 收尾 #120 主入口 identity 残留 ([5305a41](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/5305a41eb63bf58af79a796f2db5dee554605174))
+- **(migration)** 对齐仓库 identity 与 git-sync 配置 ([5367f88](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/5367f88caafbec402417acf620724eafb3ee770d))
+- **(release)** 对齐 release issue checklist 收口规则 ([21e7da0](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/21e7da0f4cb4263b3fc553cf41a1aeab3b7bb723))
+
+### 📝 文档
+
+- **(skill)** 优化 cnb-rs-docs skill 文档 ([de9a8b9](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/de9a8b964b38f7ef509c74207ebf06ed9823e0e7))
+
+### 🔧 杂项
+
+- **(cargo)** 对齐根包 package name 到 cnb-rs ([e64c84b](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/e64c84bd581147cb2682a1e15a133289727e5972))
+- merge node(merged by CNB) ([27f4ad1](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/27f4ad147521ab77fb69dc370563e9dfee6a3ae0))
+
 ## [0.5.0] - 2026-03-15
 
 ### 迁移提示
