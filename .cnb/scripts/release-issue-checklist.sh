@@ -27,7 +27,7 @@ target_label="target:${release_tag}"
 released_label="released:${release_tag}"
 cnb_web_endpoint="${CNB_WEB_ENDPOINT:-https://cnb.cool}"
 cnb_release_url="${cnb_web_endpoint}/${repo}/-/releases/tag/${release_tag}"
-github_release_url="https://github.com/wwvo/cnb-cli-rs/releases/tag/${release_tag}"
+github_release_url="https://github.com/wwvo/cnb-rs/releases/tag/${release_tag}"
 
 cnb_log "检查 CNB Release 是否存在"
 curl -fsS \
@@ -38,7 +38,7 @@ curl -fsS \
 cnb_log "检查 GitHub Release 是否存在"
 curl -fsSIL "${github_release_url}" >/dev/null
 
-cnb_log "release issue 收口清单"
+cnb_log "release issue 流水线收口候选清单"
 cat <<EOF
 版本标签规范：
 - 目标版本标签: ${target_label}
@@ -61,14 +61,14 @@ cargo run --quiet -- --repo "${repo}" issue list -s closed -l "${target_label}" 
 
 echo
 cat <<EOF
-手工收口 checklist：
+流水线收口候选 checklist：
 1. 确认 ${release_tag} 的 CNB / GitHub Release 页面和附件都已完成
 2. 对开放中的 ${target_label} issue 逐个确认：
    - 带 epic / tracking / keep-open 的 issue 默认保持打开
-   - 已随 ${release_tag} 交付的 issue：评论、添加 ${released_label}、移除 ${target_label}、再关闭
+   - 已随 ${release_tag} 交付的 issue：添加 ${released_label}、移除 ${target_label}，并交给 release 收口流水线评论和关闭
    - 未赶上的 issue：移除 ${target_label}，改挂到下一个目标版本
 
-关闭评论模板：
+流水线收口评论模板：
 已随 \`${release_tag}\` 正式发布，关闭。
 
 - CNB Release: ${cnb_release_url}
@@ -85,10 +85,7 @@ cat <<EOF
   cnb-rs --repo ${repo} label issue-add <NUMBER> -l "${released_label}"
 - 移除当前目标标签：
   cnb-rs --repo ${repo} label issue-remove <NUMBER> "${target_label}"
-- 添加关闭评论：
-  cnb-rs --repo ${repo} issue comment <NUMBER> -c '已随 `${release_tag}` 正式发布，关闭。'
-- 关闭 issue：
-  cnb-rs --repo ${repo} issue close <NUMBER> -r completed
+- 后续由 release 收口流水线执行评论与关闭，不再手工执行 issue close
 
 EOF
 

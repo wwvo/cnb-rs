@@ -12,8 +12,8 @@ branch:
       - name: 构建 Rust CI 镜像
         description: 预热 Linux CI 依赖并更新 rust-ci 镜像
         event: web_trigger_build-image
-      - name: 生成 release issue 清单
-        description: 按版本标签生成发布后手工收口 checklist
+      - name: 生成 release issue 候选清单
+        description: 按版本标签生成发布后流水线收口候选 checklist
         event: web_trigger_release-issue-checklist
         inputs:
           RELEASE_TAG:

@@ -3,7 +3,7 @@ x-release-issue-checklist-job: &release-issue-checklist-job
     runner:
       cpus: 2
     stages:
-      - name: 生成 release issue 手工收口清单
+      - name: 生成 release issue 流水线收口候选清单
         image: docker.cnb.cool/wwvo/cnb-cli/cnb:rust-ci
         script: bash .cnb/scripts/release-issue-checklist.sh
 
