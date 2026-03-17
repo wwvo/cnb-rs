@@ -6,6 +6,8 @@
 
 在终端中高效管理你的 CNB 平台资源。
 
+[![CNB Repo](https://img.shields.io/badge/CNB-wwvo%2Fcnb--rs-2F80ED?style=flat-square&logo=cloudnativebuild&logoColor=white)](https://cnb.cool/wwvo/cnb-rs/cnb-rs)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-wwvo%2Fcnb--rs-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/wwvo/cnb-rs)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue?style=flat-square)](LICENSE)
 [![Rust](https://img.shields.io/badge/rust-edition%202024-orange?style=flat-square)](https://www.rust-lang.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square)]()
