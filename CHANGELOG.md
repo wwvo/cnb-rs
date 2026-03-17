@@ -2,6 +2,30 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
+## [0.9.0] - 2026-03-17
+
+### ✨ 新功能
+
+- **(version)** 丰富版本信息输出 ([90968f4](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/90968f4e60b9b8c4acbda99b934f5b650e244b95))
+- **(msi)** 收口 Windows MSI 安装模型 ([e8f873e](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/e8f873e6a1773c0a5a2e59ca731eb353bf9b4cb4))
+
+### 👷 CI/CD
+
+- **(github)** switch mirror packaging workflows to push ([4dba6df](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/4dba6df3dd946e537e1a0bf71f23186aece70139))
+- **(cnb)** 为 pull_request 的 ci-check 增加 ifModify ([fd9e93a](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/fd9e93a4735c67b7ef4a6f6e381eeec0b2968017))
+- **(release)** 支持部分构建失败时继续发布 ([2cd4be9](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/2cd4be9ef115b60758a9eb06fd0876e74b9e1f30))
+- **(release)** 修复 Linux arm64 packaging 依赖安装 ([19025c3](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/19025c3ed8e4f8b3d4bc8660713d773c3d78dfe0))
+- **(msi)** 为 Windows MSI 增加静默安装卸载验证 ([3ff6c0a](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/3ff6c0a679d8e58836357d07d6582f4f7e94a61b))
+
+### 📝 文档
+
+- **(readme)** 添加仓库入口徽章 ([019182c](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/019182cc2b6fdd69759c73e35bae2d96991c05bc))
+
+### 📦 构建
+
+- **(release)** 将 Windows MSI 接入发版链路 ([7c3fb80](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/7c3fb800bf2dea4cd321789e3ec5a857452b60b7))
+- **(msi)** 为 Windows 增加 MSI 打包基础设施 ([72927c3](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/72927c37f0c9da9c197a88d9d2f27a871b36a42e))
+
 ## [0.8.0] - 2026-03-17
 
 ### ✨ 新功能
