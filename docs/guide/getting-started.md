@@ -29,9 +29,24 @@ sudo dnf install ./cnb-rs-*.aarch64.rpm
 
 更多说明见：[Linux 安装说明](/guide/linux-install)。
 
-### Windows / macOS
+### Windows
 
-Windows 与 macOS 当前继续使用 release 页面中的压缩包附件。
+Windows `x86_64` 当前优先提供 `.msi` 安装包，推荐直接双击安装，或在 PowerShell 中静默安装：
+
+```powershell
+msiexec /i .\cnb-rs-v<VERSION>-x86_64-pc-windows-msvc.msi
+```
+
+如果你不希望使用 MSI，或者当前目标不是 `x86_64-pc-windows-msvc`，也仍然可以继续使用 release 页面中的 `.zip` 压缩包附件。
+
+> [!NOTE]
+> 当前 MSI 只覆盖 `x86_64-pc-windows-msvc`。Windows 其他目标仍以 `.zip` 附件为主。
+
+更多说明见：[Windows 安装说明](/guide/windows-install)。
+
+### macOS
+
+macOS 当前继续使用 release 页面中的 `.tar.gz` 压缩包附件。
 
 如果你更偏好包管理器方式，也可以直接使用：
 
@@ -51,7 +66,7 @@ scoop install cnb-rs/cnb-rs
 
 - `Homebrew` 当前适合 macOS，以及偏好使用 brew 的 Linux 用户
 - `Scoop` 当前适合 Windows 用户
-- 这两种方式依赖外部分发仓库，不替代 release 页面附件
+- 这两种方式依赖外部分发仓库，不替代 release 页面附件或 MSI 安装包
 
 > [!WARNING]
 > 从改名版本开始，原来的 `cnb ...` 已改为 `cnb-rs ...`。

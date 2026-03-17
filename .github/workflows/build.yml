@@ -46,6 +46,7 @@ jobs:
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             archive_ext: zip
+            package_windows_msi: true
           - os: windows-latest
             target: aarch64-pc-windows-msvc
             archive_ext: zip
@@ -127,6 +128,16 @@ jobs:
         with:
           target: ${{ matrix.target }}
 
+      - name: Setup .NET SDK
+        if: matrix.package_windows_msi
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Setup MSVC developer command prompt
+        if: matrix.package_windows_msi
+        uses: ilammy/msvc-dev-cmd@v1
+
       - name: Build binaries
         shell: bash
         run: |
@@ -139,6 +150,15 @@ jobs:
           else
             cargo build --release --locked --target "${{ matrix.target }}"
           fi
+
+      - name: Build Windows MSI package
+        if: matrix.package_windows_msi
+        shell: pwsh
+        run: |
+          .\packaging\windows\scripts\build-msi.ps1 `
+            -Target ${{ matrix.target }} `
+            -Architecture x64 `
+            -OutputDir target\windows-msi
 
       - name: Build Linux packaging helper binary
         if: matrix.package_linux_deb || matrix.package_linux_rpm
@@ -182,6 +202,14 @@ jobs:
           fi
 
           package_files+=("${asset_file}")
+
+          if [[ "${{ matrix.package_windows_msi }}" == "true" ]]; then
+            msi_file="target/windows-msi/${asset_base}.msi"
+            : "${msi_file:?failed to determine expected MSI path}"
+            test -f "${msi_file}"
+            cp "${msi_file}" .
+            package_files+=("$(basename "${msi_file}")")
+          fi
 
           if [[ "${{ matrix.package_linux_deb }}" == "true" || "${{ matrix.package_linux_rpm }}" == "true" ]]; then
             host_target="$(rustc -vV | sed -n 's/^host: //p')"
@@ -338,7 +366,7 @@ jobs:
         run: |
           set -euo pipefail
           cd release-artifacts
-          find . -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' -o -name '*.deb' -o -name '*.rpm' \) -printf '%P\n' | sort | xargs sha256sum > sha256sum.txt
+          find . -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' -o -name '*.msi' -o -name '*.deb' -o -name '*.rpm' \) -printf '%P\n' | sort | xargs sha256sum > sha256sum.txt
 
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v2
@@ -353,7 +381,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          files="$(find release-artifacts -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' -o -name '*.deb' -o -name '*.rpm' -o -name 'sha256sum.txt' \) | sort | paste -sd, -)"
+          files="$(find release-artifacts -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' -o -name '*.msi' -o -name '*.deb' -o -name '*.rpm' -o -name 'sha256sum.txt' \) | sort | paste -sd, -)"
           : "${files:?No release artifacts found for CNB upload}"
           echo "files=${files}" >> "$GITHUB_OUTPUT"
 
