@@ -2,7 +2,7 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
-## [0.6.2] - 2026-03-17
+## [0.7.0] - 2026-03-17
 
 ### ✨ 新功能
 
@@ -10,10 +10,22 @@
 - **(dist)** 支持 Linux RPM 打包校验链路 ([11cf7ea](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/11cf7ea4c9e7c806dc8b48a6e157aac64144ffb7))
 - **(dist)** 支持 Linux DEB 打包校验链路 ([f332401](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/f33240107b482b9b1badb68af114567e9383b1d8))
 
+### 🐛 Bug 修复
+
+- **(dist)** 修正 Linux 包目标路径解析 ([50bd019](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/50bd019a4377daf2afae73ba433f02284867bfb2))
+
+### 👷 CI/CD
+
+- **(release)** 识别带 emoji 前缀的 feat 提交 ([6780d15](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/6780d152f27d2925caae77e6346e46cf077b410f))
+
 ### 📝 文档
 
 - **(install)** 补充 Scoop 与 Homebrew 安装方式 ([e92a256](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/e92a25654eff282f44c9efe733477df037c2317f))
 - **(install)** 补齐 Linux 原生包安装说明 ([fd7cd3b](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/fd7cd3b80cbefb0ab21e1db83f8827547a3d5cd2))
+
+### 🔧 杂项
+
+- **(release)** 准备 v0.6.2 发版 ([3857a37](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/3857a3704d25b9d9968b1dfa6cd2453ca5415817))
 
 ## [0.6.1] - 2026-03-17
 
