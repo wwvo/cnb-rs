@@ -4,5 +4,5 @@ main:
         - name: automerge
           type: git:auto-merge
           options:
-            mergeType: auto
+            mergeType: squash
             removeSourceBranch: true
