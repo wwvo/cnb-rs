@@ -1,0 +1,102 @@
+name: Linux RPM Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/linux-rpm.yml"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "src/**"
+      - "crates/**"
+      - "packaging/linux/**"
+      - "README.md"
+      - "LICENSE"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  build-rpm:
+    name: Build and verify x86_64 Linux RPM
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-gnu
+
+      - name: Setup Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: linux-rpm-x86_64
+
+      - name: Install RPM tooling
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y rpm
+
+      - name: Install cargo-generate-rpm
+        shell: bash
+        run: cargo install cargo-generate-rpm --locked
+
+      - name: Build release binary
+        shell: bash
+        run: cargo build --release --locked --target x86_64-unknown-linux-gnu
+
+      - name: Generate shell completions
+        shell: bash
+        run: bash packaging/linux/scripts/generate-completions.sh --target x86_64-unknown-linux-gnu
+
+      - name: Build RPM package
+        shell: bash
+        run: cargo generate-rpm
+
+      - name: Verify package contents
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          rpm_file="$(find target/generate-rpm -maxdepth 1 -type f -name '*.rpm' | head -n 1)"
+          : "${rpm_file:?failed to locate generated rpm file}"
+          rpm -qpl "${rpm_file}"
+
+      - name: Smoke test package install in Fedora container
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          rpm_file="$(find target/generate-rpm -maxdepth 1 -type f -name '*.rpm' | head -n 1)"
+          : "${rpm_file:?failed to locate generated rpm file}"
+
+          docker run --rm \
+            -e RPM_FILE="${rpm_file}" \
+            -v "${PWD}:/workspace" \
+            -w /workspace \
+            fedora:latest \
+            bash -lc '
+              set -euo pipefail
+              dnf install -y --nogpgcheck "/workspace/${RPM_FILE}" >/tmp/dnf-install.log
+              cnb-rs --version
+              cnb-rs completion bash >/dev/null
+              test -f /usr/share/bash-completion/completions/cnb-rs
+              test -f /usr/share/zsh/vendor-completions/_cnb-rs
+              test -f /usr/share/fish/vendor_completions.d/cnb-rs.fish
+            '
+
+      - name: Upload RPM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cnb-rs-rpm-x86_64-unknown-linux-gnu
+          path: target/generate-rpm/*.rpm
+          if-no-files-found: error
+          retention-days: 7

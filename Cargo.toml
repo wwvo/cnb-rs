@@ -46,6 +46,21 @@ assets = [
   ["LICENSE", "usr/share/doc/cnb-rs/LICENSE", "644"],
 ]
 
+[package.metadata.generate-rpm]
+name = "cnb-rs"
+summary = "Unofficial CNB command-line tool built with Rust"
+url = "https://cnb.cool/wwvo/cnb-rs/cnb-rs"
+license = "Apache-2.0"
+release = "1"
+assets = [
+  { source = "target/x86_64-unknown-linux-gnu/release/cnb-rs", dest = "/usr/bin/cnb-rs", mode = "755" },
+  { source = "packaging/linux/generated/bash/cnb-rs", dest = "/usr/share/bash-completion/completions/cnb-rs", mode = "644" },
+  { source = "packaging/linux/generated/zsh/_cnb-rs", dest = "/usr/share/zsh/vendor-completions/_cnb-rs", mode = "644" },
+  { source = "packaging/linux/generated/fish/cnb-rs.fish", dest = "/usr/share/fish/vendor_completions.d/cnb-rs.fish", mode = "644" },
+  { source = "README.md", dest = "/usr/share/doc/cnb-rs/README.md", mode = "644", doc = true },
+  { source = "LICENSE", dest = "/usr/share/doc/cnb-rs/LICENSE", mode = "644", doc = true },
+]
+
 [workspace]
 resolver = "2"
 members = [
