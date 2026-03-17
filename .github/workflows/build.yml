@@ -22,7 +22,8 @@ jobs:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             archive_ext: tar.gz
-            package_linux_native: true
+            package_linux_deb: true
+            package_linux_rpm: true
           - os: ubuntu-latest
             target: x86_64-unknown-linux-musl
             archive_ext: tar.gz
@@ -31,6 +32,8 @@ jobs:
             target: aarch64-unknown-linux-gnu
             archive_ext: tar.gz
             use_cross: true
+            package_linux_deb: true
+            linux_deb_arch: arm64
           - os: ubuntu-latest
             target: aarch64-unknown-linux-musl
             archive_ext: tar.gz
@@ -91,20 +94,29 @@ jobs:
           tool: cross
 
       - name: Install Linux native packaging dependencies
-        if: matrix.package_linux_native
+        if: matrix.package_linux_deb || matrix.package_linux_rpm
         shell: bash
         run: |
           set -euo pipefail
+
+          if [[ -n "${{ matrix.linux_deb_arch }}" ]]; then
+            sudo dpkg --add-architecture "${{ matrix.linux_deb_arch }}"
+          fi
+
           sudo apt-get update
           sudo apt-get install -y dpkg-dev rpm
 
+          if [[ -n "${{ matrix.linux_deb_arch }}" ]]; then
+            sudo apt-get install -y "crossbuild-essential-${{ matrix.linux_deb_arch }}"
+          fi
+
       - name: Install cargo-deb
-        if: matrix.package_linux_native
+        if: matrix.package_linux_deb
         shell: bash
         run: cargo install cargo-deb --locked
 
       - name: Install cargo-generate-rpm
-        if: matrix.package_linux_native
+        if: matrix.package_linux_rpm
         shell: bash
         run: cargo install cargo-generate-rpm --locked
 
@@ -128,7 +140,7 @@ jobs:
           fi
 
       - name: Build Linux packaging helper binary
-        if: matrix.package_linux_native
+        if: matrix.package_linux_deb || matrix.package_linux_rpm
         shell: bash
         run: |
           set -euo pipefail
@@ -170,7 +182,7 @@ jobs:
 
           package_files+=("${asset_file}")
 
-          if [[ "${{ matrix.package_linux_native }}" == "true" ]]; then
+          if [[ "${{ matrix.package_linux_deb }}" == "true" || "${{ matrix.package_linux_rpm }}" == "true" ]]; then
             host_target="$(rustc -vV | sed -n 's/^host: //p')"
             completion_binary_path="target/${{ matrix.target }}/release/cnb-rs"
             if [[ "${{ matrix.target }}" != "${host_target}" ]]; then
@@ -178,7 +190,9 @@ jobs:
             fi
 
             bash packaging/linux/scripts/generate-completions.sh --binary-path "${completion_binary_path}"
+          fi
 
+          if [[ "${{ matrix.package_linux_deb }}" == "true" ]]; then
             cargo deb --no-build --no-strip --target "${{ matrix.target }}"
             deb_file=""
             for candidate_dir in "target/${{ matrix.target }}/debian" "target/debian"; do
@@ -192,7 +206,9 @@ jobs:
             : "${deb_file:?failed to locate generated deb file}"
             cp "${deb_file}" .
             package_files+=("$(basename "${deb_file}")")
+          fi
 
+          if [[ "${{ matrix.package_linux_rpm }}" == "true" ]]; then
             cargo generate-rpm --target "${{ matrix.target }}"
             rpm_file=""
             for candidate_dir in "target/${{ matrix.target }}/generate-rpm" "target/generate-rpm"; do
