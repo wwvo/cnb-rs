@@ -39,9 +39,9 @@
 
 从 [Release 页面](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/releases) 下载适合你平台的发布产物。
 
-- Linux `x86_64`：优先使用 `.deb` 或 `.rpm`
+- Linux `x86_64 / arm64`：优先使用 `.deb` 或 `.rpm`
 - Windows / macOS：当前继续使用压缩包附件
-- 如果你的 Linux 发行版不适用 `.deb` / `.rpm`，仍然可以回退到 `.tar.gz` 手动解压安装
+- 其他 Linux 目标，或你的发行版不适用 `.deb` / `.rpm` 时，仍然可以回退到 `.tar.gz` 手动解压安装
 
 Linux 安装细节见：[Linux 安装说明](docs/guide/linux-install.md)。
 

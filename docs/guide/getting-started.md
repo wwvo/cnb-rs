@@ -6,20 +6,26 @@
 
 ### Linux
 
-首轮 Linux 原生包当前仅覆盖 `x86_64`：
+当前 Linux 原生包覆盖 `x86_64-unknown-linux-gnu` 和 `aarch64-unknown-linux-gnu`：
 
 ```bash
-# Debian / Ubuntu
-sudo dpkg -i ./cnb-rs-<VERSION>-1.x86_64.deb
+# Debian / Ubuntu（x86_64）
+sudo dpkg -i ./cnb-rs_*_amd64.deb
 
-# Fedora / Rocky / AlmaLinux
-sudo dnf install ./cnb-rs-<VERSION>-1.x86_64.rpm
+# Debian / Ubuntu（arm64）
+sudo dpkg -i ./cnb-rs_*_arm64.deb
+
+# Fedora / Rocky / AlmaLinux（x86_64）
+sudo dnf install ./cnb-rs-*.x86_64.rpm
+
+# Fedora / Rocky / AlmaLinux（arm64）
+sudo dnf install ./cnb-rs-*.aarch64.rpm
 ```
 
 如果你的环境不适合 `.deb` / `.rpm`，也可以继续下载 `.tar.gz` 手动解压，并把 `cnb-rs` 放到 `PATH` 中。
 
 > [!NOTE]
-> 当前只提供 release 附件下载，不提供 apt / yum 软件源托管。
+> 当前只提供 release 附件下载，不提供 apt / yum 软件源托管；其他 Linux 目标目前仍以 `.tar.gz` 为主。
 
 更多说明见：[Linux 安装说明](/guide/linux-install)。
 

@@ -2,12 +2,17 @@
 
 ## 适用范围
 
-当前 Linux 原生安装包首轮仅覆盖 `x86_64`，并作为 release 页面附件提供：
+当前 Linux 原生安装包覆盖以下 GNU 目标，并作为 release 页面附件提供：
+
+- `x86_64-unknown-linux-gnu`
+- `aarch64-unknown-linux-gnu`
+
+提供的 Linux 原生包格式为：
 
 - `.deb`
 - `.rpm`
 
-如果你的 Linux 环境不适用这两种包格式，仍然可以继续使用 `.tar.gz` 手动解压安装。
+其他 Linux 目标，或你的 Linux 环境不适用这两种包格式时，仍然可以继续使用 `.tar.gz` 手动解压安装。
 
 > [!NOTE]
 > 当前只提供 release 附件下载，不提供 apt / yum 软件源托管。
@@ -20,8 +25,17 @@
 
 ## 使用 `.deb` 安装
 
+`cargo-deb` 产物的架构后缀遵循 Debian 习惯：
+
+- `x86_64` 使用 `amd64`
+- `arm64` 使用 `arm64`
+
 ```bash
-sudo dpkg -i ./cnb-rs-<VERSION>-1.x86_64.deb
+# x86_64
+sudo dpkg -i ./cnb-rs_*_amd64.deb
+
+# arm64
+sudo dpkg -i ./cnb-rs_*_arm64.deb
 ```
 
 安装后默认会包含：
@@ -34,13 +48,21 @@ sudo dpkg -i ./cnb-rs-<VERSION>-1.x86_64.deb
 ## 使用 `.rpm` 安装
 
 ```bash
-sudo dnf install ./cnb-rs-<VERSION>-1.x86_64.rpm
+# x86_64
+sudo dnf install ./cnb-rs-*.x86_64.rpm
+
+# arm64
+sudo dnf install ./cnb-rs-*.aarch64.rpm
 ```
 
 如果你使用的 RPM 系环境更偏底层，也可以改用：
 
 ```bash
-sudo rpm -i ./cnb-rs-<VERSION>-1.x86_64.rpm
+# x86_64
+sudo rpm -i ./cnb-rs-*.x86_64.rpm
+
+# arm64
+sudo rpm -i ./cnb-rs-*.aarch64.rpm
 ```
 
 安装内容与 `.deb` 保持一致，包括 `cnb-rs` 可执行文件和 Bash / Zsh / Fish 补全文件。
@@ -51,6 +73,8 @@ sudo rpm -i ./cnb-rs-<VERSION>-1.x86_64.rpm
 tar -xzf ./cnb-rs-<VERSION>-x86_64-unknown-linux-gnu.tar.gz
 sudo install -m 755 ./cnb-rs-<VERSION>-x86_64-unknown-linux-gnu/cnb-rs /usr/local/bin/cnb-rs
 ```
+
+如果你下载的是 arm64 GNU 压缩包，请把上面的目标后缀替换为 `aarch64-unknown-linux-gnu`。
 
 这种方式不会自动安装 Bash / Zsh / Fish 补全文件；如果需要，请参考 [cnb-rs completion](/completion) 手动生成。
 

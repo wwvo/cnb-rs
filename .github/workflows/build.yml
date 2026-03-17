@@ -229,6 +229,60 @@ jobs:
           printf '%s\n' "${package_files[@]}" >> "$GITHUB_OUTPUT"
           printf 'EOF\n' >> "$GITHUB_OUTPUT"
 
+      - name: Validate Linux native packages
+        if: matrix.package_linux_deb || matrix.package_linux_rpm
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          case "${{ matrix.target }}" in
+            x86_64-unknown-linux-gnu)
+              expected_rpm_arch="x86_64"
+              expected_deb_arch="amd64"
+              ;;
+            aarch64-unknown-linux-gnu)
+              expected_rpm_arch="aarch64"
+              expected_deb_arch="arm64"
+              ;;
+            *)
+              echo "Unsupported Linux packaging validation target: ${{ matrix.target }}" >&2
+              exit 1
+              ;;
+          esac
+
+          expected_paths=(
+            "/usr/bin/cnb-rs"
+            "/usr/share/bash-completion/completions/cnb-rs"
+            "/usr/share/zsh/vendor-completions/_cnb-rs"
+            "/usr/share/fish/vendor_completions.d/cnb-rs.fish"
+          )
+
+          if [[ "${{ matrix.package_linux_deb }}" == "true" ]]; then
+            deb_file="$(find . -maxdepth 1 -type f -name '*.deb' | head -n 1)"
+            : "${deb_file:?failed to locate copied deb file for validation}"
+
+            actual_deb_arch="$(dpkg-deb -f "${deb_file}" Architecture)"
+            [[ "${actual_deb_arch}" == "${expected_deb_arch}" ]]
+
+            dpkg-deb --contents "${deb_file}" | awk '{print $NF}' > deb-contents.txt
+            for expected_path in "${expected_paths[@]}"; do
+              grep -Fx ".${expected_path}" deb-contents.txt > /dev/null
+            done
+          fi
+
+          if [[ "${{ matrix.package_linux_rpm }}" == "true" ]]; then
+            rpm_file="$(find . -maxdepth 1 -type f -name '*.rpm' | head -n 1)"
+            : "${rpm_file:?failed to locate copied rpm file for validation}"
+
+            actual_rpm_arch="$(rpm -qp --qf '%{ARCH}\n' "${rpm_file}")"
+            [[ "${actual_rpm_arch}" == "${expected_rpm_arch}" ]]
+
+            rpm -qpl "${rpm_file}" > rpm-contents.txt
+            for expected_path in "${expected_paths[@]}"; do
+              grep -Fx "${expected_path}" rpm-contents.txt > /dev/null
+            done
+          fi
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v6
         with:
