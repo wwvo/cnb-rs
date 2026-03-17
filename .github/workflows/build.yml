@@ -128,10 +128,10 @@ jobs:
           cp "target/${{ matrix.target }}/release/${binary_name}" "${asset_dir}/"
 
           if [[ "${{ matrix.archive_ext }}" == "zip" ]]; then
-            7z a "${asset_base}.zip" "${asset_dir}"
+            7z a -tzip -mx=9 "${asset_base}.zip" "${asset_dir}"
             asset_file="${asset_base}.zip"
           else
-            tar czf "${asset_base}.tar.gz" "${asset_dir}"
+            tar cf - "${asset_dir}" | gzip -9 > "${asset_base}.tar.gz"
             asset_file="${asset_base}.tar.gz"
           fi
 
@@ -144,6 +144,7 @@ jobs:
           path: ${{ steps.package.outputs.asset_file }}
           retention-days: 7
           if-no-files-found: error
+          compression-level: 0
 
   publish:
     name: Publish GitHub and CNB releases
