@@ -22,6 +22,7 @@ jobs:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             archive_ext: tar.gz
+            package_linux_native: true
           - os: ubuntu-latest
             target: x86_64-unknown-linux-musl
             archive_ext: tar.gz
@@ -89,6 +90,24 @@ jobs:
         with:
           tool: cross
 
+      - name: Install Linux native packaging dependencies
+        if: matrix.package_linux_native
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev rpm
+
+      - name: Install cargo-deb
+        if: matrix.package_linux_native
+        shell: bash
+        run: cargo install cargo-deb --locked
+
+      - name: Install cargo-generate-rpm
+        if: matrix.package_linux_native
+        shell: bash
+        run: cargo install cargo-generate-rpm --locked
+
       - name: Setup Windows ARM64 gnullvm toolchain
         if: matrix.setup_cross_toolchain
         uses: taiki-e/setup-cross-toolchain-action@v1
@@ -117,6 +136,7 @@ jobs:
           release_tag="${GITHUB_REF_NAME}"
           asset_base="cnb-rs-${release_tag}-${{ matrix.target }}"
           asset_dir="${asset_base}"
+          package_files=()
 
           if [[ "${{ matrix.target }}" == *-windows-* ]]; then
             binary_name="cnb-rs.exe"
@@ -135,13 +155,34 @@ jobs:
             asset_file="${asset_base}.tar.gz"
           fi
 
-          echo "asset_file=${asset_file}" >> "$GITHUB_OUTPUT"
+          package_files+=("${asset_file}")
+
+          if [[ "${{ matrix.package_linux_native }}" == "true" ]]; then
+            bash packaging/linux/scripts/generate-completions.sh --target "${{ matrix.target }}"
+
+            cargo deb --no-build --no-strip --target "${{ matrix.target }}"
+            deb_file="$(find "target/${{ matrix.target }}/debian" -maxdepth 1 -type f -name '*.deb' | head -n 1)"
+            : "${deb_file:?failed to locate generated deb file}"
+            cp "${deb_file}" .
+            package_files+=("$(basename "${deb_file}")")
+
+            cargo generate-rpm
+            rpm_file="$(find target/generate-rpm -maxdepth 1 -type f -name '*.rpm' | head -n 1)"
+            : "${rpm_file:?failed to locate generated rpm file}"
+            cp "${rpm_file}" .
+            package_files+=("$(basename "${rpm_file}")")
+          fi
+
+          printf 'asset_files<<EOF\n' >> "$GITHUB_OUTPUT"
+          printf '%s\n' "${package_files[@]}" >> "$GITHUB_OUTPUT"
+          printf 'EOF\n' >> "$GITHUB_OUTPUT"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.target }}
-          path: ${{ steps.package.outputs.asset_file }}
+          path: |
+            ${{ steps.package.outputs.asset_files }}
           retention-days: 7
           if-no-files-found: error
           compression-level: 0
@@ -191,7 +232,7 @@ jobs:
         run: |
           set -euo pipefail
           cd release-artifacts
-          find . -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' \) -printf '%P\n' | sort | xargs sha256sum > sha256sum.txt
+          find . -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' -o -name '*.deb' -o -name '*.rpm' \) -printf '%P\n' | sort | xargs sha256sum > sha256sum.txt
 
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v2
@@ -206,7 +247,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          files="$(find release-artifacts -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' -o -name 'sha256sum.txt' \) | sort | paste -sd, -)"
+          files="$(find release-artifacts -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' -o -name '*.deb' -o -name '*.rpm' -o -name 'sha256sum.txt' \) | sort | paste -sd, -)"
           : "${files:?No release artifacts found for CNB upload}"
           echo "files=${files}" >> "$GITHUB_OUTPUT"
 
