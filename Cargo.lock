@@ -306,7 +306,7 @@ dependencies = [
 
 [[package]]
 name = "cnb-api"
-version = "0.6.1"
+version = "0.6.2"
 dependencies = [
  "anyhow",
  "clap",
@@ -322,7 +322,7 @@ dependencies = [
 
 [[package]]
 name = "cnb-chat"
-version = "0.6.1"
+version = "0.6.2"
 dependencies = [
  "anyhow",
  "cnb-api",
@@ -334,7 +334,7 @@ dependencies = [
 
 [[package]]
 name = "cnb-core"
-version = "0.6.1"
+version = "0.6.2"
 dependencies = [
  "anyhow",
  "cnb-api",
@@ -353,7 +353,7 @@ dependencies = [
 
 [[package]]
 name = "cnb-rs"
-version = "0.6.1"
+version = "0.6.2"
 dependencies = [
  "anyhow",
  "base64",
@@ -382,7 +382,7 @@ dependencies = [
 
 [[package]]
 name = "cnb-tui"
-version = "0.6.1"
+version = "0.6.2"
 dependencies = [
  "anyhow",
  "chrono",
