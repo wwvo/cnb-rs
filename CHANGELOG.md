@@ -2,6 +2,15 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
+## [0.9.1] - 2026-03-17
+
+### 🐛 Bug 修复
+
+- **(ci)** 修复 Windows MSI PATH 断言误报 ([cf36065](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/cf36065e325961d4592ac9e6064e5350e5f04934))
+- **(ci)** 修复 Linux RPM 校验流程缺少显式 target ([849140f](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/849140f63a0cca21c7e863da29134a907d53d413))
+- **(ci)** 修复 Linux packaging helper 误用默认 Windows 目标 ([d5ca42e](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/d5ca42ea2da7cb1f582b94c2e66c8a85dacc753b))
+- **(ci)** 修复 Windows MSVC 构建误用 link.exe ([3aaacd3](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/3aaacd314300564bd45704027f2d89a48dd1ddd8))
+
 ## [0.9.0] - 2026-03-17
 
 ### ✨ 新功能
