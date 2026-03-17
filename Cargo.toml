@@ -2,7 +2,49 @@
 name = "cnb-rs"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
+description = "Unofficial CNB command-line tool built with Rust"
+readme = "README.md"
+homepage = "https://cnb.cool/wwvo/cnb-rs/cnb-rs"
+repository.workspace = true
 license.workspace = true
+
+[package.metadata.deb]
+name = "cnb-rs"
+section = "utils"
+priority = "optional"
+maintainer = "wwvo"
+depends = "$auto"
+extended-description = """\
+Unofficial CNB command-line tool built with Rust.
+
+This package installs the cnb-rs CLI together with Bash, Zsh, and Fish
+shell completions for Linux environments.
+"""
+assets = [
+  [
+    "target/x86_64-unknown-linux-gnu/release/cnb-rs",
+    "usr/bin/cnb-rs",
+    "755"
+  ],
+  [
+    "packaging/linux/generated/bash/cnb-rs",
+    "usr/share/bash-completion/completions/cnb-rs",
+    "644"
+  ],
+  [
+    "packaging/linux/generated/zsh/_cnb-rs",
+    "usr/share/zsh/vendor-completions/_cnb-rs",
+    "644"
+  ],
+  [
+    "packaging/linux/generated/fish/cnb-rs.fish",
+    "usr/share/fish/vendor_completions.d/cnb-rs.fish",
+    "644"
+  ],
+  ["README.md", "usr/share/doc/cnb-rs/README.md", "644"],
+  ["LICENSE", "usr/share/doc/cnb-rs/LICENSE", "644"],
+]
 
 [workspace]
 resolver = "2"

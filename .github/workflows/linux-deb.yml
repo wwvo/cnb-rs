@@ -1,0 +1,99 @@
+name: Linux DEB Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/linux-deb.yml"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "src/**"
+      - "crates/**"
+      - "packaging/linux/**"
+      - "README.md"
+      - "LICENSE"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  build-deb:
+    name: Build and verify x86_64 Linux DEB
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-gnu
+
+      - name: Setup Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: linux-deb-x86_64
+
+      - name: Install Debian packaging dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev
+
+      - name: Install cargo-deb
+        shell: bash
+        run: cargo install cargo-deb --locked
+
+      - name: Build release binary
+        shell: bash
+        run: cargo build --release --locked --target x86_64-unknown-linux-gnu
+
+      - name: Generate shell completions
+        shell: bash
+        run: bash packaging/linux/scripts/generate-completions.sh --target x86_64-unknown-linux-gnu
+
+      - name: Build DEB package
+        shell: bash
+        run: cargo deb --no-build --no-strip --target x86_64-unknown-linux-gnu
+
+      - name: Verify package contents
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deb_file="$(find target/x86_64-unknown-linux-gnu/debian -maxdepth 1 -type f -name '*.deb' | head -n 1)"
+          : "${deb_file:?failed to locate generated deb file}"
+          dpkg-deb --contents "${deb_file}"
+
+      - name: Smoke test package install
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deb_file="$(find target/x86_64-unknown-linux-gnu/debian -maxdepth 1 -type f -name '*.deb' | head -n 1)"
+          : "${deb_file:?failed to locate generated deb file}"
+
+          cleanup() {
+            sudo dpkg -r cnb-rs >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          sudo dpkg -i "${deb_file}"
+          cnb-rs --version
+          cnb-rs completion bash >/dev/null
+          test -f /usr/share/bash-completion/completions/cnb-rs
+          test -f /usr/share/zsh/vendor-completions/_cnb-rs
+          test -f /usr/share/fish/vendor_completions.d/cnb-rs.fish
+
+      - name: Upload DEB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cnb-rs-deb-x86_64-unknown-linux-gnu
+          path: target/x86_64-unknown-linux-gnu/debian/*.deb
+          if-no-files-found: error
+          retention-days: 7
