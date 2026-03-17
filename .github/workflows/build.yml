@@ -166,8 +166,8 @@ jobs:
             cp "${deb_file}" .
             package_files+=("$(basename "${deb_file}")")
 
-            cargo generate-rpm
-            rpm_file="$(find target/generate-rpm -maxdepth 1 -type f -name '*.rpm' | head -n 1)"
+            cargo generate-rpm --target "${{ matrix.target }}"
+            rpm_file="$(find "target/${{ matrix.target }}/generate-rpm" -maxdepth 1 -type f -name '*.rpm' | head -n 1)"
             : "${rpm_file:?failed to locate generated rpm file}"
             cp "${rpm_file}" .
             package_files+=("$(basename "${rpm_file}")")
