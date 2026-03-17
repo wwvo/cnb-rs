@@ -1,0 +1,67 @@
+name: Windows MSI Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/windows-msi.yml"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "src/**"
+      - "crates/**"
+      - "packaging/windows/**"
+      - "README.md"
+      - "LICENSE"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  build-msi:
+    name: Build x86_64 Windows MSI
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Setup Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: windows-msi-x86_64-pc-windows-msvc
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Setup MSVC developer command prompt
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build release binary
+        shell: bash
+        run: cargo build --release --locked --target x86_64-pc-windows-msvc
+
+      - name: Build MSI package
+        shell: pwsh
+        run: |
+          .\packaging\windows\scripts\build-msi.ps1 `
+            -Target x86_64-pc-windows-msvc `
+            -Architecture x64 `
+            -OutputDir target\windows-msi
+
+      - name: Upload MSI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cnb-rs-msi-x86_64-pc-windows-msvc
+          path: target/windows-msi/*.msi
+          if-no-files-found: error
+          retention-days: 7

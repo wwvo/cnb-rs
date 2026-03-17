@@ -1,0 +1,15 @@
+<Project Sdk="WixToolset.Sdk/6.0.2">
+  <PropertyGroup>
+    <OutputType>Package</OutputType>
+    <InstallerPlatform Condition="'$(InstallerPlatform)' == ''">x64</InstallerPlatform>
+    <Platform>$(InstallerPlatform)</Platform>
+    <ProductVersion Condition="'$(ProductVersion)' == ''">0.0.0</ProductVersion>
+    <OutputName>cnb-rs</OutputName>
+    <Cultures>en-us</Cultures>
+    <DefineConstants>
+      ProductVersion=$(ProductVersion);
+      BinarySource=$(BinarySource);
+      LicenseSource=$(LicenseSource)
+    </DefineConstants>
+  </PropertyGroup>
+</Project>

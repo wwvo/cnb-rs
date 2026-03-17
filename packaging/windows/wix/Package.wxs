@@ -1,0 +1,22 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+    Id="CnbRsMsi"
+    Name="cnb-rs"
+    Manufacturer="wwvo"
+    Version="$(var.ProductVersion)"
+    UpgradeCode="250FC14F-06A0-45D6-A0A4-41360FF44F12"
+    InstallerVersion="500"
+    Scope="perMachine">
+    <SummaryInformation Description="cnb-rs Windows MSI package" Manufacturer="wwvo" />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="cnb-rs">
+        <Component Guid="9A084689-1A6B-4A0A-B0A0-4C6100D05601">
+          <File Id="CnbRsExe" Source="$(var.BinarySource)" KeyPath="yes" />
+          <File Id="LicenseFile" Source="$(var.LicenseSource)" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+  </Package>
+</Wix>

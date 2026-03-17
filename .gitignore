@@ -7,3 +7,6 @@ docs/.vitepress/cache
 docs/.vitepress/.temp
 docs/.vitepress/dist
 packaging/linux/generated
+packaging/windows/wix/bin
+packaging/windows/wix/obj
+artifacts/windows-msi-local
