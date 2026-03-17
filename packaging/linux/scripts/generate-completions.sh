@@ -5,9 +5,14 @@ set -euo pipefail
 target=""
 profile="release"
 output_dir="packaging/linux/generated"
+binary_path=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --binary-path)
+      binary_path="${2:?missing value for --binary-path}"
+      shift 2
+      ;;
     --target)
       target="${2:?missing value for --target}"
       shift 2
@@ -22,13 +27,15 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       echo "unknown argument: $1" >&2
-      echo "usage: $0 [--target <triple>] [--profile <profile>] [--output-dir <dir>]" >&2
+      echo "usage: $0 [--binary-path <path>] [--target <triple>] [--profile <profile>] [--output-dir <dir>]" >&2
       exit 1
       ;;
   esac
 done
 
-if [[ -n "${target}" ]]; then
+if [[ -n "${binary_path}" ]]; then
+  :
+elif [[ -n "${target}" ]]; then
   binary_path="target/${target}/${profile}/cnb-rs"
 else
   binary_path="target/${profile}/cnb-rs"

@@ -127,6 +127,19 @@ jobs:
             cargo build --release --locked --target "${{ matrix.target }}"
           fi
 
+      - name: Build Linux packaging helper binary
+        if: matrix.package_linux_native
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          host_target="$(rustc -vV | sed -n 's/^host: //p')"
+          if [[ "${{ matrix.target }}" == "${host_target}" ]]; then
+            exit 0
+          fi
+
+          cargo build --release --locked --bin cnb-rs --target-dir target/packaging-host
+
       - name: Package artifact
         id: package
         shell: bash
@@ -158,16 +171,38 @@ jobs:
           package_files+=("${asset_file}")
 
           if [[ "${{ matrix.package_linux_native }}" == "true" ]]; then
-            bash packaging/linux/scripts/generate-completions.sh --target "${{ matrix.target }}"
+            host_target="$(rustc -vV | sed -n 's/^host: //p')"
+            completion_binary_path="target/${{ matrix.target }}/release/cnb-rs"
+            if [[ "${{ matrix.target }}" != "${host_target}" ]]; then
+              completion_binary_path="target/packaging-host/release/cnb-rs"
+            fi
+
+            bash packaging/linux/scripts/generate-completions.sh --binary-path "${completion_binary_path}"
 
             cargo deb --no-build --no-strip --target "${{ matrix.target }}"
-            deb_file="$(find "target/${{ matrix.target }}/debian" -maxdepth 1 -type f -name '*.deb' | head -n 1)"
+            deb_file=""
+            for candidate_dir in "target/${{ matrix.target }}/debian" "target/debian"; do
+              if [[ -d "${candidate_dir}" ]]; then
+                deb_file="$(find "${candidate_dir}" -maxdepth 1 -type f -name '*.deb' | head -n 1)"
+              fi
+              if [[ -n "${deb_file}" ]]; then
+                break
+              fi
+            done
             : "${deb_file:?failed to locate generated deb file}"
             cp "${deb_file}" .
             package_files+=("$(basename "${deb_file}")")
 
             cargo generate-rpm --target "${{ matrix.target }}"
-            rpm_file="$(find "target/${{ matrix.target }}/generate-rpm" -maxdepth 1 -type f -name '*.rpm' | head -n 1)"
+            rpm_file=""
+            for candidate_dir in "target/${{ matrix.target }}/generate-rpm" "target/generate-rpm"; do
+              if [[ -d "${candidate_dir}" ]]; then
+                rpm_file="$(find "${candidate_dir}" -maxdepth 1 -type f -name '*.rpm' | head -n 1)"
+              fi
+              if [[ -n "${rpm_file}" ]]; then
+                break
+              fi
+            done
             : "${rpm_file:?failed to locate generated rpm file}"
             cp "${rpm_file}" .
             package_files+=("$(basename "${rpm_file}")")
