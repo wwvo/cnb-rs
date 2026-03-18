@@ -197,7 +197,10 @@ jobs:
           release_tag="${GITHUB_REF_NAME}"
           asset_base="cnb-rs-${release_tag}-${{ matrix.target }}"
           asset_dir="${asset_base}"
-          package_files=()
+          archive_file=""
+          msi_file=""
+          deb_file=""
+          rpm_file=""
 
           if [[ "${{ matrix.target }}" == *-windows-* ]]; then
             binary_name="cnb-rs.exe"
@@ -210,19 +213,17 @@ jobs:
 
           if [[ "${{ matrix.archive_ext }}" == "zip" ]]; then
             7z a -tzip -mx=9 "${asset_base}.zip" "${asset_dir}"
-            asset_file="${asset_base}.zip"
+            archive_file="${asset_base}.zip"
           else
-            tar cf - "${asset_dir}" | gzip -9 > "${asset_base}.tar.gz"
-            asset_file="${asset_base}.tar.gz"
+            archive_file="${asset_base}.tar.gz"
+            tar cf - "${asset_dir}" | gzip -9 > "${archive_file}"
           fi
 
-          package_files+=("${asset_file}")
-
           if [[ "${{ matrix.package_windows_msi }}" == "true" ]]; then
-            msi_file="$(find target/windows-msi -maxdepth 1 -type f -name "*-${{ matrix.target }}.msi" | sort | head -n 1)"
-            : "${msi_file:?failed to locate generated MSI file}"
-            cp "${msi_file}" .
-            package_files+=("$(basename "${msi_file}")")
+            generated_msi_file="$(find target/windows-msi -maxdepth 1 -type f -name "*-${{ matrix.target }}.msi" | sort | head -n 1)"
+            : "${generated_msi_file:?failed to locate generated MSI file}"
+            cp "${generated_msi_file}" .
+            msi_file="$(basename "${generated_msi_file}")"
           fi
 
           if [[ "${{ matrix.package_linux_deb }}" == "true" || "${{ matrix.package_linux_rpm }}" == "true" ]]; then
@@ -237,39 +238,44 @@ jobs:
 
           if [[ "${{ matrix.package_linux_deb }}" == "true" ]]; then
             cargo deb --no-build --no-strip --target "${{ matrix.target }}"
-            deb_file=""
+            generated_deb_file=""
             for candidate_dir in "target/${{ matrix.target }}/debian" "target/debian"; do
               if [[ -d "${candidate_dir}" ]]; then
-                deb_file="$(find "${candidate_dir}" -maxdepth 1 -type f -name '*.deb' | head -n 1)"
+                generated_deb_file="$(find "${candidate_dir}" -maxdepth 1 -type f -name '*.deb' | head -n 1)"
               fi
-              if [[ -n "${deb_file}" ]]; then
+              if [[ -n "${generated_deb_file}" ]]; then
                 break
               fi
             done
-            : "${deb_file:?failed to locate generated deb file}"
-            cp "${deb_file}" .
-            package_files+=("$(basename "${deb_file}")")
+            : "${generated_deb_file:?failed to locate generated deb file}"
+            cp "${generated_deb_file}" .
+            deb_file="$(basename "${generated_deb_file}")"
           fi
 
           if [[ "${{ matrix.package_linux_rpm }}" == "true" ]]; then
             cargo generate-rpm --target "${{ matrix.target }}"
-            rpm_file=""
+            generated_rpm_file=""
             for candidate_dir in "target/${{ matrix.target }}/generate-rpm" "target/generate-rpm"; do
               if [[ -d "${candidate_dir}" ]]; then
-                rpm_file="$(find "${candidate_dir}" -maxdepth 1 -type f -name '*.rpm' | head -n 1)"
+                generated_rpm_file="$(find "${candidate_dir}" -maxdepth 1 -type f -name '*.rpm' | head -n 1)"
               fi
-              if [[ -n "${rpm_file}" ]]; then
+              if [[ -n "${generated_rpm_file}" ]]; then
                 break
               fi
             done
-            : "${rpm_file:?failed to locate generated rpm file}"
-            cp "${rpm_file}" .
-            package_files+=("$(basename "${rpm_file}")")
+            : "${generated_rpm_file:?failed to locate generated rpm file}"
+            cp "${generated_rpm_file}" .
+            rpm_file="$(basename "${generated_rpm_file}")"
           fi
 
-          printf 'asset_files<<EOF\n' >> "$GITHUB_OUTPUT"
-          printf '%s\n' "${package_files[@]}" >> "$GITHUB_OUTPUT"
-          printf 'EOF\n' >> "$GITHUB_OUTPUT"
+          printf 'archive_file=%s\n' "${archive_file}" >> "$GITHUB_OUTPUT"
+          printf 'archive_name=%s\n' "${archive_file}" >> "$GITHUB_OUTPUT"
+          printf 'msi_file=%s\n' "${msi_file}" >> "$GITHUB_OUTPUT"
+          printf 'msi_name=%s\n' "${msi_file}" >> "$GITHUB_OUTPUT"
+          printf 'deb_file=%s\n' "${deb_file}" >> "$GITHUB_OUTPUT"
+          printf 'deb_name=%s\n' "${deb_file}" >> "$GITHUB_OUTPUT"
+          printf 'rpm_file=%s\n' "${rpm_file}" >> "$GITHUB_OUTPUT"
+          printf 'rpm_name=%s\n' "${rpm_file}" >> "$GITHUB_OUTPUT"
 
       - name: Validate Linux native packages
         if: matrix.package_linux_deb || matrix.package_linux_rpm
@@ -325,12 +331,41 @@ jobs:
             done
           fi
 
-      - name: Upload build artifact
+      - name: Upload build archive artifact
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ matrix.target }}
-          path: |
-            ${{ steps.package.outputs.asset_files }}
+          name: ${{ steps.package.outputs.archive_name }}
+          path: ${{ steps.package.outputs.archive_file }}
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Upload Windows MSI artifact
+        if: ${{ steps.package.outputs.msi_file != '' }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ steps.package.outputs.msi_name }}
+          path: ${{ steps.package.outputs.msi_file }}
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Upload Linux DEB artifact
+        if: ${{ steps.package.outputs.deb_file != '' }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ steps.package.outputs.deb_name }}
+          path: ${{ steps.package.outputs.deb_file }}
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Upload Linux RPM artifact
+        if: ${{ steps.package.outputs.rpm_file != '' }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ steps.package.outputs.rpm_name }}
+          path: ${{ steps.package.outputs.rpm_file }}
           retention-days: 7
           if-no-files-found: error
           compression-level: 0
