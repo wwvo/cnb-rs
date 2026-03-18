@@ -2,6 +2,22 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
+## [0.10.0] - 2026-03-18
+
+### ✨ 新功能
+
+- **(ci)** 拆分构建产物为独立 artifact ([8b87d10](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/8b87d104102aa3f312255c670efa1e0598743599))
+- **(ci)** 为 Release Assets 增加手动触发 ([beaeac6](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/beaeac653c50bfc833487d5264fe96213d7b7d97))
+
+### 🐛 Bug 修复
+
+- **(ci)** 修复手动构建时 MSI 产物定位失败 ([a804f32](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/a804f32cc899c6d8cad702db210c1d9f3bb8f25d))
+- **(ci)** 补齐 Windows MSI 的 ARM64 与 GNU 目标 ([879e910](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/879e910b7d1415dbd8f2c7fc928db959ed6a9d8b))
+
+### 📝 文档
+
+- **(naming)** 统一 CNB CLI 文案为 cnb-rs ([a49c412](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/a49c4125271b0e50d29a6d9e104285af2f1c0dd9))
+
 ## [0.9.1] - 2026-03-17
 
 ### 🐛 Bug 修复
