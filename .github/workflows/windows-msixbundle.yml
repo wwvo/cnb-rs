@@ -1,0 +1,254 @@
+name: Windows MSIX Validation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/windows-msixbundle.yml"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "src/**"
+      - "crates/**"
+      - "packaging/windows/**"
+      - "README.md"
+      - "LICENSE"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  build-binary:
+    name: Build ${{ matrix.target }} binary
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-pc-windows-msvc
+            msvc_dev_cmd_arch: amd64
+            artifact_name: cnb-rs-msix-input-x86_64-pc-windows-msvc
+          - target: aarch64-pc-windows-msvc
+            msvc_dev_cmd_arch: amd64_arm64
+            artifact_name: cnb-rs-msix-input-aarch64-pc-windows-msvc
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Setup Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: windows-msix-${{ matrix.target }}
+
+      - name: Setup MSVC developer command prompt
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.msvc_dev_cmd_arch }}
+
+      - name: Build release binary
+        shell: pwsh
+        run: cargo build --release --locked --target "${{ matrix.target }}"
+
+      - name: Upload binary artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: target/${{ matrix.target }}/release/cnb-rs.exe
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+
+  bundle-msix:
+    name: Build Windows MSIX/MSIXBUNDLE
+    needs: build-binary
+    runs-on: windows-latest
+    outputs:
+      release_version: ${{ steps.version.outputs.release_version }}
+      msix_version: ${{ steps.version.outputs.msix_version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: windows-msixbundle-tools
+
+      - name: Setup MSVC developer command prompt
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+
+      - name: Resolve package versions
+        id: version
+        shell: pwsh
+        run: |
+          $manifest = Get-Content Cargo.toml -Raw
+          $match = [regex]::Match($manifest, '(?m)^\s*version\s*=\s*"(?<version>\d+\.\d+\.\d+(?:[-+][^"]+)?)"\s*$')
+          if (-not $match.Success) {
+            throw "Failed to detect workspace version from Cargo.toml"
+          }
+
+          $releaseVersion = $match.Groups["version"].Value
+          $semverMatch = [regex]::Match($releaseVersion, '^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)')
+          if (-not $semverMatch.Success) {
+            throw "Unsupported workspace version for MSIX packaging: $releaseVersion"
+          }
+
+          $msixVersion = "{0}.{1}.{2}.0" -f `
+            $semverMatch.Groups["major"].Value, `
+            $semverMatch.Groups["minor"].Value, `
+            $semverMatch.Groups["patch"].Value
+
+          "release_version=$releaseVersion" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "msix_version=$msixVersion" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Download x64 binary artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: cnb-rs-msix-input-x86_64-pc-windows-msvc
+          path: target/windows-msix/input/x64
+
+      - name: Download arm64 binary artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: cnb-rs-msix-input-aarch64-pc-windows-msvc
+          path: target/windows-msix/input/arm64
+
+      - name: Install msixbundle-cli
+        shell: pwsh
+        run: cargo install msixbundle-cli --locked --version 1.1.4 --root target/tools/msixbundle-cli
+
+      - name: Create CI signing certificate
+        id: certificate
+        shell: pwsh
+        run: |
+          $certDir = Join-Path $PWD "target/windows-msix/cert"
+          New-Item -ItemType Directory -Force -Path $certDir | Out-Null
+
+          $certificate = New-SelfSignedCertificate `
+            -Type CodeSigningCert `
+            -Subject "CN=cnb-rs CI" `
+            -CertStoreLocation "Cert:\CurrentUser\My" `
+            -KeyExportPolicy Exportable `
+            -HashAlgorithm SHA256 `
+            -NotAfter (Get-Date).AddYears(1)
+
+          $passwordPlain = [guid]::NewGuid().ToString("N")
+          $password = ConvertTo-SecureString -String $passwordPlain -AsPlainText -Force
+          $pfxPath = Join-Path $certDir "cnb-rs-ci.pfx"
+          $cerPath = Join-Path $certDir ("cnb-rs-v{0}-windows-msvc.cer" -f "${{ steps.version.outputs.release_version }}")
+
+          Export-PfxCertificate -Cert $certificate -FilePath $pfxPath -Password $password | Out-Null
+          Export-Certificate -Cert $certificate -FilePath $cerPath | Out-Null
+
+          "pfx_path=$pfxPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "pfx_password=$passwordPlain" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "cer_path=$cerPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+          Remove-Item -Path ("Cert:\CurrentUser\My\{0}" -f $certificate.Thumbprint) -Force
+
+      - name: Stage MSIX package contents
+        shell: pwsh
+        run: |
+          .\packaging\windows\scripts\stage-msix-content.ps1 `
+            -X64BinaryPath target\windows-msix\input\x64\cnb-rs.exe `
+            -Arm64BinaryPath target\windows-msix\input\arm64\cnb-rs.exe `
+            -OutputDir target\windows-msix\appxcontent
+
+      - name: Build Windows MSIX/MSIXBUNDLE artifacts
+        shell: pwsh
+        run: |
+          .\packaging\windows\scripts\build-msixbundle.ps1 `
+            -OutputDir target\windows-msix\output `
+            -PfxPath "${{ steps.certificate.outputs.pfx_path }}" `
+            -PfxPassword "${{ steps.certificate.outputs.pfx_password }}" `
+            -Version "${{ steps.version.outputs.release_version }}"
+
+      - name: Upload x64 MSIX artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: cnb-rs-v${{ steps.version.outputs.release_version }}-x86_64-pc-windows-msvc.msix
+          path: target/windows-msix/output/cnb-rs-v${{ steps.version.outputs.release_version }}-x86_64-pc-windows-msvc.msix
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Upload arm64 MSIX artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: cnb-rs-v${{ steps.version.outputs.release_version }}-aarch64-pc-windows-msvc.msix
+          path: target/windows-msix/output/cnb-rs-v${{ steps.version.outputs.release_version }}-aarch64-pc-windows-msvc.msix
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Upload MSIX bundle artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: cnb-rs-v${{ steps.version.outputs.release_version }}-windows-msvc.msixbundle
+          path: target/windows-msix/output/cnb-rs-v${{ steps.version.outputs.release_version }}-windows-msvc.msixbundle
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Upload MSIX certificate artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: cnb-rs-v${{ steps.version.outputs.release_version }}-windows-msvc.cer
+          path: ${{ steps.certificate.outputs.cer_path }}
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+
+  smoke-test-msixbundle:
+    name: Smoke test Windows MSIX/MSIXBUNDLE (${{ matrix.target }})
+    needs: bundle-msix
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-pc-windows-msvc
+            runner: windows-latest
+          - target: aarch64-pc-windows-msvc
+            runner: windows-11-arm
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Download MSIX bundle artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: cnb-rs-v${{ needs.bundle-msix.outputs.release_version }}-windows-msvc.msixbundle
+          path: target/windows-msix/download/bundle
+
+      - name: Download MSIX certificate artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: cnb-rs-v${{ needs.bundle-msix.outputs.release_version }}-windows-msvc.cer
+          path: target/windows-msix/download/cert
+
+      - name: Smoke test MSIX install and uninstall
+        shell: pwsh
+        run: |
+          $bundlePath = Get-ChildItem target\windows-msix\download\bundle\*.msixbundle | Select-Object -First 1 -ExpandProperty FullName
+          $certificatePath = Get-ChildItem target\windows-msix\download\cert\*.cer | Select-Object -First 1 -ExpandProperty FullName
+
+          .\packaging\windows\scripts\test-msixbundle.ps1 `
+            -BundlePath $bundlePath `
+            -CertificatePath $certificatePath `
+            -ExpectedVersion "${{ needs.bundle-msix.outputs.msix_version }}"
