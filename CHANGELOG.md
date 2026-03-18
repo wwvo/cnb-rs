@@ -198,7 +198,7 @@
 ### ✨ 新功能
 
 - 新增代码检查与发版前检查流水线 #38 ([aed69aa](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/aed69aa7ccd31395f1196a9819dbfa553bc65532))
-- add GitHub Actions workflow for multi-platform cnb cli build ([929555d](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/929555d133cb13693be922103ae25c887c4a27ea))
+- add GitHub Actions workflow for multi-platform cnb-rs build ([929555d](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/929555d133cb13693be922103ae25c887c4a27ea))
 - **(ci)** 在 release 流水线中添加更新 CHANGELOG.md 的步骤 ([9519aa2](https://cnb.cool/wwvo/cnb-cli/cnb/-/commit/9519aa2abc8198d6f21bd93aa441932d19c29b84))
 
 ### 🎨 代码风格

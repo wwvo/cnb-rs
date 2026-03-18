@@ -6,7 +6,7 @@ cnb-rs auth <subcommand>
 
 认证管理，管理 CNB 平台的登录凭证。
 
-CNB CLI 使用 Personal Access Token（PAT）进行认证。Token 通过 `cnb-rs auth login` 登录后
+cnb-rs 使用 Personal Access Token（PAT）进行认证。Token 通过 `cnb-rs auth login` 登录后
 存储在本地配置文件 `~/.cnb/config.toml` 中。
 
 也可以通过环境变量提供 Token，适合 CI/CD 等自动化场景。详见 [环境变量](#环境变量) 章节。
@@ -19,7 +19,7 @@ CNB CLI 使用 Personal Access Token（PAT）进行认证。Token 通过 `cnb-rs
 
 ## 环境变量
 
-CNB CLI 按以下优先级查找认证 Token：
+cnb-rs 按以下优先级查找认证 Token：
 
 1. **域名特定环境变量** `CNB_TOKEN_{DOMAIN}`（域名去掉 `.` 和 `-`，如 `CNB_TOKEN_cnbcool`）
 2. **通用环境变量** `CNB_TOKEN`

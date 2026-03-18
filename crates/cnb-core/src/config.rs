@@ -17,7 +17,7 @@ pub const DEFAULT_GIT_PROTOCOL: &str = "https";
 /// 配置文件名
 pub const CONFIG_FILE: &str = "config.toml";
 
-/// CNB CLI 配置
+/// cnb-rs 配置
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Config {
     /// 默认域名

@@ -1,4 +1,4 @@
-//! CNB CLI - 一个非官方的 CNB 命令行工具
+//! cnb-rs - 一个非官方的 CNB 命令行工具
 //!
 //! 通过 `cnb-rs` 命令使用。
 
@@ -8,7 +8,7 @@ use cnb_core::context::AppContext;
 mod build_info;
 mod commands;
 
-/// CNB CLI - 一个非官方的 CNB 命令行工具
+/// cnb-rs - 一个非官方的 CNB 命令行工具
 #[derive(Debug, Parser)]
 #[clap(
     name = "cnb-rs",

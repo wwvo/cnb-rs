@@ -16,7 +16,7 @@ cnb-rs auth login [flags]
 
 默认域名为 `cnb.cool`，可通过 `--domain` 全局参数覆盖。
 
-CNB CLI 也支持通过环境变量传递 Token，适合 CI/CD 等无头环境。详见 [cnb-rs auth](/auth/)。
+cnb-rs 也支持通过环境变量传递 Token，适合 CI/CD 等无头环境。详见 [cnb-rs auth](/auth/)。
 
 ::: tip
 此命令不会撤销已有的 Token。如需管理已生成的 Token，请访问

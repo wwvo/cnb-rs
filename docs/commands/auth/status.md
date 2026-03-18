@@ -26,7 +26,7 @@ Token 脱敏规则：长度大于 12 时保留前 4 位和后 4 位，中间用 
 
 ## Token 来源优先级
 
-CNB CLI 按以下顺序查找 Token：
+cnb-rs 按以下顺序查找 Token：
 
 1. **域名特定环境变量** — `CNB_TOKEN_{DOMAIN}`（域名去掉 `.` 和 `-`，如 `CNB_TOKEN_cnbcool`）
 2. **通用环境变量** — `CNB_TOKEN`

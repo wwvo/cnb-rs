@@ -4,7 +4,7 @@
 cnb-rs version
 ```
 
-显示 CNB CLI 的详细版本信息，包括版本号、Git commit hash、提交日期、Rust 编译器版本、目标平台和构建 profile。
+显示 cnb-rs 的详细版本信息，包括版本号、Git commit hash、提交日期、Rust 编译器版本、目标平台和构建 profile。
 
 所有信息在编译期通过 `build.rs` 嵌入，不涉及网络请求。
 
