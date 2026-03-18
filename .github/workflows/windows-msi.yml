@@ -21,8 +21,30 @@ env:
 
 jobs:
   build-msi:
-    name: Build x86_64 Windows MSI
-    runs-on: windows-latest
+    name: Build ${{ matrix.target }} MSI
+    runs-on: ${{ matrix.build_runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-pc-windows-msvc
+            build_runner: windows-latest
+            smoke_runner: windows-latest
+            installer_arch: x64
+            artifact_name: cnb-rs-msi-x86_64-pc-windows-msvc
+            msvc_dev_cmd_arch: amd64
+          - target: x86_64-pc-windows-gnu
+            build_runner: windows-latest
+            smoke_runner: windows-latest
+            installer_arch: x64
+            artifact_name: cnb-rs-msi-x86_64-pc-windows-gnu
+            setup_mingw: true
+          - target: aarch64-pc-windows-msvc
+            build_runner: windows-latest
+            smoke_runner: windows-11-arm
+            installer_arch: arm64
+            artifact_name: cnb-rs-msi-aarch64-pc-windows-msvc
+            msvc_dev_cmd_arch: amd64_arm64
 
     steps:
       - name: Checkout repository
@@ -31,12 +53,25 @@ jobs:
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: x86_64-pc-windows-msvc
+          targets: ${{ matrix.target }}
 
       - name: Setup Rust cache
         uses: Swatinem/rust-cache@v2
         with:
-          key: windows-msi-x86_64-pc-windows-msvc
+          key: windows-msi-${{ matrix.target }}
+
+      - name: Setup MinGW
+        if: matrix.setup_mingw
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: mingw-w64-x86_64-toolchain
+
+      - name: Add MinGW to PATH
+        if: matrix.setup_mingw
+        shell: pwsh
+        run: echo "C:\msys64\mingw64\bin" >> $env:GITHUB_PATH
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v5
@@ -44,19 +79,61 @@ jobs:
           dotnet-version: "8.0.x"
 
       - name: Setup MSVC developer command prompt
+        if: endsWith(matrix.target, '-pc-windows-msvc')
         uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.msvc_dev_cmd_arch }}
 
-      - name: Build release binary
+      - name: Build release binary (Windows MSVC)
+        if: endsWith(matrix.target, '-pc-windows-msvc')
         shell: pwsh
-        run: cargo build --release --locked --target x86_64-pc-windows-msvc
+        run: cargo build --release --locked --target ${{ matrix.target }}
+
+      - name: Build release binary (Windows GNU)
+        if: matrix.setup_mingw
+        shell: bash
+        run: cargo build --release --locked --target "${{ matrix.target }}"
 
       - name: Build MSI package
         shell: pwsh
         run: |
           .\packaging\windows\scripts\build-msi.ps1 `
-            -Target x86_64-pc-windows-msvc `
-            -Architecture x64 `
+            -Target ${{ matrix.target }} `
+            -Architecture ${{ matrix.installer_arch }} `
             -OutputDir target\windows-msi
+
+      - name: Upload MSI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: target/windows-msi/*.msi
+          if-no-files-found: error
+          retention-days: 7
+
+  smoke-test-msi:
+    name: Smoke test ${{ matrix.target }} MSI
+    needs: build-msi
+    runs-on: ${{ matrix.smoke_runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-pc-windows-msvc
+            smoke_runner: windows-latest
+            artifact_name: cnb-rs-msi-x86_64-pc-windows-msvc
+          - target: x86_64-pc-windows-gnu
+            smoke_runner: windows-latest
+            artifact_name: cnb-rs-msi-x86_64-pc-windows-gnu
+          - target: aarch64-pc-windows-msvc
+            smoke_runner: windows-11-arm
+            artifact_name: cnb-rs-msi-aarch64-pc-windows-msvc
+
+    steps:
+      - name: Download MSI artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: target/windows-msi
 
       - name: Smoke test MSI install and uninstall
         shell: pwsh
@@ -71,6 +148,23 @@ jobs:
             )
 
             return $PathEntry.Trim().TrimEnd('\').ToLowerInvariant()
+          }
+
+          function Get-MinimalProcessPath {
+            param(
+              [Parameter(Mandatory = $true)]
+              [string]$InstallDir
+            )
+
+            $entries = @(
+              $InstallDir,
+              (Join-Path $env:SystemRoot "System32"),
+              $env:SystemRoot,
+              (Join-Path $env:SystemRoot "System32\Wbem"),
+              (Join-Path $env:SystemRoot "System32\WindowsPowerShell\v1.0")
+            ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+
+            return ($entries -join ';')
           }
 
           $msiPath = Get-ChildItem target\windows-msi\*.msi | Select-Object -First 1 -ExpandProperty FullName
@@ -119,7 +213,14 @@ jobs:
               throw "Install directory was not appended to machine PATH"
             }
 
-            & $installedExe --version
+            $previousProcessPath = $env:Path
+            try {
+              $env:Path = Get-MinimalProcessPath -InstallDir $installDir
+              & $installedExe --version
+            }
+            finally {
+              $env:Path = $previousProcessPath
+            }
 
             $uninstall = Start-Process msiexec.exe -ArgumentList @(
               "/x", $msiPath, "/qn", "/norestart", "/L*V", $uninstallLog
@@ -162,11 +263,3 @@ jobs:
               ) -Wait -PassThru -ErrorAction SilentlyContinue
             }
           }
-
-      - name: Upload MSI artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: cnb-rs-msi-x86_64-pc-windows-msvc
-          path: target/windows-msi/*.msi
-          if-no-files-found: error
-          retention-days: 7

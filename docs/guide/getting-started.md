@@ -31,16 +31,23 @@ sudo dnf install ./cnb-rs-*.aarch64.rpm
 
 ### Windows
 
-Windows `x86_64` 当前优先提供 `.msi` 安装包，推荐直接双击安装，或在 PowerShell 中静默安装：
+Windows 当前提供以下 MSI 目标：
+
+- `x86_64-pc-windows-msvc`
+  - 默认推荐给大多数 `x86_64` 用户
+- `aarch64-pc-windows-msvc`
+  - 推荐给 Windows `arm64` 用户
+- `x86_64-pc-windows-gnu`
+  - 作为 `x86_64` GNU toolchain 变体提供
 
 ```powershell
 msiexec /i .\cnb-rs-v<VERSION>-x86_64-pc-windows-msvc.msi
 ```
 
-如果你不希望使用 MSI，或者当前目标不是 `x86_64-pc-windows-msvc`，也仍然可以继续使用 release 页面中的 `.zip` 压缩包附件。
+如果你不希望使用 MSI，或者当前目标不在上述 MSI 覆盖范围内，也仍然可以继续使用 release 页面中的 `.zip` 压缩包附件。
 
 > [!NOTE]
-> 当前 MSI 只覆盖 `x86_64-pc-windows-msvc`。Windows 其他目标仍以 `.zip` 附件为主。
+> 当前 MSI 覆盖 `x86_64-pc-windows-msvc`、`aarch64-pc-windows-msvc` 和 `x86_64-pc-windows-gnu`。
 
 更多说明见：[Windows 安装说明](/guide/windows-install)。
 

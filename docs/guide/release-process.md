@@ -62,7 +62,7 @@ GitHub 镜像仓库收到 `v*` tag 后，会触发 `.github/workflows/build.yml`
 
 1. 在 GitHub 原生 runner 上分别构建 Linux、Windows、macOS 产物；当前默认发布矩阵包含 Linux 4 个目标、Windows 4 个目标（GNU 1 个 x86_64 变体 + gnullvm 1 个 aarch64 实验性变体，MSVC 2 个 x86_64 / aarch64 变体）和 macOS 2 个目标
 2. 对 `x86_64-unknown-linux-gnu` 和 `aarch64-unknown-linux-gnu`，除 `.tar.gz` 外，还会额外生成 Linux 原生包：`.deb` 和 `.rpm`
-3. 对 `x86_64-pc-windows-msvc`，除 `.zip` 外，还会额外生成 Windows 原生安装包：`.msi`
+3. 对 `x86_64-pc-windows-msvc`、`aarch64-pc-windows-msvc` 和 `x86_64-pc-windows-gnu`，除 `.zip` 外，还会额外生成 Windows 原生安装包：`.msi`
 4. 对 Linux 原生包执行等价发布校验，确认包架构字段和内置文件列表符合预期
 5. 生成与 CNB 一致的 `LATEST_CHANGELOG.md`
 6. 基于最终 release 附件生成 `sha256sum.txt`，其中包含 `.tar.gz`、`.zip`、`.msi`、`.deb`、`.rpm`
@@ -79,8 +79,8 @@ GitHub 镜像仓库收到 `v*` tag 后，会触发 `.github/workflows/build.yml`
 
 当前 Windows 原生安装包的发布范围说明：
 
-- 当前只对 `x86_64-pc-windows-msvc` 发布 `.msi`
-- `x86_64-pc-windows-gnu`、`aarch64-pc-windows-msvc` 和 `aarch64-pc-windows-gnullvm` 当前仍仅提供 `.zip`
+- 当前对 `x86_64-pc-windows-msvc`、`aarch64-pc-windows-msvc` 和 `x86_64-pc-windows-gnu` 发布 `.msi`
+- `aarch64-pc-windows-gnullvm` 当前仍仅提供 `.zip`
 - 当前 `.msi` 与 `.zip` 会同时保留，避免影响已有使用方式
 
 回填完成后，GitHub Release 和 CNB Release 会持有同一组二进制产物以及对应的 SHA-256 校验文件。

@@ -43,13 +43,20 @@ jobs:
             target: x86_64-pc-windows-gnu
             archive_ext: zip
             setup_mingw: true
+            package_windows_msi: true
+            windows_msi_arch: x64
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             archive_ext: zip
             package_windows_msi: true
+            windows_msi_arch: x64
+            msvc_dev_cmd_arch: amd64
           - os: windows-latest
             target: aarch64-pc-windows-msvc
             archive_ext: zip
+            package_windows_msi: true
+            windows_msi_arch: arm64
+            msvc_dev_cmd_arch: amd64_arm64
           - os: ubuntu-latest
             target: aarch64-pc-windows-gnullvm
             archive_ext: zip
@@ -136,6 +143,8 @@ jobs:
       - name: Setup MSVC developer command prompt
         if: endsWith(matrix.target, '-pc-windows-msvc')
         uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.msvc_dev_cmd_arch }}
 
       - name: Build binaries (Windows MSVC)
         if: endsWith(matrix.target, '-pc-windows-msvc')
@@ -162,7 +171,7 @@ jobs:
         run: |
           .\packaging\windows\scripts\build-msi.ps1 `
             -Target ${{ matrix.target }} `
-            -Architecture x64 `
+            -Architecture ${{ matrix.windows_msi_arch }} `
             -OutputDir target\windows-msi
 
       - name: Build Linux packaging helper binary
