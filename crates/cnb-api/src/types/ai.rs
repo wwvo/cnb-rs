@@ -57,7 +57,7 @@ pub struct ChatStreamChunk {
     pub model: Option<String>,
     pub created: Option<i64>,
     pub choices: Vec<ChatStreamChoice>,
-    /// CNB 扩展字段：model_response
+    /// CNB 扩展字段：`model_response`
     pub model_response: Option<ModelResponse>,
 }
 
@@ -90,6 +90,7 @@ pub struct ModelResponse {
 
 impl ChatMessage {
     /// 创建 system 消息
+    #[must_use]
     pub fn system(content: &str) -> Self {
         Self {
             role: Role::System,
@@ -98,6 +99,7 @@ impl ChatMessage {
     }
 
     /// 创建 user 消息
+    #[must_use]
     pub fn user(content: &str) -> Self {
         Self {
             role: Role::User,
@@ -106,6 +108,7 @@ impl ChatMessage {
     }
 
     /// 创建 assistant 消息
+    #[must_use]
     pub fn assistant(content: &str) -> Self {
         Self {
             role: Role::Assistant,

@@ -287,6 +287,7 @@ impl Default for ListReposOptions {
 
 impl ListReposOptions {
     /// 拼接通用查询参数
+    #[must_use]
     pub fn query_string(&self) -> String {
         let mut params = vec![
             format!("page={}", self.page),

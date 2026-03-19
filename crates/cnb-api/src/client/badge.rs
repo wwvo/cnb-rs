@@ -2,11 +2,17 @@
 
 use super::CnbClient;
 use crate::error::ApiError;
-use crate::types::*;
+use crate::types::{BadgeListResult, BadgeResult, UploadBadgeRequest, UploadBadgeResult};
+use std::fmt::Write;
 use urlencoding::encode;
 
 impl CnbClient {
     /// 获取指定徽章（JSON 数据）
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn get_badge(
         &self,
         sha: &str,
@@ -21,13 +27,18 @@ impl CnbClient {
             self.base_url, self.repo
         );
         if let Some(b) = branch {
-            url.push_str(&format!("?branch={}", encode(b)));
+            let _ = write!(url, "?branch={}", encode(b));
         }
         let resp = self.http.get(&url).send().await?;
         Self::handle_response(resp).await
     }
 
     /// 获取指定徽章（SVG）
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response body cannot be read,
+    /// or the CNB API returns a non-success status.
     pub async fn get_badge_svg(
         &self,
         sha: &str,
@@ -41,7 +52,7 @@ impl CnbClient {
             self.base_url, self.repo
         );
         if let Some(b) = branch {
-            url.push_str(&format!("?branch={}", encode(b)));
+            let _ = write!(url, "?branch={}", encode(b));
         }
         let resp = self.http.get(&url).send().await?;
         let status = resp.status().as_u16();
@@ -53,6 +64,11 @@ impl CnbClient {
     }
 
     /// 列出仓库徽章
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn list_badges(&self) -> Result<BadgeListResult, ApiError> {
         let url = format!("{}{}/-/badge/list", self.base_url, self.repo);
         let resp = self.http.get(&url).send().await?;
@@ -60,6 +76,11 @@ impl CnbClient {
     }
 
     /// 上传自定义徽章
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn upload_badge(
         &self,
         req: &UploadBadgeRequest,

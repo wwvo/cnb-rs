@@ -1,8 +1,14 @@
 use super::CnbClient;
 use crate::error::ApiError;
-use crate::types::*;
+use crate::types::{ChatCompletionsRequest, ChatCompletionsResponse};
 
 impl CnbClient {
+    /// 发送 AI Chat 非流式请求。
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn ai_chat(
         &self,
         req: &ChatCompletionsRequest,
@@ -12,6 +18,12 @@ impl CnbClient {
         Self::handle_response(resp).await
     }
 
+    /// 发送 AI Chat 流式请求。
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn ai_chat_stream(
         &self,
         req: &ChatCompletionsRequest,

@@ -20,7 +20,7 @@ mod user;
 mod workspace;
 
 use crate::error::ApiError;
-use crate::types::*;
+use crate::types::{Content, Repo, User};
 use reqwest::header::{ACCEPT, AUTHORIZATION, HeaderMap, HeaderValue};
 use urlencoding::encode;
 
@@ -36,6 +36,11 @@ pub struct CnbClient {
 
 impl CnbClient {
     /// 创建新的 CNB API 客户端
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the authorization header is invalid or the underlying
+    /// HTTP client cannot be constructed.
     pub fn new(
         base_url: &str,
         base_web_url: &str,
@@ -71,25 +76,35 @@ impl CnbClient {
         })
     }
 
+    #[must_use]
     pub fn base_url(&self) -> &str {
         &self.base_url
     }
+    #[must_use]
     pub fn base_web_url(&self) -> &str {
         &self.base_web_url
     }
+    #[must_use]
     pub fn repo(&self) -> &str {
         &self.repo
     }
+    #[must_use]
     pub fn token(&self) -> &str {
         &self.token
     }
 
     /// 获取无默认认证头的 HTTP 客户端引用（用于外部模块复用连接池）
+    #[must_use]
     pub fn http_client(&self) -> &reqwest::Client {
         &self.http_plain
     }
 
     /// 获取当前用户信息
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn me(&self) -> Result<User, ApiError> {
         let url = format!("{}user", self.base_url);
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
@@ -97,6 +112,11 @@ impl CnbClient {
     }
 
     /// 获取仓库信息
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn get_repo(&self) -> Result<Repo, ApiError> {
         let url = format!("{}{}", self.base_url, self.repo);
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
@@ -104,6 +124,11 @@ impl CnbClient {
     }
 
     /// 获取仓库文件/目录内容
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn get_content(&self, path: &str, git_ref: &str) -> Result<Content, ApiError> {
         let path = Self::encode_path(path);
         let git_ref = encode(git_ref);
@@ -175,14 +200,15 @@ impl CnbClient {
         F: Fn(u32, u32) -> Fut,
         Fut: std::future::Future<Output = Result<Vec<T>, ApiError>>,
     {
-        let page_size = 100u32;
+        const PAGE_SIZE_U32: u32 = 100;
+        const PAGE_SIZE_USIZE: usize = 100;
         let mut all = Vec::new();
         let mut page = 1u32;
         loop {
-            let items = fetch(page, page_size).await?;
+            let items = fetch(page, PAGE_SIZE_U32).await?;
             let count = items.len();
             all.extend(items);
-            if (count as u32) < page_size {
+            if count < PAGE_SIZE_USIZE {
                 break;
             }
             page += 1;
@@ -209,7 +235,7 @@ impl CnbClient {
         Err(Self::map_error_status(status, resp).await)
     }
 
-    /// 将非成功 HTTP 状态码映射为对应的 ApiError
+    /// 将非成功 HTTP 状态码映射为对应的 `ApiError`
     async fn map_error_status(status: u16, resp: reqwest::Response) -> ApiError {
         if status == 401 {
             return ApiError::Auth(

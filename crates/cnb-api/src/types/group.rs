@@ -124,6 +124,7 @@ pub struct ListGroupsOptions {
 }
 
 impl ListGroupsOptions {
+    #[must_use]
     pub fn query_string(&self) -> String {
         let mut params = vec![
             format!("page={}", self.page),
@@ -148,6 +149,7 @@ pub struct ListSubGroupsOptions {
 }
 
 impl ListSubGroupsOptions {
+    #[must_use]
     pub fn query_string(&self) -> String {
         let mut params = vec![
             format!("page={}", self.page),
@@ -291,6 +293,7 @@ pub struct ListGroupMembersOptions {
 }
 
 impl ListGroupMembersOptions {
+    #[must_use]
     pub fn query_string(&self) -> String {
         let mut params = vec![
             format!("page={}", self.page),
