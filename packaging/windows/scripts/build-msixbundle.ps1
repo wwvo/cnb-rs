@@ -74,6 +74,23 @@ function Write-StepLog {
     Write-Host ("[{0}] {1}" -f $timestamp, $Message)
 }
 
+function Resolve-PfxPassword {
+    param(
+        [string]$Password
+    )
+
+    if ($Password) {
+        return $Password
+    }
+
+    if ($env:WINDOWS_MSIX_PFX_PASSWORD) {
+        Write-StepLog "Using PFX password from WINDOWS_MSIX_PFX_PASSWORD environment variable"
+        return $env:WINDOWS_MSIX_PFX_PASSWORD
+    }
+
+    return $null
+}
+
 function Import-TemporaryTrustedCertificate {
     param(
         [Parameter(Mandatory = $true)]
@@ -241,6 +258,7 @@ if ($PfxPath) {
         throw "PFX file not found: $PfxPath"
     }
 
+    $PfxPassword = Resolve-PfxPassword -Password $PfxPassword
     if (-not $PfxPassword) {
         throw "PFX password is required when signing is enabled"
     }

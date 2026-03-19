@@ -233,7 +233,6 @@ jobs:
           .\packaging\windows\scripts\build-msixbundle.ps1 `
             -OutputDir target\windows-msix\output `
             -PfxPath "${{ steps.certificate.outputs.pfx_path }}" `
-            -PfxPassword "${{ env.WINDOWS_MSIX_PFX_PASSWORD }}" `
             -CertificatePath "${{ steps.certificate.outputs.certificate_path }}" `
             -Version "${{ steps.metadata.outputs.release_version }}"
 
