@@ -688,11 +688,20 @@ jobs:
           git fetch --tags --force
           git cliff --latest --strip header -o LATEST_CHANGELOG.md
 
+      - name: Stage installer scripts
+        run: |
+          set -euo pipefail
+
+          release_tag="${GITHUB_REF_NAME}"
+          cp scripts/install.sh "release-artifacts/cnb-rs-${release_tag}-install.sh"
+          cp scripts/install.ps1 "release-artifacts/cnb-rs-${release_tag}-install.ps1"
+          chmod 755 "release-artifacts/cnb-rs-${release_tag}-install.sh"
+
       - name: Generate SHA-256 checksums
         run: |
           set -euo pipefail
           cd release-artifacts
-          find . -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' -o -name '*.msi' -o -name '*.msix' -o -name '*.msixbundle' -o -name '*.deb' -o -name '*.rpm' -o -name '*.cer' \) -printf '%P\n' | sort | xargs sha256sum > sha256sum.txt
+          find . -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' -o -name '*.msi' -o -name '*.msix' -o -name '*.msixbundle' -o -name '*.deb' -o -name '*.rpm' -o -name '*.cer' -o -name 'cnb-rs-*-install.sh' -o -name 'cnb-rs-*-install.ps1' \) -printf '%P\n' | sort | xargs sha256sum > sha256sum.txt
 
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v2
@@ -707,7 +716,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          files="$(find release-artifacts -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' -o -name '*.msi' -o -name '*.msix' -o -name '*.msixbundle' -o -name '*.deb' -o -name '*.rpm' -o -name '*.cer' -o -name 'sha256sum.txt' \) | sort | paste -sd, -)"
+          files="$(find release-artifacts -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' -o -name '*.msi' -o -name '*.msix' -o -name '*.msixbundle' -o -name '*.deb' -o -name '*.rpm' -o -name '*.cer' -o -name 'cnb-rs-*-install.sh' -o -name 'cnb-rs-*-install.ps1' -o -name 'sha256sum.txt' \) | sort | paste -sd, -)"
           : "${files:?No release artifacts found for CNB upload}"
           echo "files=${files}" >> "$GITHUB_OUTPUT"
 

@@ -51,6 +51,9 @@ curl -fsSL https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/git/raw/main/scripts/install.sh
 irm https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/git/raw/main/scripts/install.ps1 | iex
 ```
 
+- `main/scripts/install.sh` 和 `main/scripts/install.ps1` 适合“始终获取最新安装脚本”的场景
+- 每个 Release 也会附带版本化脚本 `cnb-rs-v<VERSION>-install.sh` 与 `cnb-rs-v<VERSION>-install.ps1`，适合固定版本安装或离线保存后执行
+
 - 如果你希望安装脚本改从 GitHub Release 下载，也可以切换下载源：
 
 ```bash
@@ -64,6 +67,7 @@ $env:CNB_RS_INSTALL_SOURCE = "github"; irm https://cnb.cool/wwvo/cnb-rs/cnb-rs/-
 - `scripts/install.sh` 会自动识别 Linux / macOS 的系统和架构，默认安装到可写的 `/usr/local/bin`，否则回退到 `~/.local/bin`
 - `scripts/install.ps1` 会自动识别 Windows `x64 / arm64`，默认安装到当前用户的 `AppData\Local\Programs\cnb-rs\bin`，并尝试追加到用户级 `PATH`
 - 两个脚本默认都会从 CNB Release 下载压缩包，也可以通过 `CNB_RS_INSTALL_SOURCE=github`、`--source github` 或 `-Source github` 切换到 GitHub Release，并继续校验 `sha256sum.txt`
+- 如果你下载的是某个 Release 自带的 `cnb-rs-v<VERSION>-install.sh` 或 `cnb-rs-v<VERSION>-install.ps1`，它们默认会指向同版本的发布产物
 - 如果你不显式指定版本，脚本会使用仓库当前维护的默认发布版本
 - 这两个脚本只安装 `cnb-rs` 二进制文件，不替代 `.deb` / `.rpm` / `.msix` / `.msi` 的完整安装形态
 

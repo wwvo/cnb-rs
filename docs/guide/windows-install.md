@@ -21,6 +21,8 @@
 irm https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/git/raw/main/scripts/install.ps1 | iex
 ```
 
+这条入口适合始终获取最新安装脚本。
+
 如果你希望改从 GitHub Release 下载，可以在当前会话里先切换下载源：
 
 ```powershell
@@ -34,13 +36,19 @@ Invoke-WebRequest https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/git/raw/main/scripts/ins
 .\install.ps1 -Version v<VERSION> -InstallDir "$env:LOCALAPPDATA\Programs\cnb-rs\bin"
 ```
 
+如果你更希望脚本本身也与某个版本严格绑定，可以直接从对应 Release 下载 `cnb-rs-v<VERSION>-install.ps1` 后执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\cnb-rs-v<VERSION>-install.ps1 -InstallDir "$env:LOCALAPPDATA\Programs\cnb-rs\bin"
+```
+
 如果你希望固定使用 GitHub Release，也可以在本地执行时显式指定：
 
 ```powershell
 .\install.ps1 -Source github -Version v<VERSION> -InstallDir "$env:LOCALAPPDATA\Programs\cnb-rs\bin"
 ```
 
-这个脚本会自动识别 Windows `x64 / arm64`，默认从 CNB Release 下载对应 `.zip` 压缩包，也可以切换到 GitHub Release；两种来源都会校验 `sha256sum.txt`。然后它会把 `cnb-rs.exe` 安装到当前用户目录。它不会安装 `.msixbundle` / `.msi`，也不会处理 MSIX 证书导入。
+这个脚本会自动识别 Windows `x64 / arm64`，默认从 CNB Release 下载对应 `.zip` 压缩包，也可以切换到 GitHub Release；两种来源都会校验 `sha256sum.txt`。如果你直接执行 Release 自带的 `cnb-rs-v<VERSION>-install.ps1`，默认就会安装该版本。然后它会把 `cnb-rs.exe` 安装到当前用户目录。它不会安装 `.msixbundle` / `.msi`，也不会处理 MSIX 证书导入。
 
 ## MSIX / MSIXBUNDLE
 
