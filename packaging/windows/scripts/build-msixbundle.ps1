@@ -72,7 +72,12 @@ function Import-TemporaryTrustedCertificate {
 
     $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($Path)
     $addedStores = @()
-    foreach ($storePath in @("Cert:\CurrentUser\Root", "Cert:\CurrentUser\TrustedPeople")) {
+    foreach ($storePath in @(
+        "Cert:\CurrentUser\Root",
+        "Cert:\CurrentUser\TrustedPeople",
+        "Cert:\LocalMachine\Root",
+        "Cert:\LocalMachine\TrustedPeople"
+    )) {
         $existing = Get-ChildItem $storePath | Where-Object Thumbprint -eq $cert.Thumbprint | Select-Object -First 1
         if (-not $existing) {
             Import-Certificate -FilePath $Path -CertStoreLocation $storePath | Out-Null
@@ -91,7 +96,12 @@ function Remove-TemporaryTrustedCertificate {
         [Parameter(Mandatory = $true)]
         [string]$Thumbprint,
 
-        [string[]]$StorePaths = @("Cert:\CurrentUser\Root", "Cert:\CurrentUser\TrustedPeople")
+        [string[]]$StorePaths = @(
+            "Cert:\CurrentUser\Root",
+            "Cert:\CurrentUser\TrustedPeople",
+            "Cert:\LocalMachine\Root",
+            "Cert:\LocalMachine\TrustedPeople"
+        )
     )
 
     foreach ($storePath in $StorePaths) {

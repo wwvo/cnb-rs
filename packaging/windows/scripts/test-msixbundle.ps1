@@ -21,20 +21,40 @@ function Import-TestCertificate {
     )
 
     $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($Path)
-    foreach ($storePath in @("Cert:\CurrentUser\Root", "Cert:\CurrentUser\TrustedPeople")) {
-        Import-Certificate -FilePath $Path -CertStoreLocation $storePath | Out-Null
+    $addedStores = @()
+    foreach ($storePath in @(
+        "Cert:\CurrentUser\Root",
+        "Cert:\CurrentUser\TrustedPeople",
+        "Cert:\LocalMachine\Root",
+        "Cert:\LocalMachine\TrustedPeople"
+    )) {
+        $existing = Get-ChildItem $storePath | Where-Object Thumbprint -eq $cert.Thumbprint | Select-Object -First 1
+        if (-not $existing) {
+            Import-Certificate -FilePath $Path -CertStoreLocation $storePath | Out-Null
+            $addedStores += $storePath
+        }
     }
 
-    return $cert.Thumbprint
+    return [pscustomobject]@{
+        Thumbprint = $cert.Thumbprint
+        AddedStores = $addedStores
+    }
 }
 
 function Remove-TestCertificate {
     param(
         [Parameter(Mandatory = $true)]
-        [string]$Thumbprint
+        [string]$Thumbprint,
+
+        [string[]]$StorePaths = @(
+            "Cert:\CurrentUser\Root",
+            "Cert:\CurrentUser\TrustedPeople",
+            "Cert:\LocalMachine\Root",
+            "Cert:\LocalMachine\TrustedPeople"
+        )
     )
 
-    foreach ($storePath in @("Cert:\CurrentUser\Root", "Cert:\CurrentUser\TrustedPeople")) {
+    foreach ($storePath in $StorePaths) {
         Get-ChildItem $storePath | Where-Object Thumbprint -eq $Thumbprint | Remove-Item -Force -ErrorAction SilentlyContinue
     }
 }
@@ -101,7 +121,7 @@ foreach ($path in $pathsToValidate) {
 $configPath = Join-Path $HOME ".cnb\config.toml"
 $backupPath = Join-Path $env:TEMP ("cnb-msixbundle-config-backup-{0}.toml" -f ([guid]::NewGuid().ToString("N")))
 $configExisted = Test-Path $configPath
-$thumbprint = $null
+$trustedCertificate = $null
 $package = $null
 
 try {
@@ -110,7 +130,7 @@ try {
     }
 
     if ($CertificatePath) {
-        $thumbprint = Import-TestCertificate -Path $CertificatePath
+        $trustedCertificate = Import-TestCertificate -Path $CertificatePath
     }
 
     Add-AppxPackage -Path $BundlePath -ForceApplicationShutdown
@@ -159,7 +179,7 @@ finally {
         Remove-Item $backupPath -Force -ErrorAction SilentlyContinue
     }
 
-    if ($thumbprint) {
-        Remove-TestCertificate -Thumbprint $thumbprint
+    if ($trustedCertificate -and $trustedCertificate.AddedStores.Count -gt 0) {
+        Remove-TestCertificate -Thumbprint $trustedCertificate.Thumbprint -StorePaths $trustedCertificate.AddedStores
     }
 }
