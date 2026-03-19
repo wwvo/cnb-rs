@@ -1,9 +1,20 @@
 use super::CnbClient;
 use crate::error::ApiError;
-use crate::types::*;
+use crate::types::{
+    AddAssigneesRequest, CreateCommentRequest, CreateIssueRequest, Issue, IssueAssignee,
+    IssueComment, IssueDetail, IssueLabel, IssueLabelRequest, ListIssuesOptions,
+    UpdateIssueRequest,
+};
+use std::fmt::Write;
 use urlencoding::encode;
 
 impl CnbClient {
+    /// 列出仓库 Issue。
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn list_issues(&self, opts: &ListIssuesOptions) -> Result<Vec<Issue>, ApiError> {
         let mut url = format!(
             "{}{}/-/issues?page={}&page_size={}&state={}",
@@ -14,42 +25,48 @@ impl CnbClient {
             encode(&opts.state)
         );
         if let Some(ref keyword) = opts.keyword {
-            url.push_str(&format!("&keyword={}", encode(keyword)));
+            let _ = write!(url, "&keyword={}", encode(keyword));
         }
         if let Some(ref priority) = opts.priority {
-            url.push_str(&format!("&priority={}", encode(priority)));
+            let _ = write!(url, "&priority={}", encode(priority));
         }
         if let Some(ref labels) = opts.labels {
-            url.push_str(&format!("&labels={}", encode(labels)));
+            let _ = write!(url, "&labels={}", encode(labels));
         }
         if let Some(ref labels_operator) = opts.labels_operator {
-            url.push_str(&format!("&labels_operator={}", encode(labels_operator)));
+            let _ = write!(url, "&labels_operator={}", encode(labels_operator));
         }
         if let Some(ref authors) = opts.authors {
-            url.push_str(&format!("&authors={}", encode(authors)));
+            let _ = write!(url, "&authors={}", encode(authors));
         }
         if let Some(ref assignees) = opts.assignees {
-            url.push_str(&format!("&assignees={}", encode(assignees)));
+            let _ = write!(url, "&assignees={}", encode(assignees));
         }
         if let Some(ref begin) = opts.updated_time_begin {
-            url.push_str(&format!("&updated_time_begin={}", encode(begin)));
+            let _ = write!(url, "&updated_time_begin={}", encode(begin));
         }
         if let Some(ref end) = opts.updated_time_end {
-            url.push_str(&format!("&updated_time_end={}", encode(end)));
+            let _ = write!(url, "&updated_time_end={}", encode(end));
         }
         if let Some(ref begin) = opts.close_time_begin {
-            url.push_str(&format!("&close_time_begin={}", encode(begin)));
+            let _ = write!(url, "&close_time_begin={}", encode(begin));
         }
         if let Some(ref end) = opts.close_time_end {
-            url.push_str(&format!("&close_time_end={}", encode(end)));
+            let _ = write!(url, "&close_time_end={}", encode(end));
         }
         if let Some(ref order_by) = opts.order_by {
-            url.push_str(&format!("&order_by={}", encode(order_by)));
+            let _ = write!(url, "&order_by={}", encode(order_by));
         }
         let resp = self.send_with_retry(|| self.http.get(&url)).await?;
         Self::handle_response(resp).await
     }
 
+    /// 列出仓库全部 Issue（自动分页）。
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if any paginated request fails, a response cannot be
+    /// deserialized, or the CNB API returns a non-success status.
     pub async fn list_all_issues(&self, state: &str) -> Result<Vec<Issue>, ApiError> {
         self.paginate(|page, page_size| async move {
             let opts = ListIssuesOptions {
@@ -63,6 +80,12 @@ impl CnbClient {
         .await
     }
 
+    /// 使用指定筛选条件列出仓库全部 Issue（自动分页）。
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if any paginated request fails, a response cannot be
+    /// deserialized, or the CNB API returns a non-success status.
     pub async fn list_all_issues_with_options(
         &self,
         opts: &ListIssuesOptions,
@@ -78,6 +101,12 @@ impl CnbClient {
         .await
     }
 
+    /// 获取单个 Issue 的详情。
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn get_issue(&self, number: &str) -> Result<IssueDetail, ApiError> {
         let number = encode(number);
         let url = format!("{}{}/-/issues/{number}", self.base_url, self.repo);
@@ -85,12 +114,24 @@ impl CnbClient {
         Self::handle_response(resp).await
     }
 
+    /// 创建 Issue。
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn create_issue(&self, req: &CreateIssueRequest) -> Result<IssueDetail, ApiError> {
         let url = format!("{}{}/-/issues", self.base_url, self.repo);
         let resp = self.http.post(&url).json(req).send().await?;
         Self::handle_response(resp).await
     }
 
+    /// 更新 Issue。
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn update_issue(
         &self,
         number: &str,
@@ -102,6 +143,12 @@ impl CnbClient {
         Self::handle_empty_response(resp).await
     }
 
+    /// 列出 Issue 评论。
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn list_issue_comments(
         &self,
         number: &str,
@@ -118,6 +165,11 @@ impl CnbClient {
     }
 
     /// 获取全部 Issue 评论（自动分页）
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if any paginated request fails, a response cannot be
+    /// deserialized, or the CNB API returns a non-success status.
     pub async fn list_all_issue_comments(
         &self,
         number: &str,
@@ -126,6 +178,12 @@ impl CnbClient {
             .await
     }
 
+    /// 创建 Issue 评论。
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn create_issue_comment(
         &self,
         number: &str,
@@ -137,6 +195,12 @@ impl CnbClient {
         Self::handle_empty_response(resp).await
     }
 
+    /// 列出 Issue 当前 assignee。
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn list_issue_assignees(&self, number: &str) -> Result<Vec<IssueAssignee>, ApiError> {
         let number = encode(number);
         let url = format!("{}{}/-/issues/{number}/assignees", self.base_url, self.repo);
@@ -144,6 +208,12 @@ impl CnbClient {
         Self::handle_response(resp).await
     }
 
+    /// 为 Issue 添加 assignee。
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn add_issue_assignees(
         &self,
         number: &str,
@@ -156,6 +226,11 @@ impl CnbClient {
     }
 
     /// 列出 Issue 标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn list_issue_labels(&self, number: &str) -> Result<Vec<IssueLabel>, ApiError> {
         let number = encode(number);
         let url = format!("{}{}/-/issues/{number}/labels", self.base_url, self.repo);
@@ -164,6 +239,11 @@ impl CnbClient {
     }
 
     /// 添加 Issue 标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn add_issue_labels(
         &self,
         number: &str,
@@ -176,6 +256,11 @@ impl CnbClient {
     }
 
     /// 设置（替换）Issue 标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn set_issue_labels(
         &self,
         number: &str,
@@ -188,6 +273,11 @@ impl CnbClient {
     }
 
     /// 删除 Issue 指定标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn remove_issue_label(&self, number: &str, label_name: &str) -> Result<(), ApiError> {
         let number = encode(number);
         let label_name = encode(label_name);
@@ -200,6 +290,11 @@ impl CnbClient {
     }
 
     /// 清空 Issue 所有标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn clear_issue_labels(&self, number: &str) -> Result<(), ApiError> {
         let number = encode(number);
         let url = format!("{}{}/-/issues/{number}/labels", self.base_url, self.repo);

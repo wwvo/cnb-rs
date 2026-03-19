@@ -2,13 +2,19 @@
 
 use super::CnbClient;
 use crate::error::ApiError;
-use crate::types::*;
+use crate::types::{CreateLabelRequest, Label, LabelListRequest, UpdateLabelRequest};
+use std::fmt::Write;
 use urlencoding::encode;
 
 impl CnbClient {
     // ==================== 仓库标签 ====================
 
     /// 列出仓库标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn list_labels(
         &self,
         page: u32,
@@ -20,13 +26,18 @@ impl CnbClient {
             self.base_url, self.repo
         );
         if let Some(kw) = keyword {
-            url.push_str(&format!("&keyword={}", encode(kw)));
+            let _ = write!(url, "&keyword={}", encode(kw));
         }
         let resp = self.http.get(&url).send().await?;
         Self::handle_response(resp).await
     }
 
     /// 列出仓库所有标签（自动分页）
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if any paginated request fails, a response cannot be
+    /// deserialized, or the CNB API returns a non-success status.
     pub async fn list_all_labels(&self, keyword: Option<&str>) -> Result<Vec<Label>, ApiError> {
         let kw = keyword.map(String::from);
         self.paginate(|page, page_size| {
@@ -37,6 +48,11 @@ impl CnbClient {
     }
 
     /// 创建仓库标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn create_label(&self, req: &CreateLabelRequest) -> Result<Label, ApiError> {
         let url = format!("{}{}/-/labels", self.base_url, self.repo);
         let resp = self.http.post(&url).json(req).send().await?;
@@ -44,6 +60,11 @@ impl CnbClient {
     }
 
     /// 更新仓库标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn update_label(
         &self,
         name: &str,
@@ -56,6 +77,11 @@ impl CnbClient {
     }
 
     /// 删除仓库标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn delete_label(&self, name: &str) -> Result<(), ApiError> {
         let name = encode(name);
         let url = format!("{}{}/-/labels/{name}", self.base_url, self.repo);
@@ -66,6 +92,11 @@ impl CnbClient {
     // ==================== Pull 标签 ====================
 
     /// 列出 Pull 标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails, the response cannot be deserialized,
+    /// or the CNB API returns a non-success status.
     pub async fn list_pull_labels(&self, number: &str) -> Result<Vec<Label>, ApiError> {
         let number = encode(number);
         let url = format!("{}{}/-/pulls/{number}/labels", self.base_url, self.repo);
@@ -74,6 +105,11 @@ impl CnbClient {
     }
 
     /// 添加 Pull 标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn add_pull_labels(
         &self,
         number: &str,
@@ -86,6 +122,11 @@ impl CnbClient {
     }
 
     /// 设置（替换）Pull 标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn set_pull_labels(
         &self,
         number: &str,
@@ -98,6 +139,11 @@ impl CnbClient {
     }
 
     /// 删除 Pull 指定标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn remove_pull_label(&self, number: &str, label_name: &str) -> Result<(), ApiError> {
         let number = encode(number);
         let label_name = encode(label_name);
@@ -110,6 +156,11 @@ impl CnbClient {
     }
 
     /// 清空 Pull 所有标签
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ApiError`] if the request fails or the CNB API returns a non-success
+    /// status.
     pub async fn clear_pull_labels(&self, number: &str) -> Result<(), ApiError> {
         let number = encode(number);
         let url = format!("{}{}/-/pulls/{number}/labels", self.base_url, self.repo);
