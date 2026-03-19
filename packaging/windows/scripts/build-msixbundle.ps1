@@ -107,6 +107,43 @@ function Import-TemporaryTrustedCertificate {
     }
 }
 
+function Import-TemporarySigningCertificate {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+
+        [string]$Password,
+
+        [string]$StorePath = "Cert:\CurrentUser\My"
+    )
+
+    $securePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force
+    $certificate = Get-PfxCertificate -FilePath $Path -Password $securePassword
+    if (-not $certificate) {
+        throw "Failed to read signing certificate from PFX: $Path"
+    }
+
+    Write-StepLog "Preparing temporary signing certificate import for thumbprint $($certificate.Thumbprint) into $StorePath"
+    $existing = Get-ChildItem $StorePath | Where-Object Thumbprint -eq $certificate.Thumbprint | Select-Object -First 1
+    $addedStores = @()
+    if (-not $existing) {
+        Write-StepLog "Importing PFX into $StorePath for SignTool access"
+        Import-PfxCertificate -FilePath $Path -Password $securePassword -CertStoreLocation $StorePath | Out-Null
+        $addedStores += $StorePath
+        Write-StepLog "Imported PFX into $StorePath"
+    }
+    else {
+        Write-StepLog "Signing certificate already present in $StorePath"
+    }
+
+    return [pscustomobject]@{
+        Thumbprint = $certificate.Thumbprint
+        AddedStores = $addedStores
+        CertStore = "My"
+        UseMachineStore = $false
+    }
+}
+
 function Remove-TemporaryTrustedCertificate {
     param(
         [Parameter(Mandatory = $true)]
@@ -122,6 +159,23 @@ function Remove-TemporaryTrustedCertificate {
         $matchingCertificates = Get-ChildItem $storePath | Where-Object Thumbprint -eq $Thumbprint
         if ($matchingCertificates) {
             Write-StepLog "Removing temporary certificate $Thumbprint from $storePath"
+            $matchingCertificates | Remove-Item -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+function Remove-TemporarySigningCertificate {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Thumbprint,
+
+        [string[]]$StorePaths = @("Cert:\CurrentUser\My")
+    )
+
+    foreach ($storePath in $StorePaths) {
+        $matchingCertificates = Get-ChildItem $storePath | Where-Object Thumbprint -eq $Thumbprint
+        if ($matchingCertificates) {
+            Write-StepLog "Removing temporary signing certificate $Thumbprint from $storePath"
             $matchingCertificates | Remove-Item -Force -ErrorAction SilentlyContinue
         }
     }
@@ -187,9 +241,8 @@ if ($PfxPath) {
         throw "PFX file not found: $PfxPath"
     }
 
-    $arguments += @("--pfx", $PfxPath, "--sign-each", "--verify")
-    if ($PfxPassword) {
-        $arguments += @("--pfx-password", $PfxPassword)
+    if (-not $PfxPassword) {
+        throw "PFX password is required when signing is enabled"
     }
 
     Write-StepLog "Signing is enabled for this MSIX packaging run"
@@ -200,6 +253,7 @@ else {
 }
 
 $trustedCertificate = $null
+$signingCertificate = $null
 try {
     if ($CertificatePath) {
         Write-StepLog "Starting temporary certificate trust import"
@@ -214,6 +268,21 @@ try {
     }
     else {
         Write-StepLog "Skipping temporary certificate trust import because no certificate path was provided"
+    }
+
+    if ($PfxPath) {
+        Write-StepLog "Starting temporary signing certificate import"
+        $signingCertificate = Import-TemporarySigningCertificate -Path $PfxPath -Password $PfxPassword
+        $arguments += @(
+            "--thumbprint", $signingCertificate.Thumbprint,
+            "--cert-store", $signingCertificate.CertStore,
+            "--sign-each",
+            "--verify"
+        )
+        if ($signingCertificate.UseMachineStore) {
+            $arguments += @("--machine-store")
+        }
+        Write-StepLog "Temporary signing certificate import complete; signing will use certificate thumbprint from cert store"
     }
 
     Write-StepLog "Invoking msixbundle-cli"
@@ -255,6 +324,11 @@ try {
     Write-Host "MSIX bundle created: $finalBundle"
 }
 finally {
+    if ($signingCertificate -and $signingCertificate.AddedStores.Count -gt 0) {
+        Write-StepLog "Cleaning up temporary signing certificate entries"
+        Remove-TemporarySigningCertificate -Thumbprint $signingCertificate.Thumbprint -StorePaths $signingCertificate.AddedStores
+    }
+
     if ($trustedCertificate -and $trustedCertificate.AddedStores.Count -gt 0) {
         Write-StepLog "Cleaning up temporary certificate trust entries"
         Remove-TemporaryTrustedCertificate -Thumbprint $trustedCertificate.Thumbprint -StorePaths $trustedCertificate.AddedStores
