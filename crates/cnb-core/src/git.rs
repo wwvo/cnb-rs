@@ -39,6 +39,11 @@ pub fn is_git_dir() -> bool {
 }
 
 /// 从当前目录的 Git remote 解析仓库信息
+///
+/// # Errors
+///
+/// Returns an error if the current directory is not a Git repository, Git remote
+/// data cannot be read, or the remote URL cannot be parsed.
 pub fn parse_git_info_from_current_dir() -> Result<GitInfo> {
     if !is_git_dir() {
         bail!("当前目录不是 Git 仓库");
@@ -136,6 +141,10 @@ fn current_branch_remote_name() -> Option<String> {
 /// - `https://cnb.cool/looc/git-cnb.git`
 /// - `https://user:token@cnb.cool/looc/git-cnb.git`
 /// - `git@cnb.cool:looc/git-cnb.git`
+///
+/// # Errors
+///
+/// Returns an error if `url` does not match the supported CNB HTTPS or SSH formats.
 pub fn parse_git_url(url: &str) -> Result<GitInfo> {
     // 尝试 HTTPS 格式
     if let Some(caps) = HTTPS_RE.captures(url) {
@@ -172,6 +181,11 @@ pub fn parse_git_url(url: &str) -> Result<GitInfo> {
 }
 
 /// 获取最新一次提交的标题和正文
+///
+/// # Errors
+///
+/// Returns an error if the current directory is not a Git repository or the Git
+/// log command fails.
 pub fn latest_commit_message() -> Result<(String, String)> {
     if !is_git_dir() {
         bail!("当前目录不是 Git 仓库");
@@ -192,6 +206,11 @@ pub fn latest_commit_message() -> Result<(String, String)> {
 /// 获取所有非合并提交的时间戳和作者
 ///
 /// 返回格式：`["timestamp;author", ...]`
+///
+/// # Errors
+///
+/// Returns an error if the current directory is not a Git repository or the Git
+/// log command fails.
 pub fn get_commits() -> Result<Vec<String>> {
     if !is_git_dir() {
         bail!("当前目录不是 Git 仓库");
@@ -216,6 +235,10 @@ pub fn get_commits() -> Result<Vec<String>> {
 }
 
 /// 获取当前 Git 分支名
+///
+/// # Errors
+///
+/// Returns an error if the Git command fails.
 pub fn current_branch() -> Result<String> {
     let output = Command::new("git")
         .args(["rev-parse", "--abbrev-ref", "HEAD"])

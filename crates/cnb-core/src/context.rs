@@ -28,6 +28,7 @@ pub struct AppContext {
 
 impl AppContext {
     /// 创建新的上下文
+    #[must_use]
     pub fn new(cli_domain: Option<String>, cli_repo: Option<String>, json: bool) -> Self {
         Self {
             cli_domain,
@@ -77,6 +78,11 @@ impl AppContext {
     }
 
     /// 获取当前仓库名（优先 CLI 参数 → Git remote）
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the repository cannot be resolved from CLI arguments or
+    /// the current Git directory.
     pub fn repo(&self) -> Result<&str> {
         if let Some(r) = &self.cli_repo {
             return Ok(r);
@@ -92,6 +98,10 @@ impl AppContext {
     /// `path` 为空时返回仓库首页，否则拼接子路径。
     /// 例：`web_url("")` → `https://cnb.cool/org/repo`
     /// 例：`web_url("-/issues")` → `https://cnb.cool/org/repo/-/issues`
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the repository name cannot be resolved.
     pub fn web_url(&self, path: &str) -> Result<String> {
         let domain = self.domain();
         let scheme = self
@@ -107,11 +117,20 @@ impl AppContext {
     }
 
     /// 在浏览器中打开指定 URL
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the browser cannot be opened.
     pub fn open_in_browser(url: &str) -> Result<()> {
         open::that(url).map_err(|e| anyhow::anyhow!("无法打开浏览器：{e}"))
     }
 
     /// 获取 API 客户端（懒加载）
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the repository name cannot be resolved or the API client
+    /// cannot be initialized.
     pub fn api_client(&self) -> Result<&CnbClient> {
         if let Some(client) = self.api_client.get() {
             return Ok(client);

@@ -20,7 +20,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // 生成 phf 风格的 match 函数
-    writeln!(out, "/// 根据 \"service/apiname\" 路径获取嵌入的 API 文档")?;
+    writeln!(out, "/// 根据 `service/apiname` 路径获取嵌入的 API 文档")?;
+    writeln!(out, "#[must_use]")?;
+    writeln!(out, "#[allow(clippy::too_many_lines)]")?;
     writeln!(
         out,
         "pub fn get_embedded_doc(key: &str) -> Option<&'static str> {{"
@@ -54,6 +56,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     writeln!(out)?;
     writeln!(out, "/// 列出所有 API 服务分类")?;
+    writeln!(out, "#[must_use]")?;
     writeln!(
         out,
         "pub fn list_embedded_services() -> &'static [&'static str] {{"
@@ -68,6 +71,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 生成列出所有 key 的函数
     writeln!(out)?;
     writeln!(out, "/// 列出所有嵌入的文档 key")?;
+    writeln!(out, "#[must_use]")?;
     writeln!(
         out,
         "pub fn list_embedded_keys() -> &'static [&'static str] {{"

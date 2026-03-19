@@ -47,6 +47,10 @@ pub struct HostAuth {
 
 impl Config {
     /// 加载配置文件，文件不存在时返回默认配置
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the config file cannot be read or parsed.
     pub fn load() -> anyhow::Result<Self> {
         let path = Self::config_path();
         if !path.exists() {
@@ -58,6 +62,7 @@ impl Config {
     }
 
     /// 配置文件路径：~/.cnb/config.toml
+    #[must_use]
     pub fn config_path() -> PathBuf {
         let home = cnb_home_dir();
         home.join(CONFIG_FILE)
@@ -67,6 +72,7 @@ impl Config {
     pub const VALID_KEYS: &[&str] = &["domain", "git_protocol"];
 
     /// 获取配置项的值
+    #[must_use]
     pub fn get_value(&self, key: &str) -> Option<&str> {
         match key {
             "domain" => self.domain.as_deref(),
@@ -76,6 +82,10 @@ impl Config {
     }
 
     /// 设置配置项的值并写入文件
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the config file cannot be read, validated, or written.
     pub fn set_value(key: &str, value: &str) -> anyhow::Result<()> {
         let path = Self::config_path();
         let mut config = if path.exists() {
@@ -105,6 +115,10 @@ impl Config {
     /// 保存认证信息到配置文件
     ///
     /// 保留已有配置，仅更新指定域名的 auth 段。
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the config file cannot be read, parsed, or written.
     pub fn save_auth(domain: &str, token: &str, username: &str) -> anyhow::Result<()> {
         let path = Self::config_path();
         let mut config = if path.exists() {
@@ -127,6 +141,11 @@ impl Config {
     }
 
     /// 从配置文件中移除指定域名的认证信息
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the config file exists but cannot be read, parsed, or
+    /// written back.
     pub fn remove_auth(domain: &str) -> anyhow::Result<bool> {
         let path = Self::config_path();
         if !path.exists() {
@@ -161,6 +180,7 @@ impl Config {
 }
 
 /// 获取 CNB 主目录：~/.cnb/
+#[must_use]
 pub fn cnb_home_dir() -> PathBuf {
     dirs::home_dir()
         .unwrap_or_else(|| {

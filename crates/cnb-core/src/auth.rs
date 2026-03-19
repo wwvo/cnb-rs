@@ -1,8 +1,8 @@
 //! 认证管理
 //!
 //! Token 解析优先级：
-//! 1. 环境变量：CNB_TOKEN_{domain 去掉点和横杠} / CNB_TOKEN
-//! 2. 配置文件：~/.cnb/config.toml [auth.{hostname}] token
+//! 1. 环境变量：`CNB_TOKEN_{domain 去掉点和横杠}` / `CNB_TOKEN`
+//! 2. 配置文件：`~/.cnb/config.toml` `[auth.{hostname}]` token
 //! 3. (未来) 系统 keyring
 
 use crate::config::Config;
@@ -10,15 +10,16 @@ use crate::config::Config;
 /// Token 来源
 #[derive(Debug)]
 pub enum TokenSource {
-    /// 域名特定环境变量（如 CNB_TOKEN_cnbcool）
+    /// 域名特定环境变量（如 `CNB_TOKEN_cnbcool`）
     EnvDomain(String),
-    /// 通用环境变量 CNB_TOKEN
+    /// 通用环境变量 `CNB_TOKEN`
     EnvGeneric,
-    /// 配置文件 ~/.cnb/config.toml
+    /// 配置文件 `~/.cnb/config.toml`
     ConfigFile,
 }
 
 /// 获取指定域名的认证 Token 及其来源
+#[must_use]
 pub fn get_token_with_source(domain: &str, config: &Config) -> Option<(String, TokenSource)> {
     // 优先级 1: 域名特定环境变量
     let env_key = format!("CNB_TOKEN_{}", domain.replace(['.', '-'], ""));
@@ -50,9 +51,10 @@ pub fn get_token_with_source(domain: &str, config: &Config) -> Option<(String, T
 /// 获取指定域名的认证 Token
 ///
 /// 按优先级依次尝试：
-/// 1. 域名特定的环境变量 (如 CNB_TOKEN_cnbcool)
-/// 2. 通用环境变量 CNB_TOKEN
+/// 1. 域名特定的环境变量（如 `CNB_TOKEN_cnbcool`）
+/// 2. 通用环境变量 `CNB_TOKEN`
 /// 3. 配置文件中的 token
+#[must_use]
 pub fn get_token(domain: &str, config: &Config) -> Option<String> {
     get_token_with_source(domain, config).map(|(token, _)| token)
 }

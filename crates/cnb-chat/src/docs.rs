@@ -1,14 +1,19 @@
-//! OpenAPI 嵌入式文档检索
+//! `OpenAPI` 嵌入式文档检索
 //!
 //! 通过 build.rs 编译期嵌入 references/ 目录下的 API 文档，
-//! 运行时按 "service/apiname" 格式检索。
+//! 运行时按 `service/apiname` 格式检索。
 
 // 引入 build.rs 生成的嵌入式文档代码
 include!(concat!(env!("OUT_DIR"), "/embedded_refs.rs"));
 
 /// 获取指定 API 的详细文档
 ///
-/// 支持 "service/apiname" 格式，如 "issues/listissues"
+/// 支持 `service/apiname` 格式，如 `issues/listissues`。
+///
+/// # Errors
+///
+/// Returns an error string if `doc_ref` is not a valid `service/apiname`
+/// reference or the referenced document does not exist.
 pub fn get_api_doc(doc_ref: &str) -> Result<String, String> {
     let parts: Vec<&str> = doc_ref.splitn(2, '/').collect();
     if parts.len() != 2 {

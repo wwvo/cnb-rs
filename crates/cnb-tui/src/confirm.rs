@@ -6,6 +6,10 @@ use std::io::{self, BufRead, Write};
 ///
 /// 如果 `skip` 为 true，直接返回 true（用于 `--yes` 参数）。
 /// 否则在终端打印提示信息，等待用户输入 "yes" 确认。
+///
+/// # Errors
+///
+/// Returns an error if flushing stdout or reading from stdin fails.
 pub fn confirm_action(message: &str, skip: bool) -> anyhow::Result<bool> {
     if skip {
         return Ok(true);

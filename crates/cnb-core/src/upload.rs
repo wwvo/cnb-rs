@@ -1,6 +1,6 @@
 //! 通用文件上传工具
 //!
-//! COS 上传流程：PUT 文件到 upload_url → POST 确认到 verify_url
+//! COS 上传流程：PUT 文件到 `upload_url` → POST 确认到 `verify_url`
 
 use std::path::Path;
 use tokio_util::io::ReaderStream;
@@ -10,6 +10,11 @@ use tokio_util::io::ReaderStream;
 /// 1. 流式读取本地文件（避免大文件全量加载到内存）
 /// 2. PUT 上传到 `upload_url`
 /// 3. POST 确认到 `verify_url`（带 Bearer Token 认证）
+///
+/// # Errors
+///
+/// Returns an error if the local file cannot be read, the upload request fails, or
+/// the verification request returns a non-success status.
 pub async fn upload_and_confirm(
     http: &reqwest::Client,
     file_path: &Path,
@@ -53,6 +58,11 @@ pub async fn upload_and_confirm(
 }
 
 /// 校验文件路径有效性，返回文件名和文件大小
+///
+/// # Errors
+///
+/// Returns an error if `file_path` is not a valid file, metadata cannot be read, or
+/// the file size does not fit into `i64`.
 pub fn validate_file(file_path: &str) -> anyhow::Result<(&str, i64)> {
     let path = Path::new(file_path);
     if !path.is_file() {

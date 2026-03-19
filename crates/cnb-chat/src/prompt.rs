@@ -12,6 +12,7 @@ const SKILL_CONTENT: &str = include_str!("../SKILL.md");
 const DEFAULT_API_ENDPOINT: &str = "https://api.cnb.cool";
 
 /// 获取 API 基础地址（支持环境变量覆盖）
+#[must_use]
 pub fn get_api_endpoint() -> String {
     std::env::var("CNB_API_ENDPOINT")
         .unwrap_or_else(|_| DEFAULT_API_ENDPOINT.to_string())
@@ -21,7 +22,7 @@ pub fn get_api_endpoint() -> String {
 
 /// 从 SKILL.md 生成精简索引（每个 API 一行）
 ///
-/// 格式："- APIName: 描述 [service/apiname]"
+/// 格式：`- APIName: 描述 [service/apiname]`
 pub fn get_compact_index() -> String {
     static SERVICE_RE: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^### (.+?) 服务$").unwrap_or_else(|_| unreachable!()));
@@ -70,6 +71,7 @@ pub fn get_compact_index() -> String {
 }
 
 /// 构建两阶段检索的 System Prompt
+#[must_use]
 pub fn build_system_prompt() -> String {
     let endpoint = get_api_endpoint();
     let compact_index = get_compact_index();

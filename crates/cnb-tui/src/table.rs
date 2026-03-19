@@ -12,6 +12,7 @@ pub struct Column {
 
 impl Column {
     /// 创建新的列定义
+    #[must_use]
     pub fn new(title: &str, width: usize) -> Self {
         Self {
             title: title.to_string(),
@@ -28,6 +29,7 @@ pub struct Table {
 
 impl Table {
     /// 创建新的表格
+    #[must_use]
     pub fn new(columns: Vec<Column>) -> Self {
         Self {
             columns,

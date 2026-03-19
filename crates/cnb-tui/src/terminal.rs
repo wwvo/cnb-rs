@@ -19,6 +19,11 @@ pub struct TerminalGuard {
 
 impl TerminalGuard {
     /// 初始化终端：启用 raw mode 并进入 alternate screen
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if enabling raw mode, switching screens, or creating the
+    /// terminal backend fails.
     pub fn new() -> anyhow::Result<Self> {
         terminal::enable_raw_mode()?;
         let mut stdout = io::stdout();
@@ -34,6 +39,10 @@ impl TerminalGuard {
     }
 
     /// 运行 TUI 事件循环，按 q 或 Ctrl+C 退出
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if drawing the terminal or reading terminal events fails.
     pub fn run_loop<F>(&mut self, render: F) -> anyhow::Result<()>
     where
         F: Fn(&mut ratatui::Frame),

@@ -5,6 +5,7 @@
 use crossterm::style::Stylize;
 
 /// 灰色文本（用于辅助信息、思考过程等）
+#[must_use]
 pub fn dim(text: &str) -> String {
     format!("{}", text.dark_grey())
 }

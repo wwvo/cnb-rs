@@ -6,6 +6,7 @@
 use regex_lite::Regex;
 use serde::Serialize;
 use std::collections::HashMap;
+use std::hash::BuildHasher;
 use std::sync::LazyLock;
 
 /// curl 执行结果
@@ -94,11 +95,14 @@ fn parse_curl(cmd: &str) -> Result<CurlCommand, String> {
 /// 执行 curl 命令（通过 reqwest 直接发 HTTP 请求）
 ///
 /// `vars` 为占位符替换映射，如 `{"<CNB_TOKEN>": "xxx"}`
-pub async fn exec_curl(
+pub async fn exec_curl<S>(
     http: &reqwest::Client,
     curl_cmd: &str,
-    vars: &HashMap<String, String>,
-) -> CurlResult {
+    vars: &HashMap<String, String, S>,
+) -> CurlResult
+where
+    S: BuildHasher,
+{
     // 替换占位符
     let mut cmd = curl_cmd.to_string();
     for (placeholder, value) in vars {
