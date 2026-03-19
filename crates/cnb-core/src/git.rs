@@ -87,19 +87,23 @@ fn select_remote_url<'a>(
     preferred_remote: Option<&str>,
 ) -> Option<&'a str> {
     preferred_remote
-        .and_then(|preferred| {
-            fetch_remotes
-                .iter()
-                .find(|(name, _)| *name == preferred)
-                .map(|(_, url)| *url)
-        })
+        .and_then(|preferred| remote_url_by_name(fetch_remotes, preferred))
         .or_else(|| {
-            fetch_remotes
-                .iter()
-                .find(|(name, _)| *name == "origin")
-                .map(|(_, url)| *url)
+            ["upstream", "cnb", "origin"]
+                .into_iter()
+                .find_map(|name| remote_url_by_name(fetch_remotes, name))
         })
         .or_else(|| fetch_remotes.first().map(|(_, url)| *url))
+}
+
+fn remote_url_by_name<'a>(
+    fetch_remotes: &'a [(&'a str, &'a str)],
+    remote_name: &str,
+) -> Option<&'a str> {
+    fetch_remotes
+        .iter()
+        .find(|(name, _)| *name == remote_name)
+        .map(|(_, url)| *url)
 }
 
 fn current_branch_remote_name() -> Option<String> {
@@ -292,11 +296,39 @@ mod tests {
     #[test]
     fn select_remote_url_prefers_branch_remote() {
         let fetch_remotes = vec![
-            ("github", "https://github.com/wwvo/cnb-cli-rs.git"),
-            ("origin", "https://cnb.cool/wwvo/cnb-rs/cnb-rs"),
+            ("upstream", "https://github.com/wwvo/cnb-cli-rs.git"),
+            ("cnb", "https://cnb.cool/wwvo/cnb-rs/cnb-rs"),
+            ("origin", "https://cnb.cool/wwvo/forked-cnb-rs"),
         ];
 
         let selected = select_remote_url(&fetch_remotes, Some("origin"));
+
+        assert_eq!(selected, Some("https://cnb.cool/wwvo/forked-cnb-rs"));
+    }
+
+    #[test]
+    fn select_remote_url_falls_back_to_upstream_before_cnb_and_origin() {
+        let fetch_remotes = vec![
+            ("github", "https://github.com/wwvo/cnb-cli-rs.git"),
+            ("origin", "https://cnb.cool/wwvo/forked-cnb-rs"),
+            ("cnb", "https://cnb.cool/wwvo/cnb-rs/cnb-rs"),
+            ("upstream", "https://git.example.com/upstream/repo.git"),
+        ];
+
+        let selected = select_remote_url(&fetch_remotes, None);
+
+        assert_eq!(selected, Some("https://git.example.com/upstream/repo.git"));
+    }
+
+    #[test]
+    fn select_remote_url_falls_back_to_cnb_before_origin() {
+        let fetch_remotes = vec![
+            ("github", "https://github.com/wwvo/cnb-cli-rs.git"),
+            ("origin", "https://cnb.cool/wwvo/forked-cnb-rs"),
+            ("cnb", "https://cnb.cool/wwvo/cnb-rs/cnb-rs"),
+        ];
+
+        let selected = select_remote_url(&fetch_remotes, None);
 
         assert_eq!(selected, Some("https://cnb.cool/wwvo/cnb-rs/cnb-rs"));
     }
