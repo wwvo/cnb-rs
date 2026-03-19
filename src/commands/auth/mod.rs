@@ -32,7 +32,7 @@ impl AuthCommand {
         match &self.subcommand {
             AuthSubcommand::Login(args) => login::run(ctx, args).await,
             AuthSubcommand::Status => status::run(ctx).await,
-            AuthSubcommand::Logout => logout::run(ctx).await,
+            AuthSubcommand::Logout => logout::run(ctx),
         }
     }
 }

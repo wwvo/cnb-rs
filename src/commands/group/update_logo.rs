@@ -1,6 +1,6 @@
 //! cnb group update-logo 子命令
 
-use anyhow::{Result, bail};
+use anyhow::{Result, anyhow, bail};
 use clap::Parser;
 use cnb_api::types::UploadLogoRequest;
 use cnb_core::context::AppContext;
@@ -36,7 +36,8 @@ pub async fn run(ctx: &AppContext, args: &UpdateLogoArgs) -> Result<()> {
     // 获取上传信息
     let req = UploadLogoRequest {
         name: file_name,
-        size: metadata.len() as i64,
+        size: i64::try_from(metadata.len())
+            .map_err(|_| anyhow!("Logo 文件过大，超过可上传的大小表示范围"))?,
     };
     let upload_info = client.upload_logo_info(&args.group, &req).await?;
 

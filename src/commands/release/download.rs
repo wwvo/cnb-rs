@@ -70,7 +70,7 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
     success!(
         "已下载 {} ({})",
         save_path.display(),
-        format_bytes(bytes.len() as i64)
+        format_bytes(i64::try_from(bytes.len()).unwrap_or(i64::MAX))
     );
 
     Ok(())

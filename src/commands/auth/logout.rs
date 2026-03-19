@@ -7,7 +7,7 @@ use cnb_core::context::AppContext;
 use cnb_tui::{info, success};
 
 /// 退出登录
-pub async fn run(ctx: &AppContext) -> Result<()> {
+pub fn run(ctx: &AppContext) -> Result<()> {
     let domain = ctx.domain();
     let config = ctx.config();
 

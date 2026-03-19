@@ -13,7 +13,7 @@ pub struct BrowseArgs {
 }
 
 /// 执行 browse 命令
-pub async fn run(ctx: &AppContext, args: &BrowseArgs) -> Result<()> {
+pub fn run(ctx: &AppContext, args: &BrowseArgs) -> Result<()> {
     let url = ctx.web_url(&args.path)?;
     eprintln!("正在打开 {url}");
     AppContext::open_in_browser(&url)

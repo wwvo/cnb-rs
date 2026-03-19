@@ -12,7 +12,7 @@ pub struct SecurityArgs {
     /// 仓库路径（如 org/repo），不指定则使用当前仓库
     pub repo: Option<String>,
 
-    /// 扫描类型过滤（逗号分隔：code_sensitive,code_vulnerability,code_issue）
+    /// 扫描类型过滤（逗号分隔：`code_sensitive`,`code_vulnerability`,`code_issue`）
     #[arg(short, long)]
     pub types: Option<String>,
 

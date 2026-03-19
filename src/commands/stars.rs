@@ -44,10 +44,11 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
     let mut week_list: Vec<(NaiveDate, i64)> = weekly_map.into_iter().collect();
     week_list.sort_by(|a, b| a.0.cmp(&b.0));
 
-    let mut cumulative: Vec<(NaiveDate, f64)> = Vec::new();
-    let mut total = 0.0;
+    let mut cumulative: Vec<(NaiveDate, u32)> = Vec::new();
+    let mut total = 0u32;
     for (week, count) in &week_list {
-        total += *count as f64;
+        let count = u32::try_from((*count).max(0)).unwrap_or(u32::MAX);
+        total = total.saturating_add(count);
         cumulative.push((*week, total));
     }
 
@@ -82,15 +83,21 @@ fn generate_weeks(start: NaiveDate) -> HashMap<NaiveDate, i64> {
 }
 
 /// 使用 ratatui 渲染 Star 趋势图
-fn render_star_chart(data: &[(NaiveDate, f64)], total: i64) -> Result<()> {
+fn render_star_chart(data: &[(NaiveDate, u32)], total: i64) -> Result<()> {
     let chart_data: Vec<(f64, f64)> = data
         .iter()
         .enumerate()
-        .map(|(i, (_, v))| (i as f64, *v))
+        .map(|(i, (_, v))| {
+            (
+                f64::from(u32::try_from(i).unwrap_or(u32::MAX)),
+                f64::from(*v),
+            )
+        })
         .collect();
 
-    let max_y = data.last().map_or(1.0, |(_, v)| *v).max(1.0);
-    let x_max = chart_data.len().saturating_sub(1).max(1) as f64;
+    let max_y = data.last().map_or(1.0, |(_, v)| f64::from(*v).max(1.0));
+    let x_max =
+        f64::from(u32::try_from(chart_data.len().saturating_sub(1).max(1)).unwrap_or(u32::MAX));
 
     let x_labels: Vec<String> = if let (Some(first), Some(last)) = (data.first(), data.last()) {
         vec![

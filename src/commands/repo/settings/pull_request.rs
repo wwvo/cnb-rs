@@ -60,11 +60,11 @@ pub struct PrSetArgs {
     #[arg(long)]
     pub auto_reviewer: Option<bool>,
 
-    /// 直接合并提交信息风格（default/pull_request_title/pull_request_title_with_body）
+    /// 直接合并提交信息风格（`default`/`pull_request_title`/`pull_request_title_with_body`）
     #[arg(long)]
     pub merge_message_style: Option<String>,
 
-    /// 压缩合并提交信息风格（default/pull_request_title/pull_request_title_with_body）
+    /// 压缩合并提交信息风格（`default`/`pull_request_title`/`pull_request_title_with_body`）
     #[arg(long)]
     pub squash_message_style: Option<String>,
 }

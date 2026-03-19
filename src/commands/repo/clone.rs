@@ -20,7 +20,7 @@ pub struct CloneArgs {
     pub depth: Option<u32>,
 }
 
-pub async fn run(ctx: &AppContext, args: &CloneArgs) -> Result<()> {
+pub fn run(ctx: &AppContext, args: &CloneArgs) -> Result<()> {
     let domain = ctx.domain();
 
     // CNB 暂不支持 SSH 克隆，固定使用 HTTPS

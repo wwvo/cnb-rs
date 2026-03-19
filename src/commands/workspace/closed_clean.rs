@@ -21,7 +21,7 @@ pub async fn run(ctx: &AppContext) -> Result<()> {
             break;
         }
         all_workspaces.extend(resp.list);
-        if (all_workspaces.len() as i64) >= resp.total {
+        if all_workspaces.len() >= usize::try_from(resp.total).unwrap_or(usize::MAX) {
             break;
         }
         page += 1;

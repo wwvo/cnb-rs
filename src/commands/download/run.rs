@@ -74,7 +74,8 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
         let handle = tokio::spawn(async move {
             let _permit = sem.acquire().await;
 
-            let pb = mp.add(ProgressBar::new(file.size.max(1) as u64));
+            let progress_len = u64::try_from(file.size).unwrap_or(0).max(1);
+            let pb = mp.add(ProgressBar::new(progress_len));
             pb.set_style(
                 ProgressStyle::with_template(
                     "{prefix:.cyan} [{bar:30}] {bytes}/{total_bytes} {msg}",

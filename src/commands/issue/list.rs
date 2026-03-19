@@ -137,5 +137,5 @@ fn calculate_stale_days(now: &chrono::DateTime<chrono::Utc>, last_acted_at: &str
         return 0;
     };
     let duration = now.signed_duration_since(last_time);
-    duration.num_days().max(0) as u32
+    u32::try_from(duration.num_days().max(0)).unwrap_or(u32::MAX)
 }

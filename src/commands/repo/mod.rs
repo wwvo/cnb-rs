@@ -92,7 +92,7 @@ impl RepoCommand {
         match &self.subcommand {
             RepoSubcommand::Archive(args) => archive::run(ctx, args).await,
             RepoSubcommand::Asset(args) => asset::run(ctx, args).await,
-            RepoSubcommand::Clone(args) => clone::run(ctx, args).await,
+            RepoSubcommand::Clone(args) => clone::run(ctx, args),
             RepoSubcommand::Contributor(args) => contributor::run(ctx, args).await,
             RepoSubcommand::Create(args) => create::run(ctx, args).await,
             RepoSubcommand::Delete(args) => delete::run(ctx, args).await,

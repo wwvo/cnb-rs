@@ -95,7 +95,8 @@ async fn run_list(ctx: &AppContext, args: &AssetListArgs) -> Result<()> {
             .unwrap_or("-")
             .to_string();
 
-        let size = cnb_tui::fmt::format_bytes(asset.size_in_byte as i64);
+        let size =
+            cnb_tui::fmt::format_bytes(i64::try_from(asset.size_in_byte).unwrap_or(i64::MAX));
 
         table.add_row(vec![
             asset.id.clone(),

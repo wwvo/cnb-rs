@@ -47,7 +47,7 @@ enum Commands {
     /// 构建管理
     Build(commands::build::BuildCommand),
 
-    /// 使用自然语言与 CNB OpenAPI 交互
+    /// 使用自然语言与 CNB `OpenAPI` 交互
     Chat(commands::chat::ChatArgs),
 
     /// 配置管理
@@ -162,7 +162,7 @@ async fn async_main() -> anyhow::Result<()> {
     match cli.command {
         Commands::Auth(cmd) => cmd.execute(&ctx).await,
         Commands::Badge(cmd) => cmd.execute(&ctx).await,
-        Commands::Browse(ref args) => commands::browse::run(&ctx, args).await,
+        Commands::Browse(ref args) => commands::browse::run(&ctx, args),
         Commands::Build(cmd) => cmd.execute(&ctx).await,
         Commands::Chat(ref args) => args.execute(&ctx).await,
         Commands::Config(cmd) => cmd.execute(&ctx),
@@ -182,7 +182,7 @@ async fn async_main() -> anyhow::Result<()> {
         Commands::Commit(cmd) => cmd.execute(&ctx).await,
         Commands::Download(ref args) => args.execute(&ctx).await,
         Commands::GpgKey(cmd) => cmd.execute(&ctx).await,
-        Commands::Stats => commands::stats::run().await,
+        Commands::Stats => commands::stats::run(),
         Commands::Stars => commands::stars::run(&ctx).await,
         Commands::Label(cmd) => cmd.execute(&ctx).await,
         Commands::Knowledge(cmd) => cmd.execute(&ctx).await,

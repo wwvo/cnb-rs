@@ -21,7 +21,7 @@ pub struct ListArgs {
     #[arg(long)]
     pub visibility: Option<String>,
 
-    /// 排序字段（created_at/last_updated_at/stars）
+    /// 排序字段（`created_at`/`last_updated_at`/`stars`）
     #[arg(long)]
     pub sort: Option<String>,
 

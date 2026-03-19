@@ -22,7 +22,7 @@ pub struct StartArgs {
     #[arg(long = "sha")]
     pub sha: Option<String>,
 
-    /// 事件名（默认 api_trigger）
+    /// 事件名（默认 `api_trigger`）
     #[arg(short = 'e', long = "event")]
     pub event: Option<String>,
 

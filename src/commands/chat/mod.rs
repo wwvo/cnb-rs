@@ -1,6 +1,6 @@
 //! Chat AI 子命令
 //!
-//! 使用自然语言与 CNB OpenAPI 交互。
+//! 使用自然语言与 CNB `OpenAPI` 交互。
 
 use anyhow::Result;
 use clap::Args;

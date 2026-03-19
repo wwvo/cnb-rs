@@ -14,7 +14,7 @@ use ratatui::widgets::{Axis, Block, Borders, Chart, Dataset, GraphType, List, Li
 use std::collections::HashMap;
 
 /// 执行 stats 命令
-pub async fn run() -> Result<()> {
+pub fn run() -> Result<()> {
     let lines = cnb_core::git::get_commits()?;
 
     if lines.is_empty() {
@@ -88,12 +88,20 @@ fn render_dashboard(top_users: &[(String, usize)], week_data: &[(NaiveDate, usiz
     let chart_data: Vec<(f64, f64)> = week_data
         .iter()
         .enumerate()
-        .map(|(i, (_, count))| (i as f64, *count as f64))
+        .map(|(i, (_, count))| {
+            (
+                f64::from(u32::try_from(i).unwrap_or(u32::MAX)),
+                f64::from(u32::try_from(*count).unwrap_or(u32::MAX)),
+            )
+        })
         .collect();
 
-    let max_y = week_data.iter().map(|(_, c)| *c).max().unwrap_or(1).max(1) as f64;
+    let max_y_count = u32::try_from(week_data.iter().map(|(_, c)| *c).max().unwrap_or(1).max(1))
+        .unwrap_or(u32::MAX);
+    let max_y = f64::from(max_y_count);
 
-    let x_max = chart_data.len().saturating_sub(1).max(1) as f64;
+    let x_max =
+        f64::from(u32::try_from(chart_data.len().saturating_sub(1).max(1)).unwrap_or(u32::MAX));
 
     let x_labels: Vec<String> =
         if let (Some(first), Some(last)) = (week_data.first(), week_data.last()) {
@@ -153,7 +161,7 @@ fn render_dashboard(top_users: &[(String, usize)], week_data: &[(NaiveDate, usiz
                     .bounds([0.0, max_y * 1.1])
                     .labels(vec![
                         ratatui::text::Span::raw("0"),
-                        ratatui::text::Span::raw(format!("{}", max_y as u64)),
+                        ratatui::text::Span::raw(max_y_count.to_string()),
                     ]),
             );
 
