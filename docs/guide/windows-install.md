@@ -4,12 +4,31 @@
 
 当前 Windows 平台提供两类原生安装形态：
 
+- `install.ps1`
+  - 当前覆盖 `x86_64` 与 `arm64`
+  - 自动识别系统架构，下载 `.zip` 压缩包到当前用户目录，并更新用户级 `PATH`
+  - 不依赖管理员权限，也不需要导入 MSIX 证书
 - `.msixbundle` / `.msix`
   - 当前覆盖 `x86_64-pc-windows-msvc` 与 `aarch64-pc-windows-msvc`
   - 使用 Windows 原生包安装机制，安装后通过 execution alias 调用 `cnb-rs`
 - `.msi`
   - 当前覆盖 `x86_64-pc-windows-msvc`、`aarch64-pc-windows-msvc` 和 `x86_64-pc-windows-gnu`
   - 适合偏好传统机器级安装、系统级 `PATH` 和标准 MSI 卸载流程的用户
+
+## 使用 `install.ps1` 一键安装
+
+```powershell
+irm https://raw.githubusercontent.com/wwvo/cnb-rs/main/install.ps1 | iex
+```
+
+如果你想固定某个版本，或者指定安装目录，建议先把脚本下载到本地再执行：
+
+```powershell
+Invoke-WebRequest https://raw.githubusercontent.com/wwvo/cnb-rs/main/install.ps1 -OutFile .\install.ps1
+.\install.ps1 -Version v<VERSION> -InstallDir "$env:LOCALAPPDATA\Programs\cnb-rs\bin"
+```
+
+这个脚本会自动识别 Windows `x64 / arm64`，从 GitHub Release 下载对应 `.zip` 压缩包，校验 `sha256sum.txt`，然后把 `cnb-rs.exe` 安装到当前用户目录。它不会安装 `.msixbundle` / `.msi`，也不会处理 MSIX 证书导入。
 
 ## MSIX / MSIXBUNDLE
 

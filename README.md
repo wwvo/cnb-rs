@@ -41,6 +41,21 @@
 
 从 [Release 页面](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/releases) 下载适合你平台的发布产物。
 
+如果你想直接一键安装，也可以使用仓库根目录的安装脚本：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/wwvo/cnb-rs/main/install.sh | bash
+```
+
+```powershell
+irm https://raw.githubusercontent.com/wwvo/cnb-rs/main/install.ps1 | iex
+```
+
+- `install.sh` 会自动识别 Linux / macOS 的系统和架构，默认安装到可写的 `/usr/local/bin`，否则回退到 `~/.local/bin`
+- `install.ps1` 会自动识别 Windows `x64 / arm64`，默认安装到当前用户的 `AppData\Local\Programs\cnb-rs\bin`，并尝试追加到用户级 `PATH`
+- 两个脚本都会从 GitHub Release 下载压缩包并校验 `sha256sum.txt`
+- 这两个脚本只安装 `cnb-rs` 二进制文件，不替代 `.deb` / `.rpm` / `.msix` / `.msi` 的完整安装形态
+
 - Linux `x86_64 / arm64`：优先使用 `.deb` 或 `.rpm`
 - Windows `x86_64 / arm64`（MSVC）：可选已签名 `.msixbundle`；如需传统机器级安装，也可继续使用对应 `.msi`
 - Windows `x86_64`（GNU）：使用 `x86_64-pc-windows-gnu.msi`

@@ -21,7 +21,23 @@
 
 - Debian / Ubuntu / Linux Mint：优先使用 `.deb`
 - Fedora / Rocky / AlmaLinux / RHEL 系：优先使用 `.rpm`
+- 希望快速完成安装、自动选择架构，且只需要 `cnb-rs` 二进制文件：使用仓库根目录的 `install.sh`
 - 其他 Linux 发行版，或你希望自行控制安装目录：使用 `.tar.gz`
+
+## 使用 `install.sh` 一键安装
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/wwvo/cnb-rs/main/install.sh | bash
+```
+
+如果你想固定某个版本，或者指定安装目录，可以先把脚本下载到本地再执行：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/wwvo/cnb-rs/main/install.sh -o install.sh
+bash ./install.sh --version v<VERSION> --bin-dir "$HOME/.local/bin"
+```
+
+这个脚本会自动识别 Linux `x86_64 / arm64`，并优先使用更通用的 musl 压缩包附件。它会校验 `sha256sum.txt`，然后只安装 `cnb-rs` 二进制文件，不会额外安装 Bash / Zsh / Fish 补全文件。
 
 ## 使用 `.deb` 安装
 
