@@ -71,28 +71,62 @@ jobs:
     needs: build-binary
     runs-on: windows-latest
     outputs:
-      release_version: ${{ steps.version.outputs.release_version }}
-      msix_version: ${{ steps.version.outputs.msix_version }}
+      msix_enabled: ${{ steps.signing_mode.outputs.enabled }}
+      release_version: ${{ steps.metadata.outputs.release_version }}
+      msix_version: ${{ steps.metadata.outputs.msix_version }}
+    env:
+      WINDOWS_MSIX_PFX_BASE64: ${{ secrets.WINDOWS_MSIX_PFX_BASE64 }}
+      WINDOWS_MSIX_PFX_PASSWORD: ${{ secrets.WINDOWS_MSIX_PFX_PASSWORD }}
+      WINDOWS_MSIX_IDENTITY_NAME: ${{ vars.WINDOWS_MSIX_IDENTITY_NAME }}
+      WINDOWS_MSIX_PUBLISHER_DISPLAY_NAME: ${{ vars.WINDOWS_MSIX_PUBLISHER_DISPLAY_NAME }}
+      WINDOWS_MSIX_DISPLAY_NAME: ${{ vars.WINDOWS_MSIX_DISPLAY_NAME }}
+      WINDOWS_MSIX_DESCRIPTION: ${{ vars.WINDOWS_MSIX_DESCRIPTION }}
+      WINDOWS_MSIX_EXECUTION_ALIAS: ${{ vars.WINDOWS_MSIX_EXECUTION_ALIAS }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      - name: Resolve MSIX signing mode
+        id: signing_mode
+        shell: pwsh
+        run: |
+          $hasPfx = -not [string]::IsNullOrWhiteSpace($env:WINDOWS_MSIX_PFX_BASE64)
+          $hasPassword = -not [string]::IsNullOrWhiteSpace($env:WINDOWS_MSIX_PFX_PASSWORD)
+
+          if ($hasPfx -and $hasPassword) {
+            "enabled=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            Write-Host "MSIX signing secrets detected; Windows MSIX/MSIXBUNDLE build is enabled."
+            exit 0
+          }
+
+          if (-not $hasPfx -and -not $hasPassword) {
+            "enabled=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            Write-Warning "GitHub secrets WINDOWS_MSIX_PFX_BASE64 and WINDOWS_MSIX_PFX_PASSWORD are not configured; skipping Windows MSIX/MSIXBUNDLE build."
+            exit 0
+          }
+
+          throw "Incomplete MSIX signing configuration: WINDOWS_MSIX_PFX_BASE64 and WINDOWS_MSIX_PFX_PASSWORD must either both be configured or both be absent"
+
       - name: Setup Rust toolchain
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         uses: dtolnay/rust-toolchain@stable
 
       - name: Setup Rust cache
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         uses: Swatinem/rust-cache@v2
         with:
           key: windows-msixbundle-tools
 
       - name: Setup MSVC developer command prompt
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: amd64
 
-      - name: Resolve package versions
-        id: version
+      - name: Resolve MSIX release metadata
+        id: metadata
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         shell: pwsh
         run: |
           $manifest = Get-Content Cargo.toml -Raw
@@ -112,104 +146,133 @@ jobs:
             $semverMatch.Groups["minor"].Value, `
             $semverMatch.Groups["patch"].Value
 
+          $identityName = if ([string]::IsNullOrWhiteSpace($env:WINDOWS_MSIX_IDENTITY_NAME)) { "wwvo.cnb-rs" } else { $env:WINDOWS_MSIX_IDENTITY_NAME }
+          $publisherDisplayName = if ([string]::IsNullOrWhiteSpace($env:WINDOWS_MSIX_PUBLISHER_DISPLAY_NAME)) { "wwvo" } else { $env:WINDOWS_MSIX_PUBLISHER_DISPLAY_NAME }
+          $displayName = if ([string]::IsNullOrWhiteSpace($env:WINDOWS_MSIX_DISPLAY_NAME)) { "cnb-rs" } else { $env:WINDOWS_MSIX_DISPLAY_NAME }
+          $description = if ([string]::IsNullOrWhiteSpace($env:WINDOWS_MSIX_DESCRIPTION)) { "Unofficial CNB command-line tool built with Rust" } else { $env:WINDOWS_MSIX_DESCRIPTION }
+          $executionAlias = if ([string]::IsNullOrWhiteSpace($env:WINDOWS_MSIX_EXECUTION_ALIAS)) { "cnb-rs.exe" } else { $env:WINDOWS_MSIX_EXECUTION_ALIAS }
+
           "release_version=$releaseVersion" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           "msix_version=$msixVersion" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "identity_name=$identityName" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "publisher_display_name=$publisherDisplayName" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "display_name=$displayName" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "description=$description" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "execution_alias=$executionAlias" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
       - name: Download x64 binary artifact
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         uses: actions/download-artifact@v7
         with:
           name: cnb-rs-msix-input-x86_64-pc-windows-msvc
           path: target/windows-msix/input/x64
 
       - name: Download arm64 binary artifact
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         uses: actions/download-artifact@v7
         with:
           name: cnb-rs-msix-input-aarch64-pc-windows-msvc
           path: target/windows-msix/input/arm64
 
       - name: Install msixbundle-cli
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         shell: pwsh
         run: cargo install msixbundle-cli --locked --version 1.1.4 --root target/tools/msixbundle-cli
 
-      - name: Create CI signing certificate
+      - name: Materialize signing certificate
         id: certificate
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         shell: pwsh
         run: |
           $certDir = Join-Path $PWD "target/windows-msix/cert"
           New-Item -ItemType Directory -Force -Path $certDir | Out-Null
 
-          $certificate = New-SelfSignedCertificate `
-            -Type CodeSigningCert `
-            -Subject "CN=wwvo, O=wwvo, C=CN" `
-            -CertStoreLocation "Cert:\CurrentUser\My" `
-            -KeyExportPolicy Exportable `
-            -HashAlgorithm SHA256 `
-            -NotAfter (Get-Date).AddYears(1)
+          $pfxPath = Join-Path $certDir "release-signing.pfx"
+          $certificatePath = Join-Path $certDir "release-signing.cer"
+          [System.IO.File]::WriteAllBytes($pfxPath, [System.Convert]::FromBase64String($env:WINDOWS_MSIX_PFX_BASE64))
 
-          $passwordPlain = [guid]::NewGuid().ToString("N")
-          $password = ConvertTo-SecureString -String $passwordPlain -AsPlainText -Force
-          $pfxPath = Join-Path $certDir "cnb-rs-ci.pfx"
-          $cerPath = Join-Path $certDir ("cnb-rs-v{0}-windows-msvc.cer" -f "${{ steps.version.outputs.release_version }}")
+          $password = ConvertTo-SecureString -String $env:WINDOWS_MSIX_PFX_PASSWORD -AsPlainText -Force
+          $certificate = Get-PfxCertificate -FilePath $pfxPath -Password $password
+          if (-not $certificate) {
+            throw "Failed to read signing certificate from PFX"
+          }
 
-          Export-PfxCertificate -Cert $certificate -FilePath $pfxPath -Password $password | Out-Null
-          Export-Certificate -Cert $certificate -FilePath $cerPath | Out-Null
+          [System.IO.File]::WriteAllBytes(
+            $certificatePath,
+            $certificate.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
+          )
+
+          $publisher = $certificate.Subject
+          if ([string]::IsNullOrWhiteSpace($publisher)) {
+            throw "Failed to resolve certificate subject for MSIX Publisher"
+          }
 
           "pfx_path=$pfxPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-          "pfx_password=$passwordPlain" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-          "cer_path=$cerPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-
-          Remove-Item -Path ("Cert:\CurrentUser\My\{0}" -f $certificate.Thumbprint) -Force
+          "certificate_path=$certificatePath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "publisher=$publisher" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
       - name: Stage MSIX package contents
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         shell: pwsh
         run: |
           .\packaging\windows\scripts\stage-msix-content.ps1 `
             -X64BinaryPath target\windows-msix\input\x64\cnb-rs.exe `
             -Arm64BinaryPath target\windows-msix\input\arm64\cnb-rs.exe `
             -OutputDir target\windows-msix\appxcontent `
-            -Publisher "CN=wwvo, O=wwvo, C=CN"
+            -IdentityName "${{ steps.metadata.outputs.identity_name }}" `
+            -Publisher "${{ steps.certificate.outputs.publisher }}" `
+            -PublisherDisplayName "${{ steps.metadata.outputs.publisher_display_name }}" `
+            -DisplayName "${{ steps.metadata.outputs.display_name }}" `
+            -Description "${{ steps.metadata.outputs.description }}" `
+            -ExecutionAlias "${{ steps.metadata.outputs.execution_alias }}"
 
       - name: Build Windows MSIX/MSIXBUNDLE artifacts
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         shell: pwsh
         run: |
           .\packaging\windows\scripts\build-msixbundle.ps1 `
             -OutputDir target\windows-msix\output `
             -PfxPath "${{ steps.certificate.outputs.pfx_path }}" `
-            -PfxPassword "${{ steps.certificate.outputs.pfx_password }}" `
-            -Version "${{ steps.version.outputs.release_version }}"
+            -PfxPassword "${{ env.WINDOWS_MSIX_PFX_PASSWORD }}" `
+            -CertificatePath "${{ steps.certificate.outputs.certificate_path }}" `
+            -Version "${{ steps.metadata.outputs.release_version }}"
 
       - name: Upload x64 MSIX artifact
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         uses: actions/upload-artifact@v6
         with:
-          name: cnb-rs-v${{ steps.version.outputs.release_version }}-x86_64-pc-windows-msvc.msix
-          path: target/windows-msix/output/cnb-rs-v${{ steps.version.outputs.release_version }}-x86_64-pc-windows-msvc.msix
+          name: cnb-rs-v${{ steps.metadata.outputs.release_version }}-x86_64-pc-windows-msvc.msix
+          path: target/windows-msix/output/cnb-rs-v${{ steps.metadata.outputs.release_version }}-x86_64-pc-windows-msvc.msix
           retention-days: 7
           if-no-files-found: error
           compression-level: 0
 
       - name: Upload arm64 MSIX artifact
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         uses: actions/upload-artifact@v6
         with:
-          name: cnb-rs-v${{ steps.version.outputs.release_version }}-aarch64-pc-windows-msvc.msix
-          path: target/windows-msix/output/cnb-rs-v${{ steps.version.outputs.release_version }}-aarch64-pc-windows-msvc.msix
+          name: cnb-rs-v${{ steps.metadata.outputs.release_version }}-aarch64-pc-windows-msvc.msix
+          path: target/windows-msix/output/cnb-rs-v${{ steps.metadata.outputs.release_version }}-aarch64-pc-windows-msvc.msix
           retention-days: 7
           if-no-files-found: error
           compression-level: 0
 
       - name: Upload MSIX bundle artifact
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         uses: actions/upload-artifact@v6
         with:
-          name: cnb-rs-v${{ steps.version.outputs.release_version }}-windows-msvc.msixbundle
-          path: target/windows-msix/output/cnb-rs-v${{ steps.version.outputs.release_version }}-windows-msvc.msixbundle
+          name: cnb-rs-v${{ steps.metadata.outputs.release_version }}-windows-msvc.msixbundle
+          path: target/windows-msix/output/cnb-rs-v${{ steps.metadata.outputs.release_version }}-windows-msvc.msixbundle
           retention-days: 7
           if-no-files-found: error
           compression-level: 0
 
-      - name: Upload MSIX certificate artifact
+      - name: Upload Windows MSIX signing certificate artifact
+        if: ${{ steps.signing_mode.outputs.enabled == 'true' }}
         uses: actions/upload-artifact@v6
         with:
-          name: cnb-rs-v${{ steps.version.outputs.release_version }}-windows-msvc.cer
-          path: ${{ steps.certificate.outputs.cer_path }}
+          name: windows-msix-signing-cert-v${{ steps.metadata.outputs.release_version }}
+          path: ${{ steps.certificate.outputs.certificate_path }}
           retention-days: 7
           if-no-files-found: error
           compression-level: 0
@@ -217,6 +280,7 @@ jobs:
   smoke-test-msixbundle:
     name: Smoke test Windows MSIX/MSIXBUNDLE (${{ matrix.target }})
     needs: bundle-msix
+    if: ${{ needs.bundle-msix.result == 'success' && needs.bundle-msix.outputs.msix_enabled == 'true' }}
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -240,7 +304,7 @@ jobs:
       - name: Download MSIX certificate artifact
         uses: actions/download-artifact@v7
         with:
-          name: cnb-rs-v${{ needs.bundle-msix.outputs.release_version }}-windows-msvc.cer
+          name: windows-msix-signing-cert-v${{ needs.bundle-msix.outputs.release_version }}
           path: target/windows-msix/download/cert
 
       - name: Smoke test MSIX install and uninstall
