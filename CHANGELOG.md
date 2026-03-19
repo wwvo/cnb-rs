@@ -2,6 +2,20 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
+## [0.11.1] - 2026-03-19
+
+### 📝 文档
+
+- **(api)** 修正文档注释中的 OpenAPI Markdown 标记 ([e4ffafe](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/e4ffafe179a043c38153dab8879c60da26d9fdfc))
+
+### 🔧 杂项
+
+- **(cmd)** 清理第五阶段命令层的 pedantic 警告 ([1869b61](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/1869b613dbc9bd3f5b5164faf1be8b69597698ce))
+- **(support)** 清理第四阶段支持 crate 的 pedantic 警告 ([59b11dc](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/59b11dc9eb56512db596560a79330b9370b0b832))
+- **(api)** 清理第三阶段共享层的 pedantic 警告 ([ed66c48](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/ed66c48aa336f63d670550fbcd9e74edda8cdf03))
+- **(api)** 清理第二阶段客户端的 pedantic 警告 ([364db70](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/364db70981fee1ccbdd33e15b2dc36ebf8b761da))
+- **(api)** 清理第一阶段客户端的 pedantic 警告 ([b0c2ad2](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/b0c2ad24616bc5a91b73e49baeeefef495a62731))
+
 ## [0.11.0] - 2026-03-19
 
 ### ♻️ 重构
