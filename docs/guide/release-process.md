@@ -91,7 +91,8 @@ GitHub 镜像仓库收到 `v*` tag 后，会触发 `.github/workflows/build.yml`
 
 对外分发上，当前约定是：
 
-- 仓库 raw `main/scripts/install.sh` 与 `main/scripts/install.ps1` 继续作为“始终获取最新安装脚本”的入口
+- CNB raw `main/scripts/install.sh` 与 `main/scripts/install.ps1` 继续作为默认的“始终获取最新安装脚本”入口
+- GitHub raw `main/scripts/install.sh` 与 `main/scripts/install.ps1` 作为 GitHub 下载源场景下的同源入口
 - Release 附件中的 `cnb-rs-v<VERSION>-install.sh` 与 `cnb-rs-v<VERSION>-install.ps1` 作为“固定版本安装脚本”的入口
 
 ## CLI 改名类 breaking change 约定

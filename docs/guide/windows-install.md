@@ -23,10 +23,10 @@ irm https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/git/raw/main/scripts/install.ps1 | iex
 
 这条入口适合始终获取最新安装脚本。
 
-如果你希望改从 GitHub Release 下载，可以在当前会话里先切换下载源：
+如果你希望第一跳和后续附件都走 GitHub，可以改用 GitHub 托管的脚本入口：
 
 ```powershell
-$env:CNB_RS_INSTALL_SOURCE = "github"; irm https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/git/raw/main/scripts/install.ps1 | iex
+$env:CNB_RS_INSTALL_SOURCE = "github"; irm https://raw.githubusercontent.com/wwvo/cnb-rs/main/scripts/install.ps1 | iex
 ```
 
 如果你想固定某个版本，或者指定安装目录，建议先把脚本下载到本地再执行：

@@ -32,10 +32,10 @@ curl -fsSL https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/git/raw/main/scripts/install.sh
 
 这条入口适合始终获取最新安装脚本。
 
-如果你希望改从 GitHub Release 下载，可以在执行前切换下载源：
+如果你希望第一跳和后续附件都走 GitHub，可以改用 GitHub 托管的脚本入口：
 
 ```bash
-CNB_RS_INSTALL_SOURCE=github curl -fsSL https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/git/raw/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wwvo/cnb-rs/main/scripts/install.sh | CNB_RS_INSTALL_SOURCE=github bash
 ```
 
 如果你想固定某个版本，或者指定安装目录，可以先把脚本下载到本地再执行：
@@ -57,7 +57,7 @@ bash ./cnb-rs-v<VERSION>-install.sh --bin-dir "$HOME/.local/bin"
 bash ./install.sh --source github --version v<VERSION> --bin-dir "$HOME/.local/bin"
 ```
 
-这个脚本会自动识别 Linux `x86_64 / arm64`，并优先使用更通用的 musl 压缩包附件。它默认从 CNB Release 下载文件，也可以切换到 GitHub Release；两种来源都会校验 `sha256sum.txt`。如果你直接执行 Release 自带的 `cnb-rs-v<VERSION>-install.sh`，默认就会安装该版本。然后它只安装 `cnb-rs` 二进制文件，不会额外安装 Bash / Zsh / Fish 补全文件。
+这个脚本会自动识别 Linux `x86_64 / arm64`，并优先使用更通用的 musl 压缩包附件。它默认从 CNB Release 下载文件，也可以切换到 GitHub Release；两种来源都会校验 `sha256sum.txt`。如果你在 shell 管道里用环境变量切换下载源，请把变量放在 `bash` 那一侧，而不是放在 `curl` 前面。如果你直接执行 Release 自带的 `cnb-rs-v<VERSION>-install.sh`，默认就会安装该版本。然后它只安装 `cnb-rs` 二进制文件，不会额外安装 Bash / Zsh / Fish 补全文件。
 
 ## 使用 `.deb` 安装
 
