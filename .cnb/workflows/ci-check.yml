@@ -1,43 +1,121 @@
-x-ci-check-base: &ci-check-base
-  name: ci-check
+# cargo fmt / check / clippy / test 彼此无编译产物依赖，可并行缩短墙钟时间。
+# 各子任务结束后 resolve 独立 key；ci-check-gate 全部 await 后再 resolve ci-check-ready，
+# 供 build-image 等仍依赖「代码检查通过」的流程使用。
+
+x-ci-check-rust-image: &ci-check-rust-image
+  image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
+
+x-ci-check-pr-filters: &ci-check-pr-filters
+  ifModify:
+    - "Cargo.toml"
+    - "Cargo.lock"
+    - "build.rs"
+    - ".cargo/**/*"
+    - "src/**/*"
+    - "crates/**/*"
+    - ".cnb/scripts/ci-check.sh"
+    - ".cnb/workflows/ci-check.yml"
+
+x-ci-check-fmt-job: &ci-check-fmt-job
+  name: ci-check-fmt
+  runner:
+    cpus: 2
+  stages:
+    - name: cargo fmt
+      <<: *ci-check-rust-image
+      script: bash .cnb/scripts/ci-check.sh fmt
+    - name: fmt 检查通过
+      type: cnb:resolve
+      options:
+        key: ci-check-fmt-ready
+
+x-ci-check-check-job: &ci-check-check-job
+  name: ci-check-check
   runner:
     cpus: 4
-  stages: &ci-check-stages
-    - name: cargo fmt
-      image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
-      script: bash .cnb/scripts/ci-check.sh fmt
+  stages:
     - name: cargo check
-      image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
+      <<: *ci-check-rust-image
       script: bash .cnb/scripts/ci-check.sh check
+    - name: check 检查通过
+      type: cnb:resolve
+      options:
+        key: ci-check-check-ready
+
+x-ci-check-clippy-job: &ci-check-clippy-job
+  name: ci-check-clippy
+  runner:
+    cpus: 4
+  stages:
     - name: cargo clippy
-      image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
+      <<: *ci-check-rust-image
       script: bash .cnb/scripts/ci-check.sh clippy
+    - name: clippy 检查通过
+      type: cnb:resolve
+      options:
+        key: ci-check-clippy-ready
+
+x-ci-check-test-job: &ci-check-test-job
+  name: ci-check-test
+  runner:
+    cpus: 4
+  stages:
     - name: cargo test
-      image: docker.cnb.cool/wwvo/cnb-rs/cnb-rs:rust-ci
+      <<: *ci-check-rust-image
       script: bash .cnb/scripts/ci-check.sh test
+    - name: test 检查通过
+      type: cnb:resolve
+      options:
+        key: ci-check-test-ready
+
+x-ci-check-gate-job: &ci-check-gate-job
+  name: ci-check-gate
+  runner:
+    cpus: 1
+  stages:
+    - name: 等待 fmt
+      type: cnb:await
+      options:
+        key: ci-check-fmt-ready
+    - name: 等待 check
+      type: cnb:await
+      options:
+        key: ci-check-check-ready
+    - name: 等待 clippy
+      type: cnb:await
+      options:
+        key: ci-check-clippy-ready
+    - name: 等待 test
+      type: cnb:await
+      options:
+        key: ci-check-test-ready
     - name: 代码检查通过
       type: cnb:resolve
       options:
         key: ci-check-ready
 
-x-ci-check-push-job: &ci-check-push-job
-  - <<: *ci-check-base
+x-ci-check-push-jobs: &ci-check-push-jobs
+  - <<: *ci-check-fmt-job
+  - <<: *ci-check-check-job
+  - <<: *ci-check-clippy-job
+  - <<: *ci-check-test-job
+  - <<: *ci-check-gate-job
 
-x-ci-check-pr-job: &ci-check-pr-job
-  - <<: *ci-check-base
-    ifModify:
-      - "Cargo.toml"
-      - "Cargo.lock"
-      - "build.rs"
-      - ".cargo/**/*"
-      - "src/**/*"
-      - "crates/**/*"
-      - ".cnb/scripts/ci-check.sh"
-      - ".cnb/workflows/ci-check.yml"
+x-ci-check-pr-jobs: &ci-check-pr-jobs
+  - <<: *ci-check-fmt-job
+    <<: *ci-check-pr-filters
+  - <<: *ci-check-check-job
+    <<: *ci-check-pr-filters
+  - <<: *ci-check-clippy-job
+    <<: *ci-check-pr-filters
+  - <<: *ci-check-test-job
+    <<: *ci-check-pr-filters
+  - <<: *ci-check-gate-job
+    <<: *ci-check-pr-filters
 
 main:
-  push: *ci-check-push-job
-  pull_request: *ci-check-pr-job
+  push: *ci-check-push-jobs
+  pull_request: *ci-check-pr-jobs
 
 '**':
-  web_trigger_ci-check: *ci-check-push-job
+  web_trigger_ci-check: *ci-check-push-jobs
