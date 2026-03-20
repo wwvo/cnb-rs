@@ -53,4 +53,4 @@ $ cnb-rs label pull-list 10
 
 - [cnb-rs](/guide/cnb)
 - [cnb-rs issue](/issue/)
-- [cnb-rs pull](/pull/)
+- [cnb-rs pr](/pr/)

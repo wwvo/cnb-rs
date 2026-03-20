@@ -90,13 +90,13 @@ export default defineConfig({
             ],
           },
           {
-            text: 'cnb-rs pull',
-            link: '/pull/',
+            text: 'cnb-rs pr',
+            link: '/pr/',
             items: [
-              { text: 'list', link: '/pull/list' },
-              { text: 'create', link: '/pull/create' },
-              { text: 'update', link: '/pull/update' },
-              { text: 'merge', link: '/pull/merge' },
+              { text: 'list', link: '/pr/list' },
+              { text: 'create', link: '/pr/create' },
+              { text: 'update', link: '/pr/update' },
+              { text: 'merge', link: '/pr/merge' },
             ],
           },
           {

@@ -1,7 +1,7 @@
-# cnb-rs pull create
+# cnb-rs pr create
 
 ```
-cnb-rs pull create [flags]
+cnb-rs pr create [flags]
 ```
 
 创建 Pull Request。
@@ -27,18 +27,18 @@ cnb-rs pull create [flags]
 
 ```bash
 # 从当前分支向默认分支发起 PR
-$ cnb-rs pull create
+$ cnb-rs pr create
 
 # 指定目标分支
-$ cnb-rs pull create --base-branch main
+$ cnb-rs pr create --base-branch main
 
 # 指定标题和描述
-$ cnb-rs pull create --title "feat: 新增登录功能" --body "详细描述..."
+$ cnb-rs pr create --title "feat: 新增登录功能" --body "详细描述..."
 
 # 跨仓库 PR
-$ cnb-rs pull create -R upstream/repo -B main -H feature-branch
+$ cnb-rs pr create -R upstream/repo -B main -H feature-branch
 ```
 
 ## 另请参阅
 
-- [cnb-rs pull](/pull/)
+- [cnb-rs pr](/pr/)

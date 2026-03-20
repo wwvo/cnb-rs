@@ -1,7 +1,7 @@
-# cnb-rs pull merge
+# cnb-rs pr merge
 
 ```
-cnb-rs pull merge <NUMBER> [flags]
+cnb-rs pr merge <NUMBER> [flags]
 ```
 
 合并指定的 Pull Request。
@@ -22,15 +22,15 @@ cnb-rs pull merge <NUMBER> [flags]
 
 ```bash
 # 默认 merge 方式合并
-$ cnb-rs pull merge 42 --commit-title "Merge PR #42"
+$ cnb-rs pr merge 42 --commit-title "Merge PR #42"
 
 # squash 合并
-$ cnb-rs pull merge 42 -t "feat: 新功能" -s squash
+$ cnb-rs pr merge 42 -t "feat: 新功能" -s squash
 
 # rebase 合并，附带提交信息
-$ cnb-rs pull merge 42 -t "fix: 修复问题" -m "详细说明" -s rebase
+$ cnb-rs pr merge 42 -t "fix: 修复问题" -m "详细说明" -s rebase
 ```
 
 ## 另请参阅
 
-- [cnb-rs pull](/pull/)
+- [cnb-rs pr](/pr/)

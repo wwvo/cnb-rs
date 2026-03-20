@@ -11,7 +11,7 @@
 - [cnb-rs chat](/chat) — 使用自然语言与 CNB OpenAPI 交互
 - [cnb-rs config](/config/) — 配置管理
 - [cnb-rs issue](/issue/) — Issue 管理
-- [cnb-rs pull](/pull/) — Pull Request 管理
+- [cnb-rs pr](/pr/) — PR 管理
 - [cnb-rs release](/release/) — Release 管理
 - [cnb-rs commit](/commit/) — Commit 管理
 
@@ -62,5 +62,5 @@ $ cnb-rs auth login
 $ cnb-rs issue list
 $ cnb-rs chat --do "查看我的仓库列表"
 $ cnb-rs download --files README.md
-$ cnb-rs pull create
+$ cnb-rs pr create
 ```

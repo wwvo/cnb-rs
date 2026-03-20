@@ -18,7 +18,7 @@ cnb auth login            -> cnb-rs auth login
 cnb auth status           -> cnb-rs auth status
 cnb info                  -> cnb-rs info
 cnb issue list            -> cnb-rs issue list
-cnb pull create           -> cnb-rs pull create
+cnb pull create           -> cnb-rs pr create
 cnb release latest        -> cnb-rs release latest
 cnb completion fish       -> cnb-rs completion -s fish
 ```
