@@ -142,10 +142,17 @@ impl CnbClient {
 
     // ==================== Internal ====================
 
-    /// 发送请求并在 5xx / 网络错误时自动重试（最多 3 次，退避 100ms → 500ms → 1s）
+    /// 发送 **读操作** 请求并在 5xx / 网络错误时自动重试（最多 3 次，退避 100ms → 500ms → 1s）
     ///
     /// 4xx 错误不重试（客户端错误重试无意义）。
     /// `build` 闭包每次重试时重新构建 `RequestBuilder`。
+    ///
+    /// # 重试策略设计说明
+    ///
+    /// 此方法仅用于 **幂等的读操作**（GET 请求）。写操作（POST/PUT/PATCH/DELETE）
+    /// 直接调用 `.send()` 而不经过此方法，因为写操作通常不是幂等的——自动重试
+    /// 可能导致资源重复创建、重复删除等副作用。各写操作方法中不使用
+    /// `send_with_retry` 是刻意为之，而非遗漏。
     pub(crate) async fn send_with_retry<F>(&self, build: F) -> Result<reqwest::Response, ApiError>
     where
         F: Fn() -> reqwest::RequestBuilder,
