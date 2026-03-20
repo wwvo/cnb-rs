@@ -2,6 +2,33 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
+## [0.11.3] - 2026-03-20
+
+### ♻️ 重构
+
+- **(tui)** replace manual wide-char table with unicode-width crate ([32513cc](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/32513cc79ffec4f46dedcc0b8e969f40e7b30876))
+
+### 🌀 其他
+
+- Revert #280 ([f29fff9](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/f29fff938b0749bbe7346a44519793ecb4f0d3a7))
+
+### 👷 CI/CD
+
+- **(cnb)** 将 ci-check 拆为并行 job ([e0bdcd5](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/e0bdcd57cf6eda983f82db85628b7d578eb6ed31))
+- **(cnb)** sync-github-main 不再等待代码检查 ([6af3cd0](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/6af3cd0a6e99529fde9fd7f473dbd2ce4c88355b))
+
+### 📝 文档
+
+- **(api)** add retry strategy design intent comment to send_with_retry ([5d8fb0b](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/5d8fb0bf21e36291c3a5012f8f351dd16559effb))
+- **(readme)** document MSRV 1.85 for source builds ([0a0a591](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/0a0a59182bb0de2d2465f2b6489b51d57d263930))
+
+### 🔧 杂项
+
+- **(deps)** 同步 Cargo.lock 与 workspace 清单 ([fbef6ae](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/fbef6aea4eace89c8d0f23ba57376d96d83e31a4))
+- **(release)** 包仓库提交改用 CNB 本地 Git 身份 ([8e042cf](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/8e042cf39253a538862e373ed76999f0bb48722d))
+- **(ci)** add cargo-deny config and workflow ([4572d3d](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/4572d3d25c4be157627a9d529ea3a26a6916fddf))
+- **(ci)** add rustfmt.toml and Rustfmt workflow ([53d64d8](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/53d64d8df363d66d17b07e564307a7f0906c5336))
+
 ## [0.11.2] - 2026-03-20
 
 ### 🐛 Bug 修复
