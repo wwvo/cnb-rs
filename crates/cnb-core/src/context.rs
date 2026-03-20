@@ -12,6 +12,14 @@ use crate::auth;
 use crate::config::{Config, DEFAULT_DOMAIN, DEFAULT_SCHEME};
 use crate::git::{self, GitInfo};
 
+fn missing_repo_message(in_git_repo: bool) -> &'static str {
+    if in_git_repo {
+        "无法从当前 Git 仓库解析 CNB 仓库路径。请检查 `git remote -v`，或使用 `--repo <group>/<repo>` 指定仓库。"
+    } else {
+        "当前目录不是 Git 仓库。请在 Git 仓库目录下运行，或使用 `--repo <group>/<repo>` 指定仓库。"
+    }
+}
+
 /// 应用运行上下文，所有子命令共享
 pub struct AppContext {
     /// CLI 传入的 domain 参数
@@ -90,7 +98,7 @@ impl AppContext {
         if let Some(info) = self.git_info() {
             return Ok(&info.repo);
         }
-        bail!("无法确定仓库名。请使用 --repo 参数指定，或在 Git 仓库目录下运行。")
+        bail!(missing_repo_message(git::is_git_dir()))
     }
 
     /// 构造仓库的 Web URL（用于浏览器打开）
@@ -153,5 +161,30 @@ impl AppContext {
         self.api_client
             .get()
             .ok_or_else(|| anyhow::anyhow!("API 客户端初始化失败"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn missing_repo_message_for_non_git_dir_is_actionable() {
+        let message = missing_repo_message(false);
+        assert!(message.contains("当前目录不是 Git 仓库"));
+        assert!(message.contains("--repo <group>/<repo>"));
+    }
+
+    #[test]
+    fn missing_repo_message_for_git_dir_without_remote_is_actionable() {
+        let message = missing_repo_message(true);
+        assert!(message.contains("git remote -v"));
+        assert!(message.contains("--repo <group>/<repo>"));
+    }
+
+    #[test]
+    fn repo_prefers_cli_repo_override() {
+        let ctx = AppContext::new(Some("cnb.cool".to_string()), Some("wwvo/cnb-rs/cnb-rs".to_string()), false);
+        assert_eq!(ctx.repo().expect("cli repo should be used"), "wwvo/cnb-rs/cnb-rs");
     }
 }

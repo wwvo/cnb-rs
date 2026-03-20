@@ -65,6 +65,8 @@ pub enum IssueSubcommand {
 
 impl IssueCommand {
     pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
+        ctx.repo()?;
+
         match &self.subcommand {
             IssueSubcommand::List(args) => list::run(ctx, args).await,
             IssueSubcommand::Mine => mine::run(ctx).await,
