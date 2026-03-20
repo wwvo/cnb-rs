@@ -146,15 +146,24 @@ fn main() {
     let rt = match rt {
         Ok(rt) => rt,
         Err(e) => {
-            eprintln!("Error: {e}");
+            eprint!("{}", format_top_level_error(&e));
             std::process::exit(1);
         }
     };
 
     if let Err(e) = rt.block_on(async_main()) {
-        eprintln!("Error: {e}");
+        eprint!("{}", format_top_level_error(&e));
         std::process::exit(1);
     }
+}
+
+fn format_top_level_error(error: &impl std::fmt::Display) -> String {
+    #[cfg(windows)]
+    let line_ending = "\r\n";
+    #[cfg(not(windows))]
+    let line_ending = "\n";
+
+    format!("Error: {error}{line_ending}{line_ending}")
 }
 
 fn completion_generation_command() -> clap::Command {
@@ -308,5 +317,15 @@ mod tests {
         assert!(!block.contains("--domain"));
         assert!(!block.contains("--repo"));
         assert!(!block.contains("--json"));
+    }
+
+    #[test]
+    fn top_level_error_output_has_trailing_blank_line() {
+        let rendered = super::format_top_level_error(&"当前目录不是 Git 仓库");
+
+        #[cfg(windows)]
+        assert_eq!(rendered, "Error: 当前目录不是 Git 仓库\r\n\r\n");
+        #[cfg(not(windows))]
+        assert_eq!(rendered, "Error: 当前目录不是 Git 仓库\n\n");
     }
 }
