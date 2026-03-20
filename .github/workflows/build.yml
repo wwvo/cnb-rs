@@ -784,6 +784,41 @@ jobs:
 
           exit "${status}"
 
+  update-package-repos:
+    name: Update Homebrew and Scoop package repos
+    needs:
+      - publish
+    if: ${{ needs.publish.result == 'success' && github.event_name == 'push' && !contains(github.ref_name, '-alpha') && !contains(github.ref_name, '-beta') }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Validate CNB package repo secret
+        env:
+          CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
+        run: |
+          set -euo pipefail
+          : "${CNB_TOKEN:?Missing GitHub secret CNB_TOKEN}"
+
+      - name: Update package repositories
+        env:
+          CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
+          CNB_WEB_ENDPOINT: https://cnb.cool
+        run: |
+          set -euo pipefail
+          python3 scripts/release/update_package_repos.py \
+            --release-tag "${GITHUB_REF_NAME}" \
+            --push
+
   report-build-failures:
     name: Report Partial Build Failures
     needs:

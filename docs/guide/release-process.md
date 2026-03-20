@@ -71,8 +71,11 @@ GitHub 镜像仓库收到 `v*` tag 后，会触发 `.github/workflows/build.yml`
 9. 基于最终 release 附件生成 `sha256sum.txt`，其中包含 `.tar.gz`、`.zip`、`.msi`、`.msix`、`.msixbundle`、`.deb`、`.rpm`、`.cer`、`.sh`、`.ps1`
 10. 上传附件和 `sha256sum.txt` 到 GitHub Release
 11. 先删除 CNB 对应 Release 的旧附件，再回填同一批新文件
+12. 对稳定版 tag（不含 `-alpha` / `-beta`）额外执行 `scripts/release/update_package_repos.py`：它会从 GitHub Release 读取 `sha256sum.txt` 作为单一真值源，更新 `wwvo/cnb-rs/homebrew-cnb-rs` 与 `wwvo/cnb-rs/scoop-cnb-rs`，在覆盖 Scoop 当前清单前先备份为 `cnb-rs-<version>.json` / `cnb-rs-msvc-<version>.json` / `cnb-rs-gnu-<version>.json`，并在推送前复用各自仓库的校验脚本
 
 `aarch64-pc-windows-gnullvm` 当前仍被视为实验性非阻塞目标。它不再走 `cross` 的默认镜像路径，而是在 Ubuntu runner 上通过单独的 cross toolchain setup 准备 LLVM MinGW / gnullvm 工具链；如果它单独构建失败，GitHub Release 与 CNB Release 仍会继续发布其余成功产物，因此该目标的附件可能暂时缺席。
+
+当 `aarch64-pc-windows-gnullvm` 缺席时，Scoop 的 `cnb-rs-gnu.json` 会移除 `arm64` 条目，避免发布一个指向 404 的安装清单。
 
 当前 Linux 原生包的发布范围说明：
 
@@ -87,13 +90,20 @@ GitHub 镜像仓库收到 `v*` tag 后，会触发 `.github/workflows/build.yml`
 - `aarch64-pc-windows-gnullvm` 当前仍仅提供 `.zip`
 - 当前 `.msi`、`.msix` / `.msixbundle` 与 `.zip` 会按目标并存，避免影响已有使用方式
 
-回填完成后，GitHub Release 和 CNB Release 会持有同一组二进制产物、版本化安装脚本以及对应的 SHA-256 校验文件。
+回填完成后，GitHub Release 和 CNB Release 会持有同一组二进制产物、版本化安装脚本以及对应的 SHA-256 校验文件；稳定版还会继续自动同步 Homebrew / Scoop 包仓库。
 
 对外分发上，当前约定是：
 
 - CNB raw `main/scripts/install.sh` 与 `main/scripts/install.ps1` 继续作为默认的“始终获取最新安装脚本”入口
 - GitHub raw `main/scripts/install.sh` 与 `main/scripts/install.ps1` 作为 GitHub 下载源场景下的同源入口
 - Release 附件中的 `cnb-rs-v<VERSION>-install.sh` 与 `cnb-rs-v<VERSION>-install.ps1` 作为“固定版本安装脚本”的入口
+- Homebrew / Scoop 包仓库只跟随稳定版 tag 自动更新；`alpha` / `beta` 预发布不会改动外部分发仓库
+
+如需手工回填某个正式版，可直接运行：
+
+```bash
+python3 scripts/release/update_package_repos.py --release-tag v0.11.1 --push
+```
 
 ## CLI 改名类 breaking change 约定
 
@@ -222,7 +232,8 @@ cnb-rs --repo wwvo/cnb-rs/cnb-rs label issue-remove <NUMBER> "target:v0.4.6"
   - `GITHUB_SYNC_TOKEN`
 - GitHub 侧需要配置仓库 secret：
   - `CNB_TOKEN`
-    - 需具备 CNB `repo-contents` 读写权限，用于回填 Release 附件
+    - 需具备 CNB `repo-contents` 读写权限，用于回填主仓库 Release 附件
+    - 同时需对 `wwvo/cnb-rs/homebrew-cnb-rs` 与 `wwvo/cnb-rs/scoop-cnb-rs` 具备推送权限，用于稳定版发布后的包仓库自动更新
   - `WINDOWS_MSIX_PFX_BASE64`
     - 正式 Windows `MSIX` / `MSIXBUNDLE` 发布证书的 PFX，需先转成 base64 后存入 secret
   - `WINDOWS_MSIX_PFX_PASSWORD`
@@ -244,6 +255,7 @@ cnb-rs --repo wwvo/cnb-rs/cnb-rs label issue-remove <NUMBER> "target:v0.4.6"
 
 - CNB 的 `git:release` 采用覆盖更新模式，避免重跑时删除已有 Release 元数据
 - GitHub 在回填 CNB 附件前会先删除同 tag 下的旧附件，再上传新文件，保证 release 重跑后的产物集保持一致
+- 稳定版重跑时，package repo updater 会再次以 GitHub Release 的 `sha256sum.txt` 为准刷新 Homebrew / Scoop；如果当前 release 的 Scoop 主清单版本已经与目标版本一致，则不会重复创建新的历史备份文件
 
 ## 为什么 release 流程要拆成四段
 
