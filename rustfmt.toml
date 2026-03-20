@@ -1,0 +1,2 @@
+# Align with workspace `Cargo.toml` (`edition = "2024"`).
+edition = "2024"
