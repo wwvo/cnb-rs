@@ -2,6 +2,22 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
+## [0.11.2] - 2026-03-20
+
+### 🐛 Bug 修复
+
+- **(install)** use approved verbs in PowerShell installer ([4a00dab](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/4a00dabf7c59d3906d9f72b975d464a9487e7d3b))
+- **(packages)** 收窄 updater 的推送 token 类型 ([38617e7](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/38617e7bd9f678db6ad1486eb99c9729812b3a58))
+
+### 👷 CI/CD
+
+- **(packages)** 增加手动包仓库补跑流水线 ([6d65a62](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/6d65a6263ef363a2e65d8539bc9e60e9d76d1621))
+- **(release)** 自动同步正式版包仓库 ([34d3470](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/34d34703727e4ba3dda68074dd480f477efd0ded))
+
+### 📝 文档
+
+- **(install)** 修正 GitHub 安装入口示例 ([4afb2b4](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/4afb2b400bf192f03363894876a31874c476c76e))
+
 ## [0.11.1] - 2026-03-19
 
 ### 📝 文档

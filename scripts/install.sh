@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-default_version="v0.11.1"
+default_version="v0.11.2"
 default_source="${CNB_RS_INSTALL_SOURCE:-cnb}"
 cnb_web_endpoint="${CNB_RS_INSTALL_CNB_WEB_ENDPOINT:-https://cnb.cool}"
 cnb_repo_slug="${CNB_RS_INSTALL_REPO_SLUG:-wwvo/cnb-rs/cnb-rs}"

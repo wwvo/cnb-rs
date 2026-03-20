@@ -13,7 +13,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
-$DefaultVersion = "v0.11.1"
+$DefaultVersion = "v0.11.2"
 
 function Write-StepLog {
     param(
