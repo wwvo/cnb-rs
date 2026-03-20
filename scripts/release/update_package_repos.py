@@ -97,6 +97,12 @@ def git_auth_env(token: str | None) -> dict[str, str] | None:
     return env
 
 
+def require_cnb_token(token: str | None) -> str:
+    if not token:
+        raise UpdateError("CNB_TOKEN is required when --push is set.")
+    return token
+
+
 def run_cmd(
     args: list[str],
     *,
@@ -560,8 +566,6 @@ def main() -> int:
 
     release_version = release_tag.removeprefix("v")
     cnb_token = os.environ.get("CNB_TOKEN")
-    if args.push and not cnb_token:
-        raise UpdateError("CNB_TOKEN is required when --push is set.")
 
     work_root = args.work_root
     if work_root is None and (args.homebrew_repo_dir is None or args.scoop_repo_dir is None):
@@ -623,6 +627,8 @@ def main() -> int:
         log(f"Scoop repo dir: {scoop_repo_dir}")
         return 0
 
+    push_cnb_token = require_cnb_token(cnb_token)
+
     homebrew_committed = commit_repo(
         homebrew_repo_dir,
         paths_to_add=["Formula"],
@@ -635,12 +641,12 @@ def main() -> int:
     )
 
     if homebrew_committed:
-        push_repo(homebrew_repo_dir, cnb_token=cnb_token)
+        push_repo(homebrew_repo_dir, cnb_token=push_cnb_token)
     else:
         log("Homebrew repo already up to date; skip push.")
 
     if scoop_committed:
-        push_repo(scoop_repo_dir, cnb_token=cnb_token)
+        push_repo(scoop_repo_dir, cnb_token=push_cnb_token)
     else:
         log("Scoop repo already up to date; skip push.")
 
