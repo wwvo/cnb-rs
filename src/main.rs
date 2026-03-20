@@ -221,18 +221,32 @@ mod tests {
 
     #[test]
     fn completion_accepts_long_shell_option() {
-        let matches = commands::completion::standalone_command()
-            .try_get_matches_from(["cnb-rs completion", "--shell", "bash"])
-            .expect("failed to parse completion --shell");
-        assert!(matches!(matches.get_one::<Shell>("shell"), Some(Shell::Bash)));
+        let Ok(matches) = commands::completion::standalone_command().try_get_matches_from([
+            "cnb-rs completion",
+            "--shell",
+            "bash",
+        ]) else {
+            panic!("failed to parse completion --shell");
+        };
+        assert!(matches!(
+            matches.get_one::<Shell>("shell"),
+            Some(Shell::Bash)
+        ));
     }
 
     #[test]
     fn completion_accepts_short_shell_option() {
-        let matches = commands::completion::standalone_command()
-            .try_get_matches_from(["cnb-rs completion", "-s", "zsh"])
-            .expect("failed to parse completion -s");
-        assert!(matches!(matches.get_one::<Shell>("shell"), Some(Shell::Zsh)));
+        let Ok(matches) = commands::completion::standalone_command().try_get_matches_from([
+            "cnb-rs completion",
+            "-s",
+            "zsh",
+        ]) else {
+            panic!("failed to parse completion -s");
+        };
+        assert!(matches!(
+            matches.get_one::<Shell>("shell"),
+            Some(Shell::Zsh)
+        ));
     }
 
     #[test]
@@ -279,13 +293,15 @@ mod tests {
     #[test]
     fn generated_completion_command_hides_global_flags_for_completion_subcommand() {
         let script = commands::completion::render_script(Shell::PowerShell);
-        let start = script
-            .find("        'cnb-rs;completion' {")
-            .expect("completion block should exist");
-        let end = script[start..]
+        let Some(start) = script.find("        'cnb-rs;completion' {") else {
+            panic!("completion block should exist");
+        };
+        let Some(end) = script[start..]
             .find("        }")
             .map(|offset| start + offset)
-            .expect("completion block should end");
+        else {
+            panic!("completion block should end");
+        };
         let block = &script[start..end];
 
         assert!(block.contains("--shell"));

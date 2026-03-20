@@ -184,7 +184,14 @@ mod tests {
 
     #[test]
     fn repo_prefers_cli_repo_override() {
-        let ctx = AppContext::new(Some("cnb.cool".to_string()), Some("wwvo/cnb-rs/cnb-rs".to_string()), false);
-        assert_eq!(ctx.repo().expect("cli repo should be used"), "wwvo/cnb-rs/cnb-rs");
+        let ctx = AppContext::new(
+            Some("cnb.cool".to_string()),
+            Some("wwvo/cnb-rs/cnb-rs".to_string()),
+            false,
+        );
+        let Ok(repo) = ctx.repo() else {
+            panic!("cli repo should be used");
+        };
+        assert_eq!(repo, "wwvo/cnb-rs/cnb-rs");
     }
 }
