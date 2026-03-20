@@ -13,3 +13,4 @@ chrono = { workspace = true }
 crossterm = { workspace = true }
 futures = { workspace = true }
 ratatui = { workspace = true }
+unicode-width = { workspace = true }

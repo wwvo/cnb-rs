@@ -2,6 +2,8 @@
 //!
 //! 提供 UTF-8 安全的终端表格渲染，支持列宽配置和自动截断。
 
+use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
+
 /// 表格列定义
 pub struct Column {
     /// 列标题
@@ -87,36 +89,12 @@ fn pad_or_truncate(s: &str, width: usize) -> String {
 
 /// 计算字符串的显示宽度（CJK 字符占 2 列）
 fn display_width(s: &str) -> usize {
-    s.chars().map(char_width).sum()
+    UnicodeWidthStr::width(s)
 }
 
 /// 获取单个字符的显示宽度
 fn char_width(c: char) -> usize {
-    // CJK 统一表意文字、CJK 兼容表意文字、全角字符等占 2 列
-    if is_wide_char(c) { 2 } else { 1 }
-}
-
-/// 判断字符是否为宽字符（CJK 等）
-fn is_wide_char(c: char) -> bool {
-    let cp = c as u32;
-    // CJK 统一表意文字
-    (0x4E00..=0x9FFF).contains(&cp)
-    // CJK 统一表意文字扩展 A
-    || (0x3400..=0x4DBF).contains(&cp)
-    // CJK 兼容表意文字
-    || (0xF900..=0xFAFF).contains(&cp)
-    // CJK 统一表意文字扩展 B ~ F
-    || (0x20000..=0x2FA1F).contains(&cp)
-    // 全角 ASCII 和半角片假名
-    || (0xFF01..=0xFF60).contains(&cp)
-    || (0xFFE0..=0xFFE6).contains(&cp)
-    // 日文平假名、片假名
-    || (0x3040..=0x309F).contains(&cp)
-    || (0x30A0..=0x30FF).contains(&cp)
-    // 韩文音节
-    || (0xAC00..=0xD7AF).contains(&cp)
-    // CJK 符号和标点
-    || (0x3000..=0x303F).contains(&cp)
+    UnicodeWidthChar::width(c).unwrap_or(0)
 }
 
 /// 按显示宽度截断字符串，追加省略号
