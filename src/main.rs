@@ -162,13 +162,21 @@ fn main() {
     }
 }
 
-fn format_top_level_error(error: &impl std::fmt::Display) -> String {
+pub(crate) fn format_top_level_error(error: &impl std::fmt::Display) -> String {
+    render_top_level_error_message(&error.to_string(), cli_color_choice())
+}
+
+fn render_top_level_error_message(message: &str, color_choice: ColorChoice) -> String {
     #[cfg(windows)]
     let line_ending = "\r\n";
     #[cfg(not(windows))]
     let line_ending = "\n";
 
-    format!("Error: {error}{line_ending}{line_ending}")
+    let styles = clap::builder::styling::Styles::default();
+    let use_color = should_color_stderr(color_choice);
+    let error = style_text("error", styles.get_error(), use_color);
+
+    format!("{error}: {message}{line_ending}{line_ending}")
 }
 
 fn handle_removed_command_invocation(args: &[std::ffi::OsString]) -> bool {
@@ -399,12 +407,13 @@ mod tests {
 
     #[test]
     fn top_level_error_output_has_trailing_blank_line() {
-        let rendered = super::format_top_level_error(&"当前目录不是 Git 仓库");
+        let rendered =
+            super::render_top_level_error_message("当前目录不是 Git 仓库", ColorChoice::Never);
 
         #[cfg(windows)]
-        assert_eq!(rendered, "Error: 当前目录不是 Git 仓库\r\n\r\n");
+        assert_eq!(rendered, "error: 当前目录不是 Git 仓库\r\n\r\n");
         #[cfg(not(windows))]
-        assert_eq!(rendered, "Error: 当前目录不是 Git 仓库\n\n");
+        assert_eq!(rendered, "error: 当前目录不是 Git 仓库\n\n");
     }
 
     #[test]
@@ -461,5 +470,15 @@ mod tests {
         assert!(rendered.contains("unrecognized subcommand"));
         assert!(rendered.contains("'pull'"));
         assert!(rendered.contains("'pr'"));
+    }
+
+    #[test]
+    fn top_level_error_uses_clap_colors_when_forced() {
+        let rendered =
+            super::render_top_level_error_message("当前目录不是 Git 仓库", ColorChoice::Always);
+
+        assert!(rendered.contains("\u{1b}["));
+        assert!(rendered.contains("error"));
+        assert!(rendered.contains("当前目录不是 Git 仓库"));
     }
 }

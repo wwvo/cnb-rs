@@ -78,7 +78,7 @@ pub async fn interactive_chat(client: &CnbClient) -> Result<()> {
                 };
 
                 if let Err(e) = result {
-                    eprintln!("Error: {e}");
+                    eprint!("{}", crate::format_top_level_error(&e));
                 }
                 eprintln!("---");
             }
@@ -92,7 +92,7 @@ pub async fn interactive_chat(client: &CnbClient) -> Result<()> {
                 break;
             }
             Err(e) => {
-                eprintln!("输入错误: {e}");
+                eprintln!("输入错误：{e}");
                 break;
             }
         }

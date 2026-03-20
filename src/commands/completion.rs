@@ -115,7 +115,7 @@ pub fn run(shell: Shell) {
     let mut stdout = std::io::stdout().lock();
     if let Err(err) = stdout.write_all(script.as_bytes()) {
         if err.kind() != std::io::ErrorKind::BrokenPipe {
-            eprintln!("Error: {err}");
+            eprint!("{}", crate::format_top_level_error(&err));
             std::process::exit(1);
         }
     }
