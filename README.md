@@ -138,7 +138,7 @@ cnb/
 
 ## 从源码构建
 
-**前置条件：** [Rust](https://www.rust-lang.org/tools/install)（edition 2024）
+**前置条件：** [Rust](https://www.rust-lang.org/tools/install)，**最低版本（MSRV）为 1.85**（与仓库根 `Cargo.toml` 中 `rust-version` 及 `rust-toolchain.toml` 一致；edition 为 2024）。
 
 ```bash
 git clone https://cnb.cool/wwvo/cnb-rs/cnb-rs.git
