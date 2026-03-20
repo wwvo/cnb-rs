@@ -61,7 +61,7 @@ function Invoke-DownloadFile {
     Invoke-WebRequest @params | Out-Null
 }
 
-function Normalize-Version {
+function Get-NormalizedVersion {
     param(
         [Parameter(Mandatory = $true)]
         [string]$Value
@@ -149,7 +149,7 @@ function Get-ExpectedChecksum {
     throw "Failed to find a checksum entry for $AssetName"
 }
 
-function Ensure-UserPathEntry {
+function Add-UserPathEntry {
     param(
         [Parameter(Mandatory = $true)]
         [string]$Entry
@@ -185,7 +185,7 @@ $resolvedVersion = if ([string]::IsNullOrWhiteSpace($Version)) {
     $DefaultVersion
 }
 else {
-    Normalize-Version -Value $Version
+    Get-NormalizedVersion -Value $Version
 }
 
 $resolvedSource = $Source.ToLowerInvariant()
@@ -243,7 +243,7 @@ try {
     Copy-Item -LiteralPath $stagedBinary -Destination $destinationPath -Force
 
     if (-not $NoPathUpdate) {
-        Ensure-UserPathEntry -Entry $resolvedInstallDir
+        Add-UserPathEntry -Entry $resolvedInstallDir
     }
 
     $installedVersion = & $destinationPath --version 2>$null
