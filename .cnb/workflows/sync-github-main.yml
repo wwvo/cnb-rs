@@ -3,10 +3,6 @@ x-sync-github-main-job: &sync-github-main-job
     runner:
       cpus: 2
     stages:
-      - name: 等待代码检查通过
-        type: cnb:await
-        options:
-          key: ci-check-ready
       - name: 同步 main 到 GitHub
         image: tencentcom/git-sync
         imports:
