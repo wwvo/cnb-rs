@@ -15,8 +15,8 @@ const CORE_COMMANDS: &[HelpEntry] = &[
         summary: "创建、查看和管理 Issue",
     },
     HelpEntry {
-        name: "pull",
-        summary: "创建、查看和管理 Pull Request",
+        name: "pr",
+        summary: "创建、查看和管理 PR",
     },
     HelpEntry {
         name: "repo",
@@ -241,6 +241,9 @@ mod tests {
         ] {
             assert!(help.contains(section), "missing section: {section}");
         }
+
+        assert!(help.contains("  pr          创建、查看和管理 PR"));
+        assert!(!help.contains("  pull        "));
     }
 
     #[test]

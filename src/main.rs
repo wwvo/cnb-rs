@@ -2,8 +2,9 @@
 //!
 //! 通过 `cnb-rs` 命令使用。
 
-use clap::{CommandFactory, Parser};
+use clap::{ColorChoice, CommandFactory, Parser};
 use cnb_core::context::AppContext;
+use std::io::IsTerminal;
 
 mod build_info;
 mod commands;
@@ -69,7 +70,8 @@ enum Commands {
     /// 创建、查看和管理 Issue
     Issue(commands::issue::IssueCommand),
 
-    /// 创建、查看和管理 Pull Request
+    /// 创建、查看和管理 PR
+    #[command(name = "pr")]
     Pull(commands::pull::PullCommand),
 
     /// 查看和管理 Release
@@ -135,6 +137,9 @@ fn main() {
         print!("{}", root_help::render());
         return;
     }
+    if handle_removed_command_invocation(&args) {
+        return;
+    }
     if commands::completion::handle_invocation(&args) {
         return;
     }
@@ -164,6 +169,76 @@ fn format_top_level_error(error: &impl std::fmt::Display) -> String {
     let line_ending = "\n";
 
     format!("Error: {error}{line_ending}{line_ending}")
+}
+
+fn handle_removed_command_invocation(args: &[std::ffi::OsString]) -> bool {
+    if matches_removed_command_invocation(args) {
+        eprint!("{}", removed_command_message("pull", "pr"));
+        std::process::exit(2);
+    }
+
+    false
+}
+
+fn matches_removed_command_invocation(args: &[std::ffi::OsString]) -> bool {
+    matches!(
+        args,
+        [command, ..] if command == std::ffi::OsStr::new("pull")
+    ) || matches!(
+        args,
+        [help, command, ..]
+            if help == std::ffi::OsStr::new("help") && command == std::ffi::OsStr::new("pull")
+    )
+}
+
+fn removed_command_message(command: &str, replacement: &str) -> String {
+    render_removed_command_message(command, replacement, cli_color_choice())
+}
+
+fn render_removed_command_message(
+    command: &str,
+    replacement: &str,
+    color_choice: ColorChoice,
+) -> String {
+    #[cfg(windows)]
+    let line_ending = "\r\n";
+    #[cfg(not(windows))]
+    let line_ending = "\n";
+
+    let styles = clap::builder::styling::Styles::default();
+    let use_color = should_color_stderr(color_choice);
+    let error = style_text("error", styles.get_error(), use_color);
+    let tip = style_text("tip:", styles.get_valid(), use_color);
+    let usage = style_text("Usage:", styles.get_usage(), use_color);
+    let invalid_command = style_text(&format!("'{command}'"), styles.get_invalid(), use_color);
+    let valid_command = style_text(&format!("'{replacement}'"), styles.get_valid(), use_color);
+    let help = style_text("'--help'", styles.get_literal(), use_color);
+
+    format!(
+        "{error}: unrecognized subcommand {invalid_command}{line_ending}{line_ending}  {tip} a similar subcommand exists: {valid_command}{line_ending}{line_ending}{usage} cnb-rs [OPTIONS] <COMMAND>{line_ending}{line_ending}For more information, try {help}.{line_ending}{line_ending}"
+    )
+}
+
+fn cli_color_choice() -> ColorChoice {
+    let mut cmd = Cli::command();
+    cmd.build();
+    cmd.get_color()
+}
+
+fn should_color_stderr(color_choice: ColorChoice) -> bool {
+    match color_choice {
+        ColorChoice::Always => true,
+        ColorChoice::Never => false,
+        ColorChoice::Auto => std::io::stderr().is_terminal(),
+    }
+}
+
+fn style_text(text: &str, style: &clap::builder::styling::Style, use_color: bool) -> String {
+    if use_color {
+        format!("{style}{text}{style:#}")
+    } else {
+        text.to_owned()
+    }
 }
 
 fn completion_generation_command() -> clap::Command {
@@ -226,7 +301,10 @@ async fn async_main() -> anyhow::Result<()> {
 #[cfg(test)]
 mod tests {
     use crate::commands;
+    use crate::{Cli, Commands};
+    use clap::{ColorChoice, Parser};
     use clap_complete::Shell;
+    use std::ffi::OsString;
 
     #[test]
     fn completion_accepts_long_shell_option() {
@@ -327,5 +405,61 @@ mod tests {
         assert_eq!(rendered, "Error: 当前目录不是 Git 仓库\r\n\r\n");
         #[cfg(not(windows))]
         assert_eq!(rendered, "Error: 当前目录不是 Git 仓库\n\n");
+    }
+
+    #[test]
+    fn pr_command_maps_to_pull_module() {
+        let Ok(cli) = Cli::try_parse_from(["cnb-rs", "pr", "list"]) else {
+            panic!("failed to parse pr command");
+        };
+
+        assert!(matches!(cli.command, Commands::Pull(_)));
+    }
+
+    #[test]
+    fn pull_command_is_no_longer_supported() {
+        assert!(Cli::try_parse_from(["cnb-rs", "pull", "list"]).is_err());
+    }
+
+    #[test]
+    fn removed_pull_command_invocation_is_detected() {
+        assert!(super::matches_removed_command_invocation(&[
+            OsString::from("pull"),
+            OsString::from("list"),
+        ]));
+        assert!(super::matches_removed_command_invocation(&[
+            OsString::from("help"),
+            OsString::from("pull"),
+        ]));
+        assert!(!super::matches_removed_command_invocation(&[
+            OsString::from("pr"),
+            OsString::from("list"),
+        ]));
+    }
+
+    #[test]
+    fn removed_pull_command_message_matches_expected_format() {
+        let rendered = super::render_removed_command_message("pull", "pr", ColorChoice::Never);
+
+        #[cfg(windows)]
+        assert_eq!(
+            rendered,
+            "error: unrecognized subcommand 'pull'\r\n\r\n  tip: a similar subcommand exists: 'pr'\r\n\r\nUsage: cnb-rs [OPTIONS] <COMMAND>\r\n\r\nFor more information, try '--help'.\r\n\r\n"
+        );
+        #[cfg(not(windows))]
+        assert_eq!(
+            rendered,
+            "error: unrecognized subcommand 'pull'\n\n  tip: a similar subcommand exists: 'pr'\n\nUsage: cnb-rs [OPTIONS] <COMMAND>\n\nFor more information, try '--help'.\n\n"
+        );
+    }
+
+    #[test]
+    fn removed_pull_command_message_uses_clap_colors_when_forced() {
+        let rendered = super::render_removed_command_message("pull", "pr", ColorChoice::Always);
+
+        assert!(rendered.contains("\u{1b}["));
+        assert!(rendered.contains("unrecognized subcommand"));
+        assert!(rendered.contains("'pull'"));
+        assert!(rendered.contains("'pr'"));
     }
 }
