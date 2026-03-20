@@ -187,6 +187,31 @@ def fetch_text(url: str, *, attempts: int = 5, timeout: int = 30) -> str:
     raise UpdateError(f"Failed to fetch {url}: {last_error}")
 
 
+def resolve_latest_release_tag(github_web_endpoint: str, github_repo: str) -> str:
+    latest_url = f"{normalize_base_url(github_web_endpoint)}/{github_repo}/releases/latest"
+    request = urllib.request.Request(
+        latest_url,
+        headers={"User-Agent": "cnb-rs package repo updater"},
+        method="HEAD",
+    )
+
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            resolved_url = response.geturl().rstrip("/")
+    except Exception as exc:  # pragma: no cover - network failure path
+        raise UpdateError(
+            f"Failed to resolve latest stable release tag from {latest_url}: {exc}"
+        ) from exc
+
+    release_tag = resolved_url.rsplit("/", 1)[-1].strip()
+    if not release_tag or release_tag == "latest":
+        raise UpdateError(
+            f"Failed to parse latest stable release tag from redirect target: {resolved_url}"
+        )
+
+    return release_tag
+
+
 def parse_checksums(contents: str) -> dict[str, str]:
     checksums: dict[str, str] = {}
     for line in contents.splitlines():
@@ -481,7 +506,10 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Update Homebrew and Scoop package repositories for a release.",
     )
-    parser.add_argument("--release-tag", required=True, help="Published stable tag, e.g. v0.11.1")
+    parser.add_argument(
+        "--release-tag",
+        help="Published stable tag, e.g. v0.11.1. Omit to use the latest stable GitHub release.",
+    )
     parser.add_argument("--work-root", type=Path, help="Directory used for package repo clones")
     parser.add_argument("--homebrew-repo-dir", type=Path, help="Existing Homebrew repo checkout")
     parser.add_argument("--scoop-repo-dir", type=Path, help="Existing Scoop repo checkout")
@@ -513,16 +541,24 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
 
-    if not RELEASE_TAG_PATTERN.fullmatch(args.release_tag):
+    github_web_endpoint = normalize_base_url(args.github_web_endpoint)
+    cnb_web_endpoint = normalize_base_url(args.cnb_web_endpoint)
+    release_tag = args.release_tag or resolve_latest_release_tag(
+        github_web_endpoint,
+        args.github_repo,
+    )
+    log(f"Using release tag {release_tag}")
+
+    if not RELEASE_TAG_PATTERN.fullmatch(release_tag):
         raise UpdateError(
             "Release tag must match vX.Y.Z, vX.Y.Z-alpha.N, or vX.Y.Z-beta.N."
         )
-    if "-alpha" in args.release_tag or "-beta" in args.release_tag:
+    if "-alpha" in release_tag or "-beta" in release_tag:
         raise UpdateError(
-            f"Package repo automation only supports stable releases; got prerelease tag {args.release_tag}."
+            f"Package repo automation only supports stable releases; got prerelease tag {release_tag}."
         )
 
-    release_version = args.release_tag.removeprefix("v")
+    release_version = release_tag.removeprefix("v")
     cnb_token = os.environ.get("CNB_TOKEN")
     if args.push and not cnb_token:
         raise UpdateError("CNB_TOKEN is required when --push is set.")
@@ -534,13 +570,10 @@ def main() -> int:
     elif work_root is not None:
         work_root.mkdir(parents=True, exist_ok=True)
 
-    github_web_endpoint = normalize_base_url(args.github_web_endpoint)
-    cnb_web_endpoint = normalize_base_url(args.cnb_web_endpoint)
-
     sha256sum_url = github_asset_url(
         github_web_endpoint,
         args.github_repo,
-        args.release_tag,
+        release_tag,
         "sha256sum.txt",
     )
     log(f"Fetch release checksums from {sha256sum_url}")
@@ -566,7 +599,7 @@ def main() -> int:
     log("Update Homebrew formulae")
     update_homebrew_repo(
         homebrew_repo_dir,
-        release_tag=args.release_tag,
+        release_tag=release_tag,
         github_web_endpoint=github_web_endpoint,
         github_repo=args.github_repo,
         checksums=checksums,
@@ -576,7 +609,7 @@ def main() -> int:
     log("Update Scoop manifests")
     scoop_manifest_stems = update_scoop_repo(
         scoop_repo_dir,
-        release_tag=args.release_tag,
+        release_tag=release_tag,
         release_version=release_version,
         github_web_endpoint=github_web_endpoint,
         github_repo=args.github_repo,
@@ -593,12 +626,12 @@ def main() -> int:
     homebrew_committed = commit_repo(
         homebrew_repo_dir,
         paths_to_add=["Formula"],
-        message=f"chore(release): update formulae for {args.release_tag}",
+        message=f"chore(release): update formulae for {release_tag}",
     )
     scoop_committed = commit_repo(
         scoop_repo_dir,
         paths_to_add=["bucket"],
-        message=f"chore(release): update manifests for {args.release_tag}",
+        message=f"chore(release): update manifests for {release_tag}",
     )
 
     if homebrew_committed:

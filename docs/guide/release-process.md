@@ -98,11 +98,18 @@ GitHub 镜像仓库收到 `v*` tag 后，会触发 `.github/workflows/build.yml`
 - GitHub raw `main/scripts/install.sh` 与 `main/scripts/install.ps1` 作为 GitHub 下载源场景下的同源入口
 - Release 附件中的 `cnb-rs-v<VERSION>-install.sh` 与 `cnb-rs-v<VERSION>-install.ps1` 作为“固定版本安装脚本”的入口
 - Homebrew / Scoop 包仓库只跟随稳定版 tag 自动更新；`alpha` / `beta` 预发布不会改动外部分发仓库
+- GitHub 还提供一个独立的手动流水线 `Manual Update Package Repos`，用于在不重跑整条 release workflow 的情况下补跑包仓库同步；它固定同时更新 Homebrew 和 Scoop，并默认取当前 latest stable release
 
 如需手工回填某个正式版，可直接运行：
 
 ```bash
 python3 scripts/release/update_package_repos.py --release-tag v0.11.1 --push
+```
+
+如需直接使用脚本补跑当前 latest stable release，也可以省略版本参数：
+
+```bash
+python3 scripts/release/update_package_repos.py --push
 ```
 
 ## CLI 改名类 breaking change 约定
