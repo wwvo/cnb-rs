@@ -370,10 +370,12 @@ mod tests {
 
         assert!(message.contains("用法"));
         assert!(message.contains("参数"));
-        assert!(message.contains("继承参数"));
+        assert!(message.contains("继承参数（选项）"));
         assert!(message.contains("--shell <string>"));
         assert!(message.contains("显示该命令的帮助"));
-        assert!(message.contains("使用 `cnb-rs <命令> <子命令> --help` 查看子命令的详细说明。"));
+        assert!(message.contains(
+            "使用 `cnb-rs <命令> <子命令> --help` 查看该命令的参数（含选项与位置参数）。"
+        ));
         assert!(message.contains("https://cnb.wwvo.fun/completion"));
         assert!(!message.contains("--domain"));
         assert!(!message.contains("--repo"));

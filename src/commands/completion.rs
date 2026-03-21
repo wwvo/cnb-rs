@@ -23,11 +23,11 @@ const COMPLETION_HELP_MESSAGE: &str = "\
 参数
   -s, --shell <string>  Shell 类型：{bash|zsh|fish|powershell|elvish}
 
-继承参数
+继承参数（选项）
   --help   显示该命令的帮助
 
 了解更多
-  使用 `cnb-rs <命令> <子命令> --help` 查看子命令的详细说明。
+  使用 `cnb-rs <命令> <子命令> --help` 查看该命令的参数（含选项与位置参数）。
   文档：https://cnb.wwvo.fun/completion
 
 ";

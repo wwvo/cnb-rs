@@ -140,6 +140,7 @@ pub fn is_root_help_invocation(args: &[OsString]) -> bool {
 pub fn render() -> String {
     let mut output = String::new();
 
+    push_line(&mut output, "cnb-rs");
     push_line(
         &mut output,
         "在命令行中高效管理你的 CNB 仓库、Issue、PR、Release 等资源。",
@@ -147,7 +148,11 @@ pub fn render() -> String {
     push_blank_line(&mut output);
 
     push_line(&mut output, "用法");
-    push_line(&mut output, "  cnb-rs [OPTIONS] <COMMAND>");
+    push_line(&mut output, "  cnb-rs [全局参数] <命令> [<子命令> …]");
+    push_line(
+        &mut output,
+        "  方括号内为可选；「全局参数」均为选项形态（见下）；部分命令无 <子命令>。",
+    );
     push_blank_line(&mut output);
 
     write_section(&mut output, "核心命令", CORE_COMMANDS);
@@ -155,7 +160,7 @@ pub fn render() -> String {
     write_section(&mut output, "平台相关命令", PLATFORM_COMMANDS);
     write_section(&mut output, "实用命令", UTILITY_COMMANDS);
 
-    push_line(&mut output, "全局选项");
+    push_line(&mut output, "全局参数（选项）");
     push_line(
         &mut output,
         "  --repo <REPO>      指定仓库路径，如 `wwvo/cnb-rs/cnb-rs`",
@@ -185,7 +190,7 @@ pub fn render() -> String {
     push_line(&mut output, "了解更多");
     push_line(
         &mut output,
-        "  使用 `cnb-rs <命令> --help` 查看子命令的详细说明。",
+        "  使用 `cnb-rs <命令> --help` 查看该命令的参数（含选项与位置参数）。",
     );
     push_line(&mut output, "  文档：https://cnb.wwvo.fun");
     // 末尾空行：与终端提示符分隔，避免与最后一行粘连产生歧义
@@ -236,7 +241,7 @@ mod tests {
             "仓库相关命令",
             "平台相关命令",
             "实用命令",
-            "全局选项",
+            "全局参数（选项）",
             "示例",
             "了解更多",
         ] {
@@ -245,6 +250,10 @@ mod tests {
 
         assert!(help.contains("  pr          创建、查看和管理 PR"));
         assert!(!help.contains("  pull        "));
+        assert!(
+            help.contains("[全局参数]"),
+            "用法行应体现方案 B：全局统称参数"
+        );
     }
 
     #[test]
