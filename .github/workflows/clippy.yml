@@ -1,0 +1,29 @@
+# 与 `.cnb/scripts/ci-check.sh` 中 `clippy` 动作一致（Linux 目标），
+# 与 CNB `ci-check-clippy` 对齐；本地 lefthook pre-push 使用 Windows MSVC 目标，属刻意差异。
+
+name: Clippy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: clippy-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_BUILD_TARGET: x86_64-unknown-linux-gnu
+
+jobs:
+  clippy:
+    name: cargo clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - run: cargo clippy --workspace --all-targets --target "$CARGO_BUILD_TARGET" -- -W clippy::all -W clippy::pedantic
