@@ -8,7 +8,7 @@ struct HelpEntry {
 const CORE_COMMANDS: &[HelpEntry] = &[
     HelpEntry {
         name: "auth",
-        summary: "登录、查看状态与退出登录",
+        summary: "登录、切换账号、查看状态与退出登录",
     },
     HelpEntry {
         name: "issue",
