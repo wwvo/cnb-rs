@@ -29,9 +29,14 @@ const commandCollator = new Intl.Collator('en', {
 export const sidebar: DefaultTheme.Sidebar = [
   {
     text: '指南',
+    base: '/guide/',
     items: buildGuideItems(),
   },
-  ...buildCommandItems(),
+  {
+    text: '命令',
+    base: '/',
+    items: buildCommandItems(),
+  },
 ]
 
 function buildGuideItems(): DefaultTheme.SidebarItem[] {
@@ -51,7 +56,7 @@ function buildGuideItems(): DefaultTheme.SidebarItem[] {
     items.push({
       item: {
         text: meta.title,
-        link: toRoute(fullPath),
+        link: toGuideLink(fullPath),
       },
       sortKey: meta.title,
     })
@@ -85,7 +90,7 @@ function buildCommandItems(): DefaultTheme.SidebarItem[] {
       items.push({
         item: {
           text,
-          link: toRoute(fullPath),
+          link: toCommandLink(fullPath),
         },
         sortKey: text,
       })
@@ -112,9 +117,11 @@ function buildCommandItems(): DefaultTheme.SidebarItem[] {
     }
 
     const text = deriveRootCommandText(meta.title, indexPath)
+    const link = toCommandLink(indexPath)
+    const childBase = toAbsoluteBase(link)
     const item: DefaultTheme.SidebarItem = {
       text,
-      link: toRoute(indexPath),
+      link,
     }
 
     const childItems = childPaths
@@ -128,7 +135,8 @@ function buildCommandItems(): DefaultTheme.SidebarItem[] {
         return {
           item: {
             text: childText,
-            link: toRoute(path),
+            link: toRelativeLink(path, fullPath),
+            base: childBase,
           },
           sortKey: childText,
         } satisfies SortableItem
@@ -283,23 +291,35 @@ function deriveChildCommandText(title: string, parentTitle: string, filePath: st
   return text
 }
 
-function toRoute(filePath: string): string {
-  const rel = formatPath(filePath)
+function toGuideLink(filePath: string): string {
+  return toRelativeLink(filePath, guideRoot)
+}
 
-  if (rel.startsWith('guide/')) {
-    return `/${rel.replace(/\.md$/i, '')}`
+function toCommandLink(filePath: string): string {
+  return toRelativeLink(filePath, commandsRoot)
+}
+
+function toRelativeLink(filePath: string, root: string): string {
+  const rel = relative(root, filePath).replace(/\\/g, '/')
+  const withoutExt = rel.replace(/\.md$/i, '')
+
+  if (withoutExt.toLowerCase() === 'index') {
+    return ''
   }
 
-  if (!rel.startsWith('commands/')) {
-    throw new Error(`Unsupported docs path: ${rel}`)
+  if (withoutExt.toLowerCase().endsWith('/index')) {
+    return `${withoutExt.slice(0, -'/index'.length)}/`
   }
 
-  const commandPath = rel.slice('commands/'.length).replace(/\.md$/i, '')
-  if (commandPath.toLowerCase().endsWith('/index')) {
-    return `/${commandPath.slice(0, -'/index'.length)}/`
+  return withoutExt
+}
+
+function toAbsoluteBase(link: string): string {
+  if (!link) {
+    return '/'
   }
 
-  return `/${commandPath}`
+  return link.startsWith('/') ? link : `/${link}`
 }
 
 function safeStat(path: string) {
