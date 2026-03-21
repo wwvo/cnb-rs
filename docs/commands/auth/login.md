@@ -10,26 +10,35 @@ cnb-rs auth login [flags]
 
 登录 CNB 平台。
 
-默认使用交互式隐藏输入方式获取 Token。也可以通过 `--token` 参数直接指定。
+默认使用交互式隐藏输入方式获取 Token。也可以通过 `--with-token` 从标准输入读取，
+或通过 `--token` 直接指定。
 
 登录流程：
 
 1. 获取 Token（参数传入或交互式隐藏输入）
 2. 调用 `GET /user` API 验证 Token 有效性
-3. 验证成功后将 Token 和用户名保存到 `~/.cnb/config.toml`
+3. 默认尝试将 Token 保存到系统凭证存储
+4. 如果系统凭证存储不可用，自动回退为写入 `~/.cnb/config.toml`
 
 默认域名为 `cnb.cool`，可通过 `--domain` 全局参数覆盖。
 
 cnb-rs 也支持通过环境变量传递 Token，适合 CI/CD 等无头环境。详见 [cnb-rs auth](/auth/)。
 
 ::: tip
-此命令不会撤销已有的 Token。如需管理已生成的 Token，请访问
+如果当前正在使用 `CNB_TOKEN` 或 `CNB_TOKEN_{DOMAIN}` 认证，此命令会拒绝写入本地凭证，
+并提示先清理环境变量。
+:::
+
+::: tip
+此命令不会撤销已有的远程 Token。如需管理已生成的 Token，请访问
 CNB 平台的 [个人设置 > 访问令牌](https://cnb.cool/profile/token) 页面。
 :::
 
 ## 选项
 
-- `--token <TOKEN>`: 直接指定 Token，不提供则交互式隐藏输入
+- `--with-token`: 从标准输入读取 Token
+- `--token <TOKEN>`: 直接指定 Token；适合本地调试，不推荐用于长期脚本
+- `--insecure-storage`: 将认证信息明文保存到 `~/.cnb/config.toml`
 
 **继承的全局选项：**
 
@@ -44,9 +53,20 @@ $ cnb-rs auth login
 正在验证 Token...
 ✓ 已登录为 octocat (cnb.cool)
 
+# 从标准输入读取 Token
+$ cat mytoken.txt | cnb-rs auth login --with-token
+正在验证 Token...
+✓ 已登录为 octocat (cnb.cool)
+
 # 直接指定 Token
 $ cnb-rs auth login --token cnb_xxxxxxxxxxxx
 正在验证 Token...
+✓ 已登录为 octocat (cnb.cool)
+
+# 强制明文存储
+$ cnb-rs auth login --token cnb_xxxxxxxxxxxx --insecure-storage
+正在验证 Token...
+⚠ 认证信息已明文保存到 ~/.cnb/config.toml
 ✓ 已登录为 octocat (cnb.cool)
 
 # 指定域名登录
@@ -63,6 +83,7 @@ $ cnb-rs --domain example.com auth login
 | Token 为空       | `Token 不能为空`          | 1      |
 | Token 无效       | `Token 验证失败：{error}` | 1      |
 | 网络不可达       | `Token 验证失败：{error}` | 1      |
+| 环境变量认证生效中 | 提示先清理环境变量 | 1 |
 | 配置文件写入失败 | IO 错误信息               | 1      |
 
 ## API
@@ -111,5 +132,6 @@ curl -X GET \
 ## 另请参阅
 
 - [cnb-rs auth](/auth/)
+- [cnb-rs auth switch](/auth/switch)
 - [cnb-rs auth status](/auth/status)
 - [cnb-rs auth logout](/auth/logout)

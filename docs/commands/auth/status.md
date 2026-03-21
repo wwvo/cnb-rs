@@ -13,6 +13,7 @@ cnb-rs auth status
 按优先级查找 Token 及其来源，然后调用 `GET /user` API 验证 Token 有效性并获取用户名，
 最终显示域名、用户名、Token（脱敏）及来源信息。
 
+如果本地保存了账号元数据，但系统凭证存储中的 token 无法读取，也会显示对应错误信息。
 如果未找到 Token，输出未登录提示并建议使用 `cnb-rs auth login` 或设置环境变量。
 
 ::: tip
@@ -34,18 +35,19 @@ cnb-rs 按以下顺序查找 Token：
 
 1. **域名特定环境变量** — `CNB_TOKEN_{DOMAIN}`（域名去掉 `.` 和 `-`，如 `CNB_TOKEN_cnbcool`）
 2. **通用环境变量** — `CNB_TOKEN`
-3. **配置文件** — `~/.cnb/config.toml` 中 `[auth.{domain}]` 段的 `token` 字段
+3. **系统凭证存储** — 当前激活账号在系统 keyring 中的 token
+4. **配置文件** — 当前激活账号在 `~/.cnb/config.toml` 中的明文 token
 
 详见 [cnb-rs auth — 环境变量](/auth/#环境变量)。
 
 ## 示例
 
 ```bash
-# 已登录状态（Token 来自配置文件）
+# 已登录状态（Token 来自系统凭证存储）
 $ cnb-rs auth status
 域名：  cnb.cool
 用户：  octocat
-Token:  cnb_****xxxx（来源：配置文件 ~/.cnb/config.toml）
+Token:  cnb_****xxxx（来源：系统凭证存储）
 
 # 使用环境变量认证
 $ CNB_TOKEN=cnb_xxxxxxxxxxxx cnb-rs auth status
@@ -62,8 +64,16 @@ Token:  cnb_****xxxx（来源：环境变量 CNB_TOKEN_cnbcool）
 # Token 无效
 $ cnb-rs auth status
 域名：  cnb.cool
-用户：  (Token 无效)
-Token:  cnb_****xxxx（来源：配置文件 ~/.cnb/config.toml）
+用户：  octocat
+Token:  cnb_****xxxx（来源：系统凭证存储）
+状态：  Token 无效或无法校验
+
+# 系统凭证存储中的 Token 无法读取
+$ cnb-rs auth status
+域名：  cnb.cool
+用户：  octocat
+Token:  无法读取（来源：系统凭证存储）
+状态：  访问系统凭证存储超时
 
 # 未登录
 $ cnb-rs auth status
@@ -88,4 +98,5 @@ API 详情同 [cnb-rs auth login — API](/auth/login#api) 章节。
 
 - [cnb-rs auth](/auth/)
 - [cnb-rs auth login](/auth/login)
+- [cnb-rs auth switch](/auth/switch)
 - [cnb-rs auth logout](/auth/logout)
