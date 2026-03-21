@@ -1,17 +1,32 @@
 # cargo-deny: https://embarkstudios.github.io/cargo-deny/
 # Run locally: `cargo deny check` (install: `cargo install cargo-deny --locked`).
+#
+# Advisory 数据库
+# - 默认与 Cargo 一致：缓存在 $CARGO_HOME/advisory-dbs（见下方 db-path）。
+# - 每次执行 `cargo deny check`（未使用 `--offline` / `--disable-fetch`）时会从 db-urls 拉取或更新；
+#   CI 与本地常规检查因此始终对照 RustSec 最新提交。
+# - 仅在使用 `--offline` 或 `--disable-fetch` 时才会校验数据库「新鲜度」；
+#   此时受 maximum-db-staleness 约束（默认 90 天，与 cargo-audit 一致）。
 
 [graph]
 targets = []
 all-features = false
 
 [advisories]
-db-path = "~/.cargo/advisory-db"
+db-path = "$CARGO_HOME/advisory-dbs"
 db-urls = ["https://github.com/rustsec/advisory-db"]
-yanked = "warn"
+# 已 yanked 的版本在 lockfile 中会导致检查失败，避免继续依赖被撤包版本
+yanked = "deny"
+# 未在依赖图中出现的 ignore 项会告警，防止遗留无效条目
+unused-ignored-advisory = "warn"
+# 严于默认 `workspace`：任意 crate 的 unsound 通报均失败
+unsound = "all"
+# unmaintained 默认即为 `all`（最严），此处不显式写出以免与上游默认语义漂移
 
 [licenses]
 version = 2
+# allow 列表中未被任何 crate 使用的 SPDX 会告警，便于收紧白名单
+unused-allowed-license = "warn"
 allow = [
   "Apache-2.0",
   "MIT",
@@ -34,7 +49,9 @@ ignore = true
 
 [bans]
 multiple-versions = "warn"
+# 未使用 `wildcards = "deny"`：cargo-deny 将 `workspace = true` 也视为通配，与本仓库 workspace 依赖模式冲突
 
 [sources]
 unknown-registry = "deny"
-unknown-git = "warn"
+# 禁止未声明的 git 源，降低供应链风险（仅 crates.io / 已配置源）
+unknown-git = "deny"
