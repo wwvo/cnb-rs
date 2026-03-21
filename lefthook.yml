@@ -32,6 +32,8 @@ pre-push:
       run: |
         set -e
         cargo fmt --all --check
-        cargo clippy --workspace --all-targets --target x86_64-pc-windows-msvc -- -W clippy::all -W clippy::pedantic
-        cargo test --workspace --target x86_64-pc-windows-msvc
+        # 不显式 --target：使用当前 rustc 默认 host triple（跨平台）。
+        # 若需交叉检查，可设置环境变量 CARGO_BUILD_TARGET（Cargo 会作为默认目标）。
+        cargo clippy --workspace --all-targets -- -W clippy::all -W clippy::pedantic
+        cargo test --workspace
       fail_text: "Pre-push 校验失败。请修复问题后再推送，或手动执行 `lefthook run pre-push --force` 复查。"

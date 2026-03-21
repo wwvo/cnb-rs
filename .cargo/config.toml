@@ -1,2 +1,2 @@
-[build]
-target = "x86_64-pc-windows-msvc"
+# 不在仓库中固定 `build.target`，避免 Linux/macOS 开发者克隆后默认交叉到 Windows。
+# 需要固定目标时（例如交叉编译）：使用环境变量 `CARGO_BUILD_TARGET`，或在本机 `~/.cargo/config.toml` 中配置。
