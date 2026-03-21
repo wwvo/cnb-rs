@@ -147,16 +147,16 @@ pub fn render() -> String {
     );
     push_blank_line(&mut output);
 
-    push_line(&mut output, "USAGE");
+    push_line(&mut output, "用法");
     push_line(&mut output, "  cnb-rs [OPTIONS] <COMMAND>");
     push_blank_line(&mut output);
 
-    write_section(&mut output, "CORE COMMANDS", CORE_COMMANDS);
-    write_section(&mut output, "REPOSITORY COMMANDS", REPOSITORY_COMMANDS);
-    write_section(&mut output, "PLATFORM COMMANDS", PLATFORM_COMMANDS);
-    write_section(&mut output, "UTILITY COMMANDS", UTILITY_COMMANDS);
+    write_section(&mut output, "核心命令", CORE_COMMANDS);
+    write_section(&mut output, "仓库相关命令", REPOSITORY_COMMANDS);
+    write_section(&mut output, "平台相关命令", PLATFORM_COMMANDS);
+    write_section(&mut output, "实用命令", UTILITY_COMMANDS);
 
-    push_line(&mut output, "GLOBAL OPTIONS");
+    push_line(&mut output, "全局选项");
     push_line(
         &mut output,
         "  --repo <REPO>      指定仓库路径，如 `wwvo/cnb-rs/cnb-rs`",
@@ -173,7 +173,7 @@ pub fn render() -> String {
     push_line(&mut output, "  -V, --version      显示版本");
     push_blank_line(&mut output);
 
-    push_line(&mut output, "EXAMPLES");
+    push_line(&mut output, "示例");
     push_line(&mut output, "  $ cnb-rs auth login");
     push_line(
         &mut output,
@@ -183,12 +183,12 @@ pub fn render() -> String {
     push_line(&mut output, "  $ cnb-rs release list --json");
     push_blank_line(&mut output);
 
-    push_line(&mut output, "LEARN MORE");
+    push_line(&mut output, "了解更多");
     push_line(
         &mut output,
-        "  Use `cnb-rs <command> --help` for more information about a command.",
+        "  使用 `cnb-rs <命令> --help` 查看子命令的详细说明。",
     );
-    push_line(&mut output, "  Read the docs at https://cnb.wwvo.fun");
+    push_line(&mut output, "  文档：https://cnb.wwvo.fun");
 
     output
 }
@@ -230,14 +230,14 @@ mod tests {
         let help = render();
 
         for section in [
-            "USAGE",
-            "CORE COMMANDS",
-            "REPOSITORY COMMANDS",
-            "PLATFORM COMMANDS",
-            "UTILITY COMMANDS",
-            "GLOBAL OPTIONS",
-            "EXAMPLES",
-            "LEARN MORE",
+            "用法",
+            "核心命令",
+            "仓库相关命令",
+            "平台相关命令",
+            "实用命令",
+            "全局选项",
+            "示例",
+            "了解更多",
         ] {
             assert!(help.contains(section), "missing section: {section}");
         }
