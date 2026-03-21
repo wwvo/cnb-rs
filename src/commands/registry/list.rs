@@ -5,7 +5,7 @@ use clap::Parser;
 use cnb_api::types::ListRegistriesOptions;
 use cnb_core::context::AppContext;
 use cnb_tui::fmt::format_bytes;
-use cnb_tui::{info, Column, Table};
+use cnb_tui::{Column, Table, info};
 
 /// 列出组织下的制品库
 #[derive(Debug, Parser)]

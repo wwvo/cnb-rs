@@ -4,7 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_api::types::ListRepoAllMembersOptions;
 use cnb_core::context::AppContext;
-use cnb_tui::{info, Column, Table};
+use cnb_tui::{Column, Table, info};
 
 use super::repo_list::format_access_level;
 

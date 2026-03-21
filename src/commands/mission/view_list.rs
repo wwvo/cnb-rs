@@ -3,7 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{info, Column, Table};
+use cnb_tui::{Column, Table, info};
 
 /// 列出任务集视图
 #[derive(Debug, Parser)]
