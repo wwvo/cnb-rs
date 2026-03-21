@@ -8,11 +8,7 @@ const percentage = computed(() => Math.round(progress.value * 100))
 const arcDegree = computed(() => `${(progress.value * 360).toFixed(1)}deg`)
 const isGoTop = computed(() => percentage.value > 20)
 const ariaLabel = computed(() => (isGoTop.value ? '回到页面顶部' : '跳到页面底部'))
-const iconPath = computed(() =>
-  isGoTop.value
-    ? 'M12 19V5M5 12l7-7 7 7M7 19h10'
-    : 'M12 5v14M5 12l7 7 7-7M7 5h10',
-)
+const iconPath = computed(() => (isGoTop.value ? 'M12 19V5M5 12l7-7 7 7M7 19h10' : 'M12 5v14M5 12l7 7 7-7M7 5h10'))
 
 const ringStyle = computed(() => ({
   '--scroll-progress-degree': arcDegree.value,

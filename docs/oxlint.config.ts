@@ -1,11 +1,7 @@
 import { defineConfig } from 'oxlint'
 
 export default defineConfig({
-  ignorePatterns: [
-    'node_modules/**',
-    '.vitepress/cache/**',
-    '.vitepress/dist/**',
-  ],
+  ignorePatterns: ['node_modules/**', '.vitepress/cache/**', '.vitepress/dist/**'],
   overrides: [
     {
       files: ['.vitepress/config.ts', '.vitepress/sidebar.ts'],

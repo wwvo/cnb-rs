@@ -102,7 +102,7 @@ function buildCommandItems(): DefaultTheme.SidebarItem[] {
     }
 
     const indexPath = join(fullPath, 'index.md')
-    const childPaths = collectMarkdownFiles(fullPath).filter(path => path !== indexPath)
+    const childPaths = collectMarkdownFiles(fullPath).filter((path) => path !== indexPath)
 
     if (!safeStat(indexPath)) {
       if (childPaths.length) {
@@ -140,9 +140,7 @@ function buildCommandItems(): DefaultTheme.SidebarItem[] {
       })
     }
 
-    childItems.sort((left, right) =>
-      commandCollator.compare(left.text ?? '', right.text ?? ''),
-    )
+    childItems.sort((left, right) => commandCollator.compare(left.text ?? '', right.text ?? ''))
 
     if (childItems.length) {
       item.items = childItems
@@ -250,10 +248,7 @@ function parseScalar(rawValue: string): unknown {
     return false
   }
 
-  if (
-    (value.startsWith('"') && value.endsWith('"'))
-    || (value.startsWith('\'') && value.endsWith('\''))
-  ) {
+  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
     return value.slice(1, -1)
   }
 
@@ -277,9 +272,7 @@ function deriveRootCommandText(title: string, filePath: string): string {
 function deriveChildCommandText(title: string, parentTitle: string, filePath: string): string {
   const prefix = `${parentTitle} `
   if (!title.startsWith(prefix)) {
-    throw new Error(
-      `Child command title must start with "${parentTitle} ": ${formatPath(filePath)}`,
-    )
+    throw new Error(`Child command title must start with "${parentTitle} ": ${formatPath(filePath)}`)
   }
 
   const text = title.slice(prefix.length).trim()
@@ -324,8 +317,7 @@ function toAbsoluteBase(link: string): string {
 function safeStat(path: string) {
   try {
     return statSync(path)
-  }
-  catch {
+  } catch {
     return undefined
   }
 }

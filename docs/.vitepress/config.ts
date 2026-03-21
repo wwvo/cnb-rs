@@ -54,7 +54,8 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2026-present wwvo | ❤️ <a href="https://vitepress.vuejs.org" target="_blank" rel="noopener noreferrer">VitePress</a>',
+      copyright:
+        'Copyright © 2026-present wwvo | ❤️ <a href="https://vitepress.vuejs.org" target="_blank" rel="noopener noreferrer">VitePress</a>',
     },
 
     editLink: {

@@ -8,8 +8,5 @@
     "noEmit": true,
     "skipLibCheck": true
   },
-  "include": [
-    ".vitepress/**/*.ts",
-    "oxlint.config.ts"
-  ]
+  "include": [".vitepress/**/*.ts", "oxlint.config.ts"]
 }
