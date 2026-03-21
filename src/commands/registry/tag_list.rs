@@ -4,6 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_api::types::ListPackageTagsOptions;
 use cnb_core::context::AppContext;
+use cnb_tui::info;
 
 /// 列出制品标签
 #[derive(Debug, Parser)]
@@ -46,7 +47,7 @@ pub async fn run(ctx: &AppContext, args: &TagListArgs) -> Result<()> {
     }
 
     if tags.is_empty() {
-        eprintln!("没有找到标签");
+        info!("没有找到标签");
         return Ok(());
     }
 

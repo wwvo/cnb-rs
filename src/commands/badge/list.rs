@@ -3,7 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 /// 列出仓库徽章
 #[derive(Debug, Parser)]
@@ -20,7 +20,7 @@ pub async fn run(ctx: &AppContext, _args: &ListArgs) -> Result<()> {
     }
 
     if result.badges.is_empty() {
-        eprintln!("没有找到徽章");
+        info!("没有找到徽章");
         return Ok(());
     }
 

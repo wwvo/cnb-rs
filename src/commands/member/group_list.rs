@@ -4,7 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_api::types::ListGroupMembersOptions;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 use super::repo_list::format_access_level;
 
@@ -41,7 +41,7 @@ pub async fn run(ctx: &AppContext, args: &GroupListArgs) -> Result<()> {
     }
 
     if members.is_empty() {
-        eprintln!("没有找到成员");
+        info!("没有找到成员");
         return Ok(());
     }
 

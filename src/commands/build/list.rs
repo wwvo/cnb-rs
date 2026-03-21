@@ -4,7 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use cnb_api::types::BuildListOptions;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 /// 列出构建记录
 #[derive(Debug, Parser)]
@@ -76,7 +76,7 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     }
 
     if result.data.is_empty() {
-        eprintln!("没有找到构建记录");
+        info!("没有找到构建记录");
         return Ok(());
     }
 

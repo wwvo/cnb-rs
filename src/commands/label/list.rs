@@ -3,7 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 /// 列出仓库所有标签
 #[derive(Debug, Parser)]
@@ -24,7 +24,7 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     }
 
     if labels.is_empty() {
-        eprintln!("没有找到标签");
+        info!("没有找到标签");
         return Ok(());
     }
 

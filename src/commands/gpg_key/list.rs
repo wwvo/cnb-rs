@@ -3,7 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 /// 列出 GPG 密钥
 #[derive(Debug, Parser)]
@@ -50,7 +50,7 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     }
 
     if keys.is_empty() {
-        eprintln!("没有找到 GPG 密钥");
+        info!("没有找到 GPG 密钥");
         return Ok(());
     }
 

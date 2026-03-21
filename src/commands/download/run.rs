@@ -3,6 +3,7 @@
 use anyhow::Result;
 use base64::Engine;
 use cnb_core::context::AppContext;
+use cnb_tui::info;
 use futures::future::try_join_all;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use std::io::Write;
@@ -29,7 +30,7 @@ pub struct DownFile {
 /// 执行 download 命令
 pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
     if args.files.is_empty() {
-        eprintln!("请指定要下载的文件，使用 --files 参数，详见 -h");
+        info!("请指定要下载的文件，使用 --files 参数，详见 -h");
         return Ok(());
     }
 
@@ -49,7 +50,7 @@ pub async fn run(ctx: &AppContext, args: &DownloadArgs) -> Result<()> {
     let download_files = filter_files(all_files, &args.include, &args.exclude);
 
     if download_files.is_empty() {
-        eprintln!("没有找到需要下载的文件");
+        info!("没有找到需要下载的文件");
         return Ok(());
     }
 

@@ -5,7 +5,7 @@ use clap::Parser;
 use cnb_api::types::ListRegistriesOptions;
 use cnb_core::context::AppContext;
 use cnb_tui::fmt::format_bytes;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 /// 列出组织下的制品库
 #[derive(Debug, Parser)]
@@ -50,7 +50,7 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     }
 
     if registries.is_empty() {
-        eprintln!("没有找到制品库");
+        info!("没有找到制品库");
         return Ok(());
     }
 

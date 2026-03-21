@@ -3,7 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 /// 查看粉丝列表
 #[derive(Debug, Parser)]
@@ -32,7 +32,7 @@ pub async fn run(ctx: &AppContext, args: &FollowersArgs) -> Result<()> {
     }
 
     if users.is_empty() {
-        eprintln!("没有找到粉丝");
+        info!("没有找到粉丝");
         return Ok(());
     }
 

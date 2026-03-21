@@ -3,7 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 /// 列出仓库直接成员
 #[derive(Debug, Parser)]
@@ -50,7 +50,7 @@ pub async fn run(ctx: &AppContext, args: &RepoListArgs) -> Result<()> {
     }
 
     if members.is_empty() {
-        eprintln!("没有找到成员");
+        info!("没有找到成员");
         return Ok(());
     }
 

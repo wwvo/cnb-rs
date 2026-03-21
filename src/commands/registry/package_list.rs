@@ -3,7 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 /// 列出制品
 #[derive(Debug, Parser)]
@@ -44,7 +44,7 @@ pub async fn run(ctx: &AppContext, args: &PackageListArgs) -> Result<()> {
     }
 
     if packages.is_empty() {
-        eprintln!("没有找到制品");
+        info!("没有找到制品");
         return Ok(());
     }
 

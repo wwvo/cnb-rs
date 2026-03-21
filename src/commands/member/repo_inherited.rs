@@ -3,7 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 use super::repo_list::format_access_level;
 
@@ -33,7 +33,7 @@ pub async fn run(ctx: &AppContext, args: &RepoInheritedArgs) -> Result<()> {
     }
 
     if groups.is_empty() {
-        eprintln!("没有找到继承成员");
+        info!("没有找到继承成员");
         return Ok(());
     }
 

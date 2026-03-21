@@ -3,7 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 use super::repo_list::format_access_level;
 
@@ -26,7 +26,7 @@ pub async fn run(ctx: &AppContext, args: &RepoUserAccessArgs) -> Result<()> {
     }
 
     if levels.is_empty() {
-        eprintln!("没有找到权限信息");
+        info!("没有找到权限信息");
         return Ok(());
     }
 

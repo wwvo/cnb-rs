@@ -3,7 +3,7 @@
 use anyhow::Result;
 use clap::Parser;
 use cnb_core::context::AppContext;
-use cnb_tui::{Column, Table};
+use cnb_tui::{info, Column, Table};
 
 /// 列出组织下的任务集
 #[derive(Debug, Parser)]
@@ -45,7 +45,7 @@ pub async fn run(ctx: &AppContext, args: &ListArgs) -> Result<()> {
     }
 
     if missions.is_empty() {
-        eprintln!("没有找到任务集");
+        info!("没有找到任务集");
         return Ok(());
     }
 
