@@ -1,4 +1,6 @@
 /target
+lcov.info
+coverage-html/
 __pycache__/
 .windsurf
 .agents

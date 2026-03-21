@@ -148,6 +148,22 @@ cargo build --release
 
 产物路径：`target/release/cnb-rs`（Windows 下为 `target/release/cnb-rs.exe`）。
 
+## 测试与覆盖率
+
+```bash
+cargo test --workspace
+```
+
+`main` 分支与指向 `main` 的 PR 会在 **GitHub Actions** 上执行 `cargo llvm-cov` 并上传 **LCOV** 工件（见 `.github/workflows/coverage.yml`），便于在本地或第三方工具中查看行覆盖率。
+
+本地生成 HTML 报告（需 [llvm-tools-preview](https://doc.rust-lang.org/rustc/instrument-coverage.html) 与 [cargo-llvm-cov](https://github.com/taiki-e/cargo-llvm-cov)）：
+
+```bash
+rustup component add llvm-tools-preview
+cargo install cargo-llvm-cov --locked
+cargo llvm-cov --workspace --html --output-dir coverage-html
+```
+
 ## 迁移说明
 
 - 旧命令：`cnb ...`
