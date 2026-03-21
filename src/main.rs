@@ -282,7 +282,10 @@ async fn async_main() -> anyhow::Result<()> {
             Ok(())
         }
         Commands::Info(cmd) => cmd.execute(&ctx).await,
-        Commands::Version(cmd) => cmd.execute(),
+        Commands::Version(_cmd) => {
+            commands::version::VersionArgs::execute();
+            Ok(())
+        }
         Commands::Issue(cmd) => cmd.execute(&ctx).await,
         Commands::Pull(cmd) => cmd.execute(&ctx).await,
         Commands::Release(cmd) => cmd.execute(&ctx).await,
@@ -290,7 +293,7 @@ async fn async_main() -> anyhow::Result<()> {
         Commands::Commit(cmd) => cmd.execute(&ctx).await,
         Commands::Download(ref args) => args.execute(&ctx).await,
         Commands::GpgKey(cmd) => cmd.execute(&ctx).await,
-        Commands::Stats(cmd) => cmd.execute(),
+        Commands::Stats(_cmd) => commands::stats::StatsArgs::execute(),
         Commands::Stars(cmd) => cmd.execute(&ctx).await,
         Commands::Label(cmd) => cmd.execute(&ctx).await,
         Commands::Knowledge(cmd) => cmd.execute(&ctx).await,

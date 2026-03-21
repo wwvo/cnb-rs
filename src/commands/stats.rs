@@ -19,7 +19,7 @@ use std::collections::HashMap;
 pub struct StatsArgs;
 
 impl StatsArgs {
-    pub fn execute(&self) -> Result<()> {
+    pub fn execute() -> Result<()> {
         run()
     }
 }

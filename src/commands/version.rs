@@ -1,6 +1,5 @@
 //! version 子命令
 
-use anyhow::Result;
 use clap::Args;
 
 /// 显示版本信息
@@ -8,8 +7,7 @@ use clap::Args;
 pub struct VersionArgs;
 
 impl VersionArgs {
-    pub fn execute(&self) -> Result<()> {
+    pub fn execute() {
         println!("{}", crate::build_info::COMMAND_LONG_VERSION);
-        Ok(())
     }
 }
