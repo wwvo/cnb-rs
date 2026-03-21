@@ -4,6 +4,7 @@
 
 use anyhow::Result;
 use chrono::{Duration, NaiveDate, NaiveDateTime};
+use clap::Args;
 use cnb_core::context::AppContext;
 use cnb_tui::time::start_of_week;
 use cnb_tui::{TerminalGuard, info};
@@ -12,8 +13,17 @@ use ratatui::style::{Color, Style};
 use ratatui::widgets::{Axis, Block, Borders, Chart, Dataset, GraphType};
 use std::collections::HashMap;
 
-/// 执行 stars 命令
-pub async fn run(ctx: &AppContext) -> Result<()> {
+/// 查看仓库 Star 趋势
+#[derive(Debug, Args)]
+pub struct StarsArgs;
+
+impl StarsArgs {
+    pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
+        run(ctx).await
+    }
+}
+
+async fn run(ctx: &AppContext) -> Result<()> {
     let client = ctx.api_client()?;
     let star_users = client.list_star_users().await?;
 

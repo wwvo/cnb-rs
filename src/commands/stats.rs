@@ -6,6 +6,7 @@
 
 use anyhow::Result;
 use chrono::{DateTime, Duration, NaiveDate, Utc};
+use clap::Args;
 use cnb_tui::{TerminalGuard, info};
 use ratatui::layout::{Constraint, Direction, Layout};
 use ratatui::style::{Color, Modifier, Style};
@@ -13,8 +14,17 @@ use ratatui::text::Line;
 use ratatui::widgets::{Axis, Block, Borders, Chart, Dataset, GraphType, List, ListItem};
 use std::collections::HashMap;
 
-/// 执行 stats 命令
-pub fn run() -> Result<()> {
+/// 查看本地 Git 提交统计
+#[derive(Debug, Args)]
+pub struct StatsArgs;
+
+impl StatsArgs {
+    pub fn execute(&self) -> Result<()> {
+        run()
+    }
+}
+
+fn run() -> Result<()> {
     let lines = cnb_core::git::get_commits()?;
 
     if lines.is_empty() {

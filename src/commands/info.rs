@@ -1,10 +1,20 @@
 //! info 子命令 - 显示仓库和用户信息
 
 use anyhow::Result;
+use clap::Args;
 use cnb_core::context::AppContext;
 
-/// 执行 info 命令
-pub async fn run(ctx: &AppContext) -> Result<()> {
+/// 显示当前用户与仓库信息
+#[derive(Debug, Args)]
+pub struct InfoArgs;
+
+impl InfoArgs {
+    pub async fn execute(&self, ctx: &AppContext) -> Result<()> {
+        run(ctx).await
+    }
+}
+
+async fn run(ctx: &AppContext) -> Result<()> {
     let client = ctx.api_client()?;
 
     // 并行获取用户和仓库信息

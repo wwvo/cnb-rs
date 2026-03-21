@@ -47,6 +47,9 @@ enum Commands {
     /// 在浏览器中打开仓库或资源页面
     Browse(commands::browse::BrowseArgs),
 
+    /// 显示当前用户与仓库信息
+    Info(commands::info::InfoArgs),
+
     /// 查看、触发与管理构建
     Build(commands::build::BuildCommand),
 
@@ -60,12 +63,9 @@ enum Commands {
     #[command(override_usage = "cnb-rs completion -s <shell>")]
     Completion(commands::completion::CompletionArgs),
 
-    /// 显示当前用户与仓库信息
-    Info,
-
     /// 显示版本信息（建议使用 --version）
     #[command(hide = true)]
-    Version,
+    Version(commands::version::VersionArgs),
 
     /// 创建、查看和管理 Issue
     Issue(commands::issue::IssueCommand),
@@ -91,10 +91,10 @@ enum Commands {
     GpgKey(commands::gpg_key::GpgKeyCommand),
 
     /// 查看本地 Git 提交统计
-    Stats,
+    Stats(commands::stats::StatsArgs),
 
     /// 查看仓库 Star 趋势
-    Stars,
+    Stars(commands::stars::StarsArgs),
 
     /// 管理仓库标签
     Label(commands::label::LabelCommand),
@@ -268,7 +268,7 @@ async fn async_main() -> anyhow::Result<()> {
     match cli.command {
         Commands::Auth(cmd) => cmd.execute(&ctx).await,
         Commands::Badge(cmd) => cmd.execute(&ctx).await,
-        Commands::Browse(ref args) => commands::browse::run(&ctx, args),
+        Commands::Browse(ref args) => args.execute(&ctx),
         Commands::Build(cmd) => cmd.execute(&ctx).await,
         Commands::Chat(ref args) => args.execute(&ctx).await,
         Commands::Config(cmd) => cmd.execute(&ctx),
@@ -281,11 +281,8 @@ async fn async_main() -> anyhow::Result<()> {
             }
             Ok(())
         }
-        Commands::Info => commands::info::run(&ctx).await,
-        Commands::Version => {
-            commands::version::run();
-            Ok(())
-        }
+        Commands::Info(cmd) => cmd.execute(&ctx).await,
+        Commands::Version(cmd) => cmd.execute(),
         Commands::Issue(cmd) => cmd.execute(&ctx).await,
         Commands::Pull(cmd) => cmd.execute(&ctx).await,
         Commands::Release(cmd) => cmd.execute(&ctx).await,
@@ -293,8 +290,8 @@ async fn async_main() -> anyhow::Result<()> {
         Commands::Commit(cmd) => cmd.execute(&ctx).await,
         Commands::Download(ref args) => args.execute(&ctx).await,
         Commands::GpgKey(cmd) => cmd.execute(&ctx).await,
-        Commands::Stats => commands::stats::run(),
-        Commands::Stars => commands::stars::run(&ctx).await,
+        Commands::Stats(cmd) => cmd.execute(),
+        Commands::Stars(cmd) => cmd.execute(&ctx).await,
         Commands::Label(cmd) => cmd.execute(&ctx).await,
         Commands::Knowledge(cmd) => cmd.execute(&ctx).await,
         Commands::Member(cmd) => cmd.execute(&ctx).await,

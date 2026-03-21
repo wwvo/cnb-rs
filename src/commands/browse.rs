@@ -12,9 +12,10 @@ pub struct BrowseArgs {
     pub path: String,
 }
 
-/// 执行 browse 命令
-pub fn run(ctx: &AppContext, args: &BrowseArgs) -> Result<()> {
-    let url = ctx.web_url(&args.path)?;
-    eprintln!("正在打开 {url}");
-    AppContext::open_in_browser(&url)
+impl BrowseArgs {
+    pub fn execute(&self, ctx: &AppContext) -> Result<()> {
+        let url = ctx.web_url(&self.path)?;
+        eprintln!("正在打开 {url}");
+        AppContext::open_in_browser(&url)
+    }
 }
