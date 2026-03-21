@@ -48,8 +48,12 @@ confidence-threshold = 0.8
 ignore = true
 
 [bans]
-multiple-versions = "warn"
+# 传递依赖中常见「同一 crate 多版本并存」（如 windows-sys、getrandom、thiserror），
+# 短期内无法仅靠本仓库 Cargo.toml 收敛；若改为 warn，CI 与本地会被大量重复版本告警刷屏。
+# 仍可通过 `cargo tree -d` 或临时改为 `warn` 做人工审计。
+multiple-versions = "allow"
 # 未使用 `wildcards = "deny"`：cargo-deny 将 `workspace = true` 也视为通配，与本仓库 workspace 依赖模式冲突
+# wildcards = "deny"
 
 [sources]
 unknown-registry = "deny"
