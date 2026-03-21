@@ -2,6 +2,7 @@
 title: 发布流程
 sidebar: false
 ---
+
 # 发布流程
 
 `cnb-rs` 项目当前采用“准备发版 PR -> 合并后自动打 tag -> CNB 创建 release 并同步 GitHub -> GitHub 构建并回填附件”的四段式流程：

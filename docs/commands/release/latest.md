@@ -1,6 +1,7 @@
 ---
 title: cnb-rs release latest
 ---
+
 # cnb-rs release latest
 
 ```

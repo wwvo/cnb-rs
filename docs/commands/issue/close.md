@@ -1,6 +1,7 @@
 ---
 title: cnb-rs issue close
 ---
+
 # cnb-rs issue close
 
 ```

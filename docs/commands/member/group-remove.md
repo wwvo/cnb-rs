@@ -1,6 +1,7 @@
 ---
 title: cnb-rs member group-remove
 ---
+
 # cnb-rs member group-remove
 
 ```

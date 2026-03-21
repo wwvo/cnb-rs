@@ -1,6 +1,7 @@
 ---
 title: cnb-rs badge get
 ---
+
 # cnb-rs badge get
 
 ```

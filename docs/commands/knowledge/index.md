@@ -1,6 +1,7 @@
 ---
 title: cnb-rs knowledge
 ---
+
 # cnb-rs knowledge
 
 知识库管理，管理仓库的 Embedding 知识库。

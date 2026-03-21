@@ -1,6 +1,7 @@
 ---
 title: cnb-rs label create
 ---
+
 # cnb-rs label create
 
 ```

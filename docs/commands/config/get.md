@@ -1,6 +1,7 @@
 ---
 title: cnb-rs config get
 ---
+
 # cnb-rs config get
 
 ```

@@ -1,6 +1,7 @@
 ---
 title: cnb-rs group update-logo
 ---
+
 # cnb-rs group update-logo
 
 ```

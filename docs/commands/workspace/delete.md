@@ -1,6 +1,7 @@
 ---
 title: cnb-rs workspace delete
 ---
+
 # cnb-rs workspace delete
 
 ```

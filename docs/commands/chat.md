@@ -1,6 +1,7 @@
 ---
 title: cnb-rs chat
 ---
+
 # cnb-rs chat
 
 ```

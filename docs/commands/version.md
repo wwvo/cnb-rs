@@ -1,6 +1,7 @@
 ---
 title: cnb-rs version
 ---
+
 # cnb-rs version
 
 ```
@@ -23,12 +24,12 @@ profile: release
 
 ## 输出说明
 
-| 行                               | 说明                                   |
-| -------------------------------- | -------------------------------------- |
+| 行                                  | 说明                                   |
+| ----------------------------------- | -------------------------------------- |
 | `cnb-rs 0.1.0 (a5eec5d 2026-02-26)` | 版本号 + Git commit 短 hash + 提交日期 |
-| `rustc 1.93.1 (...)`             | Rust 编译器版本                        |
-| `target: ...`                    | 编译目标平台三元组                     |
-| `profile: release`               | 构建 profile（debug / release）        |
+| `rustc 1.93.1 (...)`                | Rust 编译器版本                        |
+| `target: ...`                       | 编译目标平台三元组                     |
+| `profile: release`                  | 构建 profile（debug / release）        |
 
 ## 另请参阅
 

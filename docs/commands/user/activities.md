@@ -1,6 +1,7 @@
 ---
 title: cnb-rs user activities
 ---
+
 # cnb-rs user activities
 
 ```
