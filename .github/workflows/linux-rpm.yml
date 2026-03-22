@@ -112,7 +112,7 @@ jobs:
               set -euo pipefail
               dnf install -y --nogpgcheck "/workspace/${RPM_FILE}" >/tmp/dnf-install.log
               cnb-rs --version
-              cnb-rs completion bash >/dev/null
+              cnb-rs completion -s bash >/dev/null
               test -f /usr/share/bash-completion/completions/cnb-rs
               test -f /usr/share/zsh/vendor-completions/_cnb-rs
               test -f /usr/share/fish/vendor_completions.d/cnb-rs.fish

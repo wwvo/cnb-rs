@@ -49,6 +49,6 @@ fi
 rm -rf "${output_dir}"
 mkdir -p "${output_dir}/bash" "${output_dir}/zsh" "${output_dir}/fish"
 
-"${binary_path}" completion bash > "${output_dir}/bash/cnb-rs"
-"${binary_path}" completion zsh > "${output_dir}/zsh/_cnb-rs"
-"${binary_path}" completion fish > "${output_dir}/fish/cnb-rs.fish"
+"${binary_path}" completion -s bash > "${output_dir}/bash/cnb-rs"
+"${binary_path}" completion -s zsh > "${output_dir}/zsh/_cnb-rs"
+"${binary_path}" completion -s fish > "${output_dir}/fish/cnb-rs.fish"
