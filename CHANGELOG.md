@@ -2,6 +2,97 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
+## [0.12.0] - 2026-03-22
+
+### ♻️ 重构
+
+- **(auth)** 重构认证配置模型与凭证解析 ([95ffa87](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/95ffa87daf4ae719e0dc4adcf307b1083f4c427b))
+- **(deps)** 使用 windows crate 绑定控制台 UTF-8 代码页 ([78d6373](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/78d63731d4b0439ef32f17e81d883463babc49d7))
+- **(commands)** 统一命令执行入口为 execute 模式 ([79ac71a](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/79ac71a79e76b993d2fce1ac6f9d7bbbb6b09ff8))
+- **(commands)** 统一空列表提示使用 info! 宏 ([3731094](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/3731094aaf71160ae8102869ee673cf727268f84))
+
+### ✨ 新功能
+
+- **(auth)** 对齐 gh 登录存储与账号切换行为 ([b4f192b](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/b4f192b36318fe498a2cbcb02cbe8939a4e0a6dc))
+- **(tui)** 为 Table 添加 print_or_hint 方法 ([c90b0d2](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/c90b0d2afcf9ea82f7a4a52514c0940f0bc42b3f))
+- **(cli)** 将 pull 命令更名为 pr ([f923c55](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/f923c55502863734ea1da38bec70b8db32efd740))
+- **(hooks)** 添加 Lefthook 本地校验配置 ([778db81](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/778db817e1def9dd6ccaa77e5c7c9012a8dcc6d1))
+- **(completion)** 统一补全子命令交互 ([d8bf9fd](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/d8bf9fd7233b2418c7cddbec9ff600048ef91d23))
+- **(cli)** 优化根命令帮助输出 ([37e5075](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/37e5075f2de42a46a231ccfeb3a04e24b93bf02b))
+
+### 🎨 代码风格
+
+- **(docs)** 使用 oxfmt 统一 Markdown 文档格式 ([f87a45a](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/f87a45a4784c03c5f8b85baa8f1411dfdadc9f65))
+- **(docs)** 使用 oxfmt 统一文档站格式 ([f3953c0](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/f3953c00c47d198560dbbb2b84e293276e7aad34))
+- **(commands)** 按 rustfmt 重排 cnb_tui 导入 ([0c6735c](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/0c6735ce927d9af7ddfa265dce610d9b580903fa))
+
+### 🐛 Bug 修复
+
+- **(completion)** 修正 Linux 补全脚本生成调用 ([b69f076](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/b69f076b9b5f5803000432ffd0a719059dad4747))
+- **(auth)** 修正认证测试的环境隔离 ([adcbd3e](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/adcbd3e29fa8028f27f371ca13ad827362b294c6))
+- **(cli)** 按方案 B 统一「参数」表述 ([1bc9cd0](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/1bc9cd089ad4f4522b4e1adcd6edb09abb767ca8))
+- **(cli)** 根级帮助末尾增加空行 ([f7fb7eb](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/f7fb7eb8aaa9643a0d98c60f18967beab50529c2))
+- **(cli)** 根级 --help 文案改为中文 ([6e7ce5a](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/6e7ce5ae6bc80dacbe0ab5c2531c49072d5bd072))
+- **(cli)** 统一顶层错误与补全帮助为中文 ([803bbe9](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/803bbe9d54c452303bdd96b8ceadc475b814f508))
+- **(deps)** 升级 rustls-webpki 修复安全通告 ([619662c](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/619662c79d42243c964714887d3510a5e1ab99d5))
+- **(cli)** 统一运行时错误输出样式 ([5d75a47](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/5d75a47386f1391c83a00c01fd691ca22ea174dd))
+- **(cli)** 为错误输出补充空行 ([6fa13c9](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/6fa13c95741ed26e1d87db002f4079f5194759b1))
+- **(completion)** 修复测试代码的 fmt 与 clippy 问题 ([6617be2](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/6617be2e48a7895ceeb5706a7e33e92f613d175c))
+- **(issue)** 优化 issue 命令的仓库解析提示 ([8f704bb](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/8f704bb7c09fa7391c90a9127bd9a609bb6d4e91))
+- **(cli)** 修复根命令帮助输出的 Clippy 报错 ([69a7a4d](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/69a7a4d8d996bc3a6287ed643a59d091f2531124))
+
+### 👷 CI/CD
+
+- **(coverage)** 为覆盖率工作流上传 HTML 报告 ([b22c5ed](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/b22c5ed194c8a9472a906303e36e35c7f22e2b84))
+- **(github)** 修正 coverage 工作流的 Codecov 条件判断 ([e8e163a](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/e8e163a0967b7fc2f698af0254e0673fc65ebb8d))
+- **(github)** 为 Linux 工作流补齐 dbus 构建依赖 ([f1bffe2](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/f1bffe2e76083a1651a6ae624ac5114417b59ef9))
+- **(build-image)** 修复手动镜像构建死锁 ([e42a2d3](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/e42a2d3e81c2452ba7885950af9ed287683b043d))
+- **(check)** 为 Linux 检查脚本补齐 dbus 依赖 ([8067eed](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/8067eed0c4b98dce444de98eb272f0a766a86e19))
+- **(coverage)** 接入 Codecov 上传 ([205794d](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/205794d4499f0ddbb700020f11f11303efaa245e))
+- **(coverage)** 添加 cargo-llvm-cov 工作流 ([40d7a33](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/40d7a33e5f372e9b76d48e9f3ac471ef4d5bba9b))
+- **(github)** 添加独立 Clippy 工作流 ([abb6bdf](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/abb6bdf0a5914300922f03e275e08537c06a32fe))
+- **(cnb)** 添加 CNB cargo-deny 工作流 ([28d5257](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/28d5257f543004e990bf26596d7b7527147d9bbc))
+- **(github-actions)** 添加 GitHub Actions cargo-deny 工作流 ([d8da850](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/d8da8502284f61f7fdfda753f8c8687dbe55a6e3))
+- **(deny)** 为 CI 脚本和镜像添加 cargo-deny 支持 ([eede656](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/eede656f9db63c2e6cfa620ccb1942e313bc8a51))
+- **(workflow)** 固定打包校验流程的宿主 target ([e5238e9](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/e5238e94b8bfb644aede96843f2ff3a59be07518))
+
+### 📝 文档
+
+- **(auth)** 更新认证文档为 keyring 与多账号模型 ([95e29cc](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/95e29cc6f8bc0213c4f82e455c458c86182c2fc6))
+- **(theme)** 添加文档滚动进度组件 ([0435eec](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/0435eecbb2e6435956737b6d6d8035e067cf495f))
+- **(link)** 更新指南文档站内链接 ([c7541c6](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/c7541c628350370df050d416dede258876fb55b4))
+- **(route)** 为指南页面启用根路径重写 ([3f80ae4](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/3f80ae4a654b38df1f9c0c1030dc19a784db774c))
+- **(sidebar)** 使用 base 组织文档侧边栏 ([7909ade](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/7909ade3009bdf29921f3320dea47448fbfebce5))
+- **(sidebar)** 改为自动生成文档侧边栏 ([7b326c3](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/7b326c331f34fa266466e69f5f4895e369d6d67d))
+- **(meta)** 补充文档页面 Frontmatter 元数据 ([1214bee](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/1214bee5961d0d019a641710df4b91a08d9d8d7c))
+- **(sidebar)** 调整指南文档侧边栏入口 ([d1062bb](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/d1062bb209a996ddcb98bc6db8778501852285ea))
+- **(vitepress)** 拆分并精简文档侧边栏 ([83f267c](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/83f267cf6ef7118b78911fb58661877b3dca4ba4))
+- **(cli)** 同步 pr 命令文档入口 ([49c42da](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/49c42da77f545dfc9607eb030b72d2a88ff5ec8d))
+- **(completion)** 更新补全文档与迁移说明 ([3c26bc7](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/3c26bc72f949d249a27e835d7825b0cef4628a72))
+
+### 📦 构建
+
+- **(image)** 预装 rust-ci 的 dbus 构建依赖 ([c7f3dc5](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/c7f3dc52b75ae0d7925f445fb4171f5beb27dcee))
+- **(auth)** 接入系统凭证存储依赖 ([07a3895](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/07a3895b9b09f5bba0ea9df0741494b7e1ec3786))
+- **(cargo)** 默认使用 Windows MSVC 目标 ([2faff45](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/2faff4599ffb0bcd6ccc8b7117bc2fc28489cb8d))
+
+### 🔧 杂项
+
+- **(clippy)** 清理 cnb-core 既有告警 ([3d3d446](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/3d3d44675a7f35e13ebd36fbe2a1038fbd7c6dc3))
+- **(gitignore)** 忽略 ace-tool 本地目录 ([04c306d](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/04c306d13e084cf777083723cdb8142ee4a758a1))
+- **(lint)** 修复既有 clippy 告警 ([3383184](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/3383184bff07bac9758540a2753cfa2efd4e3fea))
+- **(docs)** 添加文档检查聚合脚本 ([98ea9c7](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/98ea9c7f861ce0cc6ad81a73fb33c4a0df454728))
+- **(docs)** 放开 oxfmt 的 Markdown 格式化范围 ([6c10f92](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/6c10f92558df9e291a560a37cdfc2eb7cb16573e))
+- **(docs)** 接入 oxfmt 格式化工具 ([95cb064](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/95cb0647af9ff88d8e2c99076ecf72ce76508cc3))
+- **(docs)** 修正文档侧边栏类型检查 ([911548f](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/911548f1fc00519f764d4c6e3ac92e51cdf398ba))
+- **(docs)** 接入 oxlint 检查 ([080acaf](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/080acafd495da168d149447940ffd71159188902))
+- **(docs)** 对齐文档包元数据 ([981880f](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/981880f986ee400e2fb09f9cf3085f4052522bf5))
+- **(lefthook)** pre-push 使用本机默认目标 ([cb0ffc9](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/cb0ffc9a44e912c9f9b3b484461c1d7d23087927))
+- **(deny)** 用 bans.skip 替代全局允许多版本 ([3f100a8](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/3f100a8c50e38e21fd27af44f4c78a076b1d6a9f))
+- **(deny)** 关闭多版本重复告警 ([91ce4c6](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/91ce4c613a5dd993e00eb513672fd99c56c7524f))
+- **(deny)** 收紧 cargo-deny 策略并补充说明 ([0146807](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/01468078ccee488a15d8e7dd98b0559d3ed76fe6))
+- **(deny)** 添加 cargo-deny 本地检查配置 ([9717d1e](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/9717d1ebd6dde89da03810becbd3912262435f51))
+
 ## [0.11.3] - 2026-03-20
 
 ### ♻️ 重构
