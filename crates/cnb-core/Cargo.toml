@@ -26,7 +26,7 @@ keyring = { workspace = true, features = ["apple-native"] }
 keyring = { workspace = true, features = ["windows-native"] }
 
 [target.'cfg(any(target_os = "linux", target_os = "freebsd", target_os = "openbsd"))'.dependencies]
-keyring = { workspace = true, features = ["sync-secret-service"] }
+keyring = { workspace = true, features = ["sync-secret-service", "vendored"] }
 
 [lints]
 workspace = true
