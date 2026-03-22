@@ -542,6 +542,14 @@ mod tests {
         }
     }
 
+    fn resolve_auth_without_env(
+        domain: &str,
+        config: &Config,
+        store: &dyn CredentialStore,
+    ) -> AuthLookup {
+        resolve_auth_with_env_lookup(domain, config, store, |_| None)
+    }
+
     #[test]
     fn resolve_auth_prefers_domain_env() {
         let store = MemoryCredentialStore::default();
@@ -575,7 +583,7 @@ mod tests {
             },
         );
 
-        let lookup = resolve_auth_with_store("cnb.cool", &config, &store);
+        let lookup = resolve_auth_without_env("cnb.cool", &config, &store);
         let AuthLookup::Found(resolved) = lookup else {
             panic!("expected token from keyring");
         };
@@ -600,7 +608,7 @@ mod tests {
             },
         );
 
-        let lookup = resolve_auth_with_store("cnb.cool", &config, &store);
+        let lookup = resolve_auth_without_env("cnb.cool", &config, &store);
         let AuthLookup::Unavailable(unavailable) = lookup else {
             panic!("expected unavailable result");
         };
