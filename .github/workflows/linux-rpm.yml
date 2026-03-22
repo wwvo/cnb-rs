@@ -47,12 +47,12 @@ jobs:
           : "${host_target:?failed to resolve Cargo host target}"
           printf 'target=%s\n' "${host_target}" >> "$GITHUB_OUTPUT"
 
-      - name: Install RPM tooling and build dependencies
+      - name: Install RPM tooling
         shell: bash
         run: |
           set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y rpm pkg-config libdbus-1-dev
+          sudo apt-get install -y rpm
 
       - name: Install cargo-generate-rpm
         shell: bash

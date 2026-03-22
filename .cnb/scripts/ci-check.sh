@@ -5,42 +5,6 @@ set -euo pipefail
 action="${1:-all}"
 target="${CARGO_BUILD_TARGET:-x86_64-unknown-linux-gnu}"
 
-run_with_privilege() {
-  if [ "$(id -u)" -eq 0 ]; then
-    "$@"
-    return
-  fi
-
-  if command -v sudo >/dev/null 2>&1; then
-    sudo "$@"
-    return
-  fi
-
-  echo "缺少 root 权限，无法自动安装 Linux 系统依赖: $*" >&2
-  exit 1
-}
-
-ensure_linux_system_deps() {
-  if [ "$(uname -s)" != "Linux" ]; then
-    return
-  fi
-
-  if command -v pkg-config >/dev/null 2>&1 && pkg-config --exists dbus-1; then
-    return
-  fi
-
-  if ! command -v apt-get >/dev/null 2>&1; then
-    echo "当前 Linux 环境未提供 apt-get，无法自动安装 dbus-1 开发包" >&2
-    exit 1
-  fi
-
-  echo "缺少 Linux 系统依赖，正在安装 pkg-config 和 libdbus-1-dev..." >&2
-  run_with_privilege env DEBIAN_FRONTEND=noninteractive apt-get update
-  run_with_privilege env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    pkg-config \
-    libdbus-1-dev
-}
-
 ensure_rust_component() {
   local component="${1}"
   local cargo_subcommand="${2}"
@@ -74,18 +38,15 @@ run_fmt() {
 }
 
 run_check() {
-  ensure_linux_system_deps
   cargo check --workspace --target "${target}"
 }
 
 run_clippy() {
-  ensure_linux_system_deps
   ensure_rust_component clippy clippy
   cargo clippy --workspace --all-targets --target "${target}" -- -W clippy::all -W clippy::pedantic
 }
 
 run_test() {
-  ensure_linux_system_deps
   cargo test --workspace --target "${target}"
 }
 

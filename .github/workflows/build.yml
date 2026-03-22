@@ -117,14 +117,14 @@ jobs:
         with:
           tool: cross
 
-      - name: Install Linux native packaging and build dependencies
+      - name: Install Linux native packaging dependencies
         if: matrix.package_linux_deb || matrix.package_linux_rpm
         shell: bash
         run: |
           set -euo pipefail
 
           sudo apt-get update
-          sudo apt-get install -y dpkg-dev rpm pkg-config libdbus-1-dev
+          sudo apt-get install -y dpkg-dev rpm
 
           if [[ -n "${{ matrix.linux_deb_arch }}" ]]; then
             # crossbuild-essential-arm64 is an Architecture: all metapackage.
