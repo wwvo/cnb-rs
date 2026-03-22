@@ -2,6 +2,17 @@
 
 此文件由 [git-cliff](https://git-cliff.org/) 自动生成。
 
+## [0.12.1] - 2026-03-22
+
+### 🐛 Bug 修复
+
+- **(build)** 为 Linux keyring 启用 vendored dbus 构建 ([c9bb9c3](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/c9bb9c369c10a77190f01c22e22761d876102ffc))
+
+### 🔧 杂项
+
+- **(ci)** 移除不再需要的 Linux 系统依赖 pkg-config libdbus-1-dev ([2d140c6](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/2d140c6cacbed450252f992cd0705d24db69762f))
+- **(release)** 分离发版提交与 PR 标题 ([58b933d](https://cnb.cool/wwvo/cnb-rs/cnb-rs/-/commit/58b933d1d457a57d36359aa144f7d3881304ae24))
+
 ## [0.12.0] - 2026-03-22
 
 ### ♻️ 重构
