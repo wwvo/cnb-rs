@@ -2,6 +2,11 @@ FROM rust:latest
 
 ARG GIT_CLIFF_VERSION=2.12.0
 
+# keyring 在 Linux 上通过 Secret Service 访问凭证，需要 dbus-1 开发包参与构建。
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends pkg-config libdbus-1-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # 配置 rustup 使用 tuna 镜像源（加速下载工具链组件）
 ENV RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
 ENV RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
